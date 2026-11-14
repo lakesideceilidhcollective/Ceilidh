@@ -857,24 +857,88 @@ footer p {
 
     <!-- CONTACT FORM -->
 
-<form
+    <form
   id="contactForm"
   action="https://formsubmit.co/lakesideceilidhcollective@gmail.com"
   method="POST">
 
   <input type="hidden" name="_subject" value="New Lakeside Ceilidh Band Website Enquiry">
-
   <input type="hidden" name="_template" value="table">
-
   <input type="hidden" name="_captcha" value="true">
-
-  <input
-    type="hidden"
-    name="_next"
-    value="https://lakesideceilidhcollective.github.io/Ceilidh/?submitted=true#contact"
-  >
+  <input type="hidden" name="_next" value="https://lakesideceilidhcollective.github.io/Ceilidh/?submitted=true#contact">
 
   <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+
+  <input type="text" name="Name" placeholder="Your name" autocomplete="name" required>
+
+  <input type="email" name="Email" placeholder="Email address" autocomplete="email" required>
+
+  <input type="tel" name="Phone" placeholder="Phone number" autocomplete="tel">
+
+  <select name="Event type" required>
+    <option value="">What are you celebrating?</option>
+    <option>Wedding</option>
+    <option>Birthday</option>
+    <option>Private Party</option>
+    <option>Other Event</option>
+  </select>
+
+  <input type="date" name="Event date">
+
+  <input type="text" name="Location" placeholder="Event location">
+
+  <select name="Optional extras">
+    <option value="">Interested in any extras?</option>
+    <option>Disco Till Late</option>
+    <option>DJ Till Late</option>
+    <option>Enhanced Lighting Rig</option>
+    <option>Multiple Extras</option>
+    <option>Not Sure Yet</option>
+  </select>
+
+  <textarea name="Message" placeholder="Tell us about your plans, guests and anything else you'd like us to know..."></textarea>
+
+  <button class="btn" type="submit">
+    Request My Quote
+  </button>
+
+  <p class="form-note">
+    Your enquiry will be sent directly to Lakeside Ceilidh Band.
+  </p>
+
+</form>
+
+<div class="success-message" id="successMessage" style="display:none;">
+  <h3>Thank You for Your Enquiry!</h3>
+  <p>Your enquiry has been submitted successfully.</p>
+  <p>Thank you for considering Lakeside Ceilidh Band. We'll be in touch as soon as possible.</p>
+  <a href="#about" class="btn">Back to Website</a>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const params = new URLSearchParams(window.location.search);
+  const form = document.getElementById("contactForm");
+  const successMessage = document.getElementById("successMessage");
+
+  if (params.get("submitted") === "true") {
+    form.style.display = "none";
+    successMessage.style.display = "block";
+
+    window.history.replaceState(
+      {},
+      document.title,
+      window.location.pathname + "#contact"
+    );
+
+    document.getElementById("contact").scrollIntoView({
+      behavior: "smooth"
+    });
+  }
+});
+</script>
+
+    </form>
 
   </div>
 
@@ -918,5 +982,3 @@ footer p {
 
 </body>
 </html>
-
-
