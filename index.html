@@ -881,7 +881,7 @@ footer p {
 
     <!-- CONTACT FORM -->
 
-    <form
+<form
   id="contactForm"
   action="https://formsubmit.co/lakesideceilidhcollective@gmail.com"
   method="POST">
@@ -927,25 +927,33 @@ footer p {
   </button>
 
   <p class="form-note">
-    Your enquiry will be sent directly to Lakeside Ceilidh Collective
+    Your enquiry will be sent directly to Lakeside Ceilidh Band.
   </p>
 
 </form>
 
 <div class="success-message" id="successMessage" style="display:none;">
+
   <h3>Thank You for Your Enquiry!</h3>
+
   <p>Your enquiry has been submitted successfully.</p>
-  <p>Thank you for considering Lakeside Ceilidh Collective. We'll be in touch as soon as possible.</p>
-  <a href="#about" class="btn">Back to Website</a>
+
+  <p>
+    Thank you for considering Lakeside Ceilidh Band.
+    We'll be in touch as soon as possible.
+  </p>
+
 </div>
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
+
   const params = new URLSearchParams(window.location.search);
   const form = document.getElementById("contactForm");
   const successMessage = document.getElementById("successMessage");
 
   if (params.get("submitted") === "true") {
+
     form.style.display = "none";
     successMessage.style.display = "block";
 
@@ -958,7 +966,9 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("contact").scrollIntoView({
       behavior: "smooth"
     });
+
   }
+
 });
 </script>
 
