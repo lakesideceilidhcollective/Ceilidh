@@ -16,6 +16,8 @@
 
 /* COLOUR SCHEME */
 
+
+  
 :root {
   --green: #245B85;
   --dark: #172F45;
@@ -37,6 +39,28 @@ html {
   scroll-padding-top: 90px;
 }
 
+.success-message {
+  background: var(--cream);
+  border-left: 4px solid var(--green);
+  padding: 30px;
+  color: var(--green);
+}
+
+.success-message h3 {
+  font-size: 27px;
+  margin-bottom: 12px;
+}
+
+.success-message p {
+  color: var(--text);
+  margin-bottom: 10px;
+}
+
+.success-message .btn {
+  margin-top: 20px;
+  display: inline-block;
+}
+  
 body {
   font-family: 'DM Sans', sans-serif;
   color: var(--text);
@@ -939,6 +963,23 @@ document.addEventListener("DOMContentLoaded", function() {
 </script>
 
     </form>
+    <div class="success-message" id="successMessage" style="display:none;">
+
+  <h3>Thank You for Your Enquiry!</h3>
+
+  <p>
+    Your enquiry has been submitted successfully.
+  </p>
+
+  <p>
+    Thank you for considering Lakeside Ceilidh Band
+    for your celebration. We'll be in touch as soon
+    as possible.
+  </p>
+
+  <a href="#about" class="btn">Back to Website</a>
+
+</div>
 
   </div>
 
@@ -981,4 +1022,31 @@ document.addEventListener("DOMContentLoaded", function() {
 </footer>
 
 </body>
+  <script>
+document.addEventListener("DOMContentLoaded", function() {
+
+  const params = new URLSearchParams(window.location.search);
+
+  const form = document.getElementById("contactForm");
+  const successMessage = document.getElementById("successMessage");
+
+  if (params.get("submitted") === "true") {
+
+    form.style.display = "none";
+    successMessage.style.display = "block";
+
+    window.history.replaceState(
+      {},
+      document.title,
+      window.location.pathname + "#contact"
+    );
+
+    document.getElementById("contact").scrollIntoView({
+      behavior: "smooth"
+    });
+
+  }
+
+});
+</script>
 </html>
