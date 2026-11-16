@@ -312,7 +312,14 @@ section {
 /* OPTIONAL EXTRAS */
 
 .extras {
-  background: var(--cream);
+  background: var(--green);
+  color: white;
+}
+
+.extras .section-heading h2,
+.extras .section-heading p,
+.extras .section-heading .eyebrow {
+  color: white;
 }
 
 .extras-grid {
@@ -365,7 +372,7 @@ section {
   margin: 50px auto 0;
   text-align: center;
   padding: 35px;
-  background: var(--green);
+  background: var(--dark);
   color: white;
 }
 
@@ -378,7 +385,17 @@ section {
   color: #e3edf5;
 }
 
-  
+/* MOBILE RESPONSIVENESS */
+
+@media(max-width: 800px) {
+  .extras-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .extras-bottom {
+    padding: 30px 20px;
+  }
+}
 /* CONTACT */
 
 .contact {
