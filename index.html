@@ -2165,12 +2165,16 @@ document.addEventListener("DOMContentLoaded", function() {
 
     if (loaded) return;
 
-    if (!data || data.success !== true ||
-        !Array.isArray(data.quickQuotes)) {
+  if (!data || data.success !== true ||
+    !Array.isArray(data.quickQuotes)) {
 
-      showMessage("Unable to load our kind words just now.");
-      return;
-    }
+  const errorDetails = data && data.error
+    ? data.error
+    : JSON.stringify(data);
+
+  showMessage("Google Apps Script says: " + errorDetails);
+  return;
+}
 
     const quotes = data.quickQuotes.filter(function(item) {
 
