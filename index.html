@@ -325,6 +325,146 @@ section {
   color: var(--green);
 }
 
+/* TESTIMONIALS */
+
+.testimonials {
+  max-width: 1150px;
+  margin: 75px auto 0;
+  padding-top: 55px;
+  border-top: 1px solid #ffffff35;
+}
+
+.testimonials-heading {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.testimonials-heading h2 {
+  font-size: clamp(30px, 4vw, 40px);
+  margin-bottom: 15px;
+  color: white;
+}
+
+.testimonials-heading p {
+  color: #e3edf5;
+}
+
+.testimonial-viewport {
+  width: 100%;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.testimonial-viewport::-webkit-scrollbar {
+  display: none;
+}
+
+.testimonial-track {
+  display: flex;
+  gap: 20px;
+  align-items: stretch;
+}
+
+.testimonial-card {
+  flex: 0 0 calc((100% - 40px) / 3);
+  min-width: 0;
+  background: var(--white);
+  color: var(--text);
+  padding: 30px 25px;
+  border-radius: 4px;
+  text-align: left;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 190px;
+}
+
+.testimonial-quote {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  line-height: 1.6;
+  margin-bottom: 25px;
+}
+
+.testimonial-from {
+  color: var(--green);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.testimonial-controls {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 22px;
+}
+
+.testimonial-controls button {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid white;
+  background: transparent;
+  color: white;
+  font-size: 22px;
+  cursor: pointer;
+  transition: .3s;
+}
+
+.testimonial-controls button:hover {
+  background: white;
+  color: var(--green);
+}
+
+.testimonial-controls button:disabled {
+  opacity: .35;
+  cursor: default;
+}
+
+.testimonial-status {
+  color: #e3edf5;
+  text-align: center;
+  font-size: 12px;
+  margin-top: 18px;
+}
+
+.testimonial-loading {
+  color: white;
+  padding: 25px;
+  text-align: center;
+  width: 100%;
+}
+
+/* TABLET */
+
+@media(max-width: 900px) {
+  .testimonial-card {
+    flex: 0 0 calc((100% - 20px) / 2);
+  }
+}
+
+/* MOBILE */
+
+@media(max-width: 600px) {
+  .testimonials {
+    margin-top: 55px;
+    padding-top: 40px;
+  }
+
+  .testimonial-card {
+    flex: 0 0 100%;
+    min-height: 170px;
+  }
+
+  .testimonial-quote {
+    font-size: 17px;
+  }
+}
+
 /* OPTIONAL EXTRAS */
 
 .extras {
@@ -809,6 +949,45 @@ footer p {
   <a href="#contact" class="btn">
     Enquire About Your Date
   </a>
+
+<!-- TESTIMONIALS -->
+
+<div class="testimonials">
+
+  <div class="testimonials-heading">
+    <div class="eyebrow">Kind Words</div>
+    <h2>What Our Customers Say</h2>
+    <p>We're lucky to be part of so many special celebrations.</p>
+  </div>
+
+  <div class="testimonial-controls">
+
+    <button type="button" id="testimonialPrev"
+      aria-label="Previous testimonials">
+      &#8592;
+    </button>
+
+    <button type="button" id="testimonialNext"
+      aria-label="Next testimonials">
+      &#8594;
+    </button>
+
+  </div>
+
+  <div class="testimonial-viewport">
+
+    <div id="testimonialTrack" class="testimonial-track">
+      <p class="testimonial-loading">
+        Loading testimonials...
+      </p>
+    </div>
+
+  </div>
+
+  <div id="testimonialStatus" class="testimonial-status"
+    aria-live="polite"></div>
+
+</div>
 
 </section>
 </body>
@@ -1575,6 +1754,115 @@ document.addEventListener("DOMContentLoaded", function() {
   </p>
 
 </footer>
+<script> 
+document.addEventListener("DOMContentLoaded", function() {
 
+  const scriptUrl = "YOUR_GOOGLE_SCRIPT_URL_HERE";
+
+  const track = document.getElementById("testimonialTrack");
+  const viewport = document.querySelector(".testimonial-viewport");
+  const prev = document.getElementById("testimonialPrev");
+  const next = document.getElementById("testimonialNext");
+  const status = document.getElementById("testimonialStatus");
+
+  if (!track || !viewport || !prev || !next) return;
+
+  function updateControls() {
+    const maxScroll = viewport.scrollWidth - viewport.clientWidth;
+
+    prev.disabled = viewport.scrollLeft <= 2;
+    next.disabled = viewport.scrollLeft >= maxScroll - 2;
+
+    const cards = track.querySelectorAll(".testimonial-card");
+
+    if (cards.length) {
+      const cardWidth = cards[0].offsetWidth;
+      const gap = parseFloat(getComputedStyle(track).gap) || 0;
+      const position = Math.round(
+        viewport.scrollLeft / (cardWidth + gap)
+      ) + 1;
+
+      status.textContent =
+        position + " / " + cards.length;
+    }
+  }
+
+  function moveCarousel(direction) {
+    const card = track.querySelector(".testimonial-card");
+
+    if (!card) return;
+
+    const gap = parseFloat(getComputedStyle(track).gap) || 0;
+
+    viewport.scrollBy({
+      left: direction * (card.offsetWidth + gap),
+      behavior: "smooth"
+    });
+  }
+
+  prev.addEventListener("click", function() {
+    moveCarousel(-1);
+  });
+
+  next.addEventListener("click", function() {
+    moveCarousel(1);
+  });
+
+  viewport.addEventListener("scroll", updateControls);
+
+  function loadTestimonials(data) {
+
+    if (!Array.isArray(data) || data.length === 0) {
+      track.innerHTML =
+        '<p class="testimonial-loading">Our testimonials will be appearing here soon.</p>';
+      status.textContent = "";
+      return;
+    }
+
+    track.innerHTML = "";
+
+    data.forEach(function(item) {
+
+      const card = document.createElement("div");
+      card.className = "testimonial-card";
+
+      const quote = document.createElement("p");
+      quote.className = "testimonial-quote";
+      quote.textContent = "“" + item.testimonial + "”";
+
+      const from = document.createElement("p");
+      from.className = "testimonial-from";
+      from.textContent = "— " + item.from;
+
+      card.appendChild(quote);
+      card.appendChild(from);
+
+      track.appendChild(card);
+
+    });
+
+    updateControls();
+
+  }
+
+  window.lakesideTestimonialsCallback = loadTestimonials;
+
+  const script = document.createElement("script");
+
+  script.src = scriptUrl +
+    "?callback=lakesideTestimonialsCallback";
+
+  script.onerror = function() {
+    track.innerHTML =
+      '<p class="testimonial-loading">Unable to load testimonials just now.</p>';
+    status.textContent = "";
+  };
+
+  document.body.appendChild(script);
+
+  window.addEventListener("resize", updateControls);
+
+});
+</script>
 </body>
 </html>
