@@ -798,14 +798,24 @@ footer p {
 
 </section>
 
+
 <!-- ENLARGED PHOTO VIEW -->
 
 <div id="gallery-lightbox" role="dialog" aria-modal="true" aria-label="Enlarged gallery photo">
-  <button type="button" aria-label="Close image">&times;</button>
-  <img src="" alt="Lakeside Ceilidh Band photograph">
+
+  <button type="button" class="lightbox-close" aria-label="Close image">&times;</button>
+
+  <button type="button" class="lightbox-prev" aria-label="Previous photo">&#10094;</button>
+
+  <img src="" alt="Lakeside Ceilidh Collective photograph">
+
+  <button type="button" class="lightbox-next" aria-label="Next photo">&#10095;</button>
+
 </div>
 
+
 <style>
+
 #gallery {
   background: var(--cream);
 }
@@ -845,6 +855,8 @@ footer p {
   color: var(--text);
 }
 
+/* ENLARGED PHOTO VIEW */
+
 #gallery-lightbox {
   display: none;
   position: fixed;
@@ -853,7 +865,7 @@ footer p {
   background: #081522ee;
   align-items: center;
   justify-content: center;
-  padding: 30px;
+  padding: 60px;
 }
 
 #gallery-lightbox.active {
@@ -861,25 +873,73 @@ footer p {
 }
 
 #gallery-lightbox img {
-  max-width: 95%;
+  max-width: 85%;
   max-height: 85vh;
   object-fit: contain;
 }
 
 #gallery-lightbox button {
   position: absolute;
-  top: 20px;
-  right: 25px;
   background: transparent;
   color: white;
   border: none;
-  font-size: 38px;
   cursor: pointer;
+  z-index: 2;
 }
+
+.lightbox-close {
+  top: 20px;
+  right: 25px;
+  font-size: 40px;
+}
+
+.lightbox-prev,
+.lightbox-next {
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 38px;
+  padding: 15px;
+}
+
+.lightbox-prev {
+  left: 20px;
+}
+
+.lightbox-next {
+  right: 20px;
+}
+
+#gallery-lightbox button:hover {
+  color: var(--sage);
+}
+
+/* MOBILE */
 
 @media(max-width:800px) {
   .gallery-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  #gallery-lightbox {
+    padding: 45px 10px;
+  }
+
+  #gallery-lightbox img {
+    max-width: 90%;
+    max-height: 75vh;
+  }
+
+  .lightbox-prev {
+    left: 2px;
+  }
+
+  .lightbox-next {
+    right: 2px;
+  }
+
+  .lightbox-prev,
+  .lightbox-next {
+    font-size: 27px;
   }
 }
 
@@ -888,6 +948,8 @@ footer p {
     grid-template-columns: 1fr;
   }
 }
+</style>
+
 </style>
 
 <script>
@@ -901,57 +963,113 @@ document.addEventListener("DOMContentLoaded", function() {
   const status = document.getElementById("galleryStatus");
   const lightbox = document.getElementById("gallery-lightbox");
 
+  const enlarged = lightbox.querySelector("img");
+  const closeButton = lightbox.querySelector(".lightbox-close");
+  const prevButton = lightbox.querySelector(".lightbox-prev");
+  const nextButton = lightbox.querySelector(".lightbox-next");
+
+  let photos = [];
+  let currentIndex = 0;
   let galleryLoaded = false;
 
-  // CLOSE ENLARGED IMAGE
+  // OPEN PHOTO
 
-  lightbox.querySelector("button").addEventListener("click", function() {
+  function openPhoto(index) {
+
+    if (!photos.length) return;
+
+    currentIndex = (index + photos.length) % photos.length;
+
+    enlarged.src = photos[currentIndex].url;
+    enlarged.alt = photos[currentIndex].name || "Gallery photograph";
+
+    lightbox.classList.add("active");
+
+  }
+
+  // NEXT PHOTO
+
+  function nextPhoto() {
+    openPhoto(currentIndex + 1);
+  }
+
+  // PREVIOUS PHOTO
+
+  function previousPhoto() {
+    openPhoto(currentIndex - 1);
+  }
+
+  // CLOSE PHOTO
+
+  function closePhoto() {
     lightbox.classList.remove("active");
-  });
+    enlarged.src = "";
+  }
+
+  closeButton.addEventListener("click", closePhoto);
+  nextButton.addEventListener("click", nextPhoto);
+  prevButton.addEventListener("click", previousPhoto);
 
   lightbox.addEventListener("click", function(e) {
+
     if (e.target === lightbox) {
-      lightbox.classList.remove("active");
+      closePhoto();
     }
+
   });
+
+  // KEYBOARD CONTROLS
 
   document.addEventListener("keydown", function(e) {
-    if (e.key === "Escape") {
-      lightbox.classList.remove("active");
-    }
+
+    if (!lightbox.classList.contains("active")) return;
+
+    if (e.key === "Escape") closePhoto();
+    if (e.key === "ArrowRight") nextPhoto();
+    if (e.key === "ArrowLeft") previousPhoto();
+
   });
 
-  // LOAD GALLERY PHOTOS
+  // LOAD GALLERY
 
   function loadGallery(data) {
 
     if (galleryLoaded) return;
 
     if (!data || !data.success || !Array.isArray(data.images)) {
+
       status.textContent =
         "Our gallery is temporarily unavailable. Please try again later.";
+
       return;
+
     }
 
     if (data.images.length === 0) {
-      status.textContent =
-        "Our photos will be appearing here soon.";
+
+      status.textContent = "Our photos will be appearing here soon.";
+      galleryLoaded = true;
+      return;
+
+    }
+
+    photos = data.images.filter(function(photo) {
+      return photo.url;
+    });
+
+    if (!photos.length) {
+      status.textContent = "Our photos will be appearing here soon.";
       galleryLoaded = true;
       return;
     }
 
     galleryLoaded = true;
 
-    status.textContent = "Loading photos...";
-
-    data.images.forEach(function(photo, index) {
-
-      if (!photo.url) return;
+    photos.forEach(function(photo, index) {
 
       const button = document.createElement("button");
       button.className = "gallery-item";
       button.type = "button";
-      button.setAttribute("aria-label", "View " + (photo.name || "gallery photo"));
 
       const img = document.createElement("img");
 
@@ -967,14 +1085,7 @@ document.addEventListener("DOMContentLoaded", function() {
       };
 
       button.addEventListener("click", function() {
-
-        const enlarged = lightbox.querySelector("img");
-
-        enlarged.src = photo.url;
-        enlarged.alt = img.alt;
-
-        lightbox.classList.add("active");
-
+        openPhoto(index);
       });
 
       grid.appendChild(button);
@@ -992,14 +1103,15 @@ document.addEventListener("DOMContentLoaded", function() {
   const script = document.createElement("script");
 
   script.src = galleryUrl + "?callback=lakesideGalleryCallback";
-
   script.async = true;
 
   const timeout = setTimeout(function() {
 
     if (!galleryLoaded) {
+
       status.textContent =
-        "Our gallery is taking longer than expected to load. Please refresh the page to try again.";
+        "Our gallery is taking longer than expected to load. Please refresh to try again.";
+
     }
 
   }, 12000);
@@ -1013,18 +1125,18 @@ document.addEventListener("DOMContentLoaded", function() {
 
   };
 
-  const originalCallback = window.lakesideGalleryCallback;
-
   window.lakesideGalleryCallback = function(data) {
 
     clearTimeout(timeout);
-    originalCallback(data);
+    loadGallery(data);
 
   };
 
   document.body.appendChild(script);
 
 });
+</script>
+
 </script>
 
 
