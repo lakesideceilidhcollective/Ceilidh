@@ -1769,8 +1769,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
   if (!track || !viewport || !prev || !next || !status) return;
 
-  let loaded = false;
-  let timeout;
+// AUTO-SCROLL SETTINGS
+const AUTO_SCROLL_SECONDS = 20;
+
+let autoScrollTimer = null;
+let loaded = false;
+let timeout;
 
   function showMessage(message) {
     if (loaded) return;
@@ -1809,7 +1813,42 @@ document.addEventListener("DOMContentLoaded", function() {
       status.textContent = position + " / " + cards.length;
     }
   }
+// AUTOMATIC TESTIMONIAL SCROLL
 
+function startAutoScroll() {
+
+  stopAutoScroll();
+
+  autoScrollTimer = setInterval(function() {
+
+    const maxScroll =
+      viewport.scrollWidth - viewport.clientWidth;
+
+    if (viewport.scrollLeft >= maxScroll - 5) {
+
+      viewport.scrollTo({
+        left: 0,
+        behavior: "smooth"
+      });
+
+    } else {
+
+      moveCarousel(1);
+
+    }
+
+  }, AUTO_SCROLL_SECONDS * 1000);
+
+}
+
+function stopAutoScroll() {
+
+  if (autoScrollTimer) {
+    clearInterval(autoScrollTimer);
+    autoScrollTimer = null;
+  }
+
+}
   function moveCarousel(direction) {
 
     const card = track.querySelector(".testimonial-card");
@@ -1823,13 +1862,17 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   }
 
-  prev.addEventListener("click", function() {
-    moveCarousel(-1);
-  });
+prev.addEventListener("click", function() {
+  stopAutoScroll();
+  moveCarousel(-1);
+  startAutoScroll();
+});
 
-  next.addEventListener("click", function() {
-    moveCarousel(1);
-  });
+next.addEventListener("click", function() {
+  stopAutoScroll();
+  moveCarousel(1);
+  startAutoScroll();
+});
 
   viewport.addEventListener("scroll", updateControls);
 
@@ -1881,6 +1924,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     updateControls();
+    startAutoScroll();
   }
 
   window.lakesideTestimonialsCallback = loadTestimonials;
