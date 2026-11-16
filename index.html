@@ -252,46 +252,50 @@ section {
 /* ABOUT AND YOUTUBE VIDEO */
 
 
-.about-grid {
+/* TWO VIDEO LAYOUT */
+
+.video-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 35px;
-  align-items: center;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 30px;
   max-width: 1150px;
-  margin: auto;
+  margin: 0 auto 45px;
 }
 
-.about-image {
+.video-wrapper {
+  position: relative;
   width: 100%;
   aspect-ratio: 16 / 9;
-  border-radius: 3px;
-  overflow: hidden;
   background: var(--dark);
+  overflow: hidden;
+  border-radius: 4px;
 }
 
-.about-image iframe {
+.video-wrapper iframe {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
-  border: none;
-  display: block;
+  border: 0;
 }
 
-
-.about-text h2 {
-  font-size: 43px;
-  color: var(--green);
-  margin-bottom: 25px;
+.about-text {
+  max-width: 850px;
+  margin: auto;
+  text-align: center;
 }
 
 .about-text p {
   margin-bottom: 20px;
 }
 
-.italic {
-  font-family: 'Playfair Display', serif;
-  font-style: italic;
-  font-size: 20px;
-  color: var(--sage);
+/* MOBILE VIDEO LAYOUT */
+
+@media (max-width: 800px) {
+  .video-grid {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
 }
 
 /* WHAT WE DO */
@@ -685,70 +689,62 @@ footer p {
 
 <!-- ABOUT -->
 
+<!-- ABOUT SECTION -->
+
 <section id="about">
 
-  <div class="about-grid">
+  <div class="section-heading">
+    <div class="eyebrow">A little about us</div>
+    <h2>Tradition with a Modern Twist</h2>
+    <p>
+      Bringing people together through live folk music,
+      ceilidh dancing and unforgettable celebrations.
+    </p>
+  </div>
 
-   
-<div class="about-image">
+  <div class="video-grid">
 
-  <iframe
-    src="https://www.youtube-nocookie.com/embed/RaH1lGOBVdM"
-    title="Lakeside Ceilidh Collective Performance 1"
-    loading="lazy"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    referrerpolicy="strict-origin-when-cross-origin"
-    allowfullscreen>
-  </iframe>
+    <div class="video-wrapper">
+      <iframe
+        src="https://www.youtube-nocookie.com/embed/RaH1lGOBVdM"
+        title="Lakeside Ceilidh Collective Performance"
+        loading="lazy"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen>
+      </iframe>
+    </div>
 
-</div>
-
-<div class="about-image">
-
-  <iframe
-    src="https://www.youtube-nocookie.com/embed/HL7WMSeZHF0"
-    title="Lakeside Ceilidh Collective Performance 2"
-    loading="lazy"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    referrerpolicy="strict-origin-when-cross-origin"
-    allowfullscreen>
-  </iframe>
-
-</div>
-
-
-    <div class="about-text">
-
-      <div class="eyebrow">
-        A little about us
-      </div>
-
-      <h2>
-        Tradition with a Modern Twist
-      </h2>
-
-      <p>
-        At Lakeside Ceilidh Collective, we believe the best
-        celebrations are the ones where everyone gets involved.
-      </p>
-
-      <p>
-        Combining the spirit of traditional ceilidh music
-        with a fresh, contemporary wedding atmosphere,
-        we bring energy, connection and plenty of reasons
-        to get onto the dance floor.
-      </p>
-
-      <p class="italic">
-        Good music. Great people. Unforgettable memories.
-      </p>
-
+    <div class="video-wrapper">
+      <iframe
+        src="https://www.youtube-nocookie.com/embed/HL7WMSeZHF0"
+        title="Lakeside Ceilidh Collective Video"
+        loading="lazy"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen>
+      </iframe>
     </div>
 
   </div>
 
-</section>
+  <div class="about-text">
+    <p>
+      At Lakeside Ceilidh Collective, we believe the best
+      celebrations are the ones where everyone gets involved.
+    </p>
 
+    <p>
+      Combining the spirit of traditional ceilidh music
+      with a fresh, contemporary wedding atmosphere,
+      we bring energy, connection and plenty of reasons
+      to get onto the dance floor.
+    </p>
+
+    <p class="italic">
+      Good music. Great people. Unforgettable memories.
+    </p>
+  </div>
+
+</section>
 
 <!-- WHAT WE DO -->
 
