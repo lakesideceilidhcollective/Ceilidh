@@ -169,10 +169,14 @@ nav {
   text-align: center;
   color: white;
   padding: 100px 20px;
-  background:
+
+  background-image:
     linear-gradient(#172f4575, #172f4585),
-    ("https://lh3.googleusercontent.com/d/1kQiq7yFZ7N5s_wxB3FwrcBEaH3xZYhqF")
-    center / cover no-repeat;
+    url("https://lh3.googleusercontent.com/d/1kQiq7yFZ7N5s_wxB3FwrcBEaH3xZYhqF");
+
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .hero-content {
@@ -990,10 +994,7 @@ footer p {
 </div>
 
 </section>
-</body>
 
-
-  
 <!-- GALLERY -->
 
 <section id="gallery">
@@ -1754,7 +1755,6 @@ document.addEventListener("DOMContentLoaded", function() {
   </p>
 
 </footer>
-<script> 
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
@@ -1767,7 +1767,7 @@ document.addEventListener("DOMContentLoaded", function() {
   const next = document.getElementById("testimonialNext");
   const status = document.getElementById("testimonialStatus");
 
-  if (!track || !viewport || !prev || !next) return;
+  if (!track || !viewport || !prev || !next || !status) return;
 
   let loaded = false;
   let timeout;
@@ -1798,6 +1798,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const cards = track.querySelectorAll(".testimonial-card");
 
     if (cards.length) {
+
       const width = cards[0].offsetWidth;
       const gap = parseFloat(getComputedStyle(track).gap) || 0;
 
@@ -1812,7 +1813,6 @@ document.addEventListener("DOMContentLoaded", function() {
   function moveCarousel(direction) {
 
     const card = track.querySelector(".testimonial-card");
-
     if (!card) return;
 
     const gap = parseFloat(getComputedStyle(track).gap) || 0;
@@ -1837,20 +1837,20 @@ document.addEventListener("DOMContentLoaded", function() {
 
     if (loaded) return;
 
-    let testimonials = Array.isArray(data)
+    const testimonials = Array.isArray(data)
       ? data
       : data && Array.isArray(data.testimonials)
         ? data.testimonials
         : [];
 
-    testimonials = testimonials.filter(function(item) {
+    const valid = testimonials.filter(function(item) {
       return item &&
         typeof item.testimonial === "string" &&
-        item.testimonial.trim() &&
+        item.testimonial.trim() !== "" &&
         typeof item.from === "string";
     });
 
-    if (!testimonials.length) {
+    if (!valid.length) {
       showMessage("Our testimonials will be appearing here soon.");
       return;
     }
@@ -1860,7 +1860,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     track.innerHTML = "";
 
-    testimonials.forEach(function(item) {
+    valid.forEach(function(item) {
 
       const card = document.createElement("div");
       card.className = "testimonial-card";
@@ -1877,6 +1877,7 @@ document.addEventListener("DOMContentLoaded", function() {
       card.appendChild(from);
 
       track.appendChild(card);
+
     });
 
     updateControls();
@@ -1896,7 +1897,7 @@ document.addEventListener("DOMContentLoaded", function() {
   };
 
   timeout = setTimeout(function() {
-    showMessage("Our testimonials are taking too long to load. Please try again later.");
+    showMessage("Testimonials are taking too long to load. Please try again later.");
   }, 12000);
 
   document.body.appendChild(script);
@@ -1905,9 +1906,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
 });
 </script>
-</body>
-</html>
 
-</script>
 </body>
 </html>
