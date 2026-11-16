@@ -1644,9 +1644,13 @@ document.addEventListener("DOMContentLoaded", function() {
           name="Message"
           placeholder="Tell us about your plans, guests and anything else you'd like us to know..."></textarea>
 
-        <button class="btn" type="submit">
-          Request My Quote
-        </button>
+<button class="btn" type="submit" id="submitButton">
+  Request My Quote
+</button>
+
+<p id="sendingMessage" style="display:none; color:#173B5E; font-weight:600;">
+  Sending your enquiry, please wait...
+</p>
 
         <p class="form-note">
           Your enquiry will be sent directly to Lakeside Ceilidh Collective.
@@ -1688,19 +1692,20 @@ document.addEventListener("DOMContentLoaded", function() {
 
 <script>
 
+
 document.addEventListener("DOMContentLoaded", function() {
 
   const params = new URLSearchParams(window.location.search);
 
   const form = document.getElementById("contactForm");
+  const successMessage = document.getElementById("successMessage");
+  const submitButton = document.getElementById("submitButton");
+  const sendingMessage = document.getElementById("sendingMessage");
 
-  const successMessage =
-    document.getElementById("successMessage");
-
+  // Successful submission redirect
   if (params.get("submitted") === "true") {
 
     form.style.display = "none";
-
     successMessage.style.display = "block";
 
     window.history.replaceState(
@@ -1712,9 +1717,18 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("contact").scrollIntoView({
       behavior: "smooth"
     });
-
   }
 
+  // Show loading state when submitting
+  form.addEventListener("submit", function() {
+
+    if (!form.checkValidity()) return;
+
+    submitButton.disabled = true;
+    submitButton.textContent = "Sending Enquiry...";
+
+    sendingMessage.style.display = "block";
+  });
 });
 
 </script>
