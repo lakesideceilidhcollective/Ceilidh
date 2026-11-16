@@ -748,6 +748,93 @@ footer p {
 
 }
 
+/* QUICK FIRE QUOTES */
+
+.quick-quotes {
+  background: #EAF3FA;
+  padding: 45px 8%;
+  text-align: center;
+  overflow: hidden;
+}
+
+.quick-quotes-heading {
+  margin-bottom: 25px;
+}
+
+.quick-quotes-heading h2 {
+  color: #173B5E;
+  font-size: clamp(25px, 3vw, 34px);
+}
+
+.quick-quotes-heading .eyebrow {
+  color: #3979A8;
+  margin-bottom: 10px;
+}
+
+.quick-quotes-viewport {
+  max-width: 1150px;
+  margin: auto;
+  overflow: hidden;
+}
+
+.quick-quotes-track {
+  display: flex;
+  gap: 25px;
+  align-items: stretch;
+}
+
+.quick-quote-card {
+  flex: 0 0 calc((100% - 50px) / 3);
+  background: white;
+  border-radius: 4px;
+  padding: 25px 22px;
+  color: #173B5E;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 125px;
+}
+
+.quick-quote-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 19px;
+  line-height: 1.5;
+  color: #173B5E;
+}
+
+.quick-quote-from {
+  font-size: 12px;
+  font-weight: 700;
+  color: #3979A8;
+  margin-top: 10px;
+}
+
+.quick-quotes-loading {
+  width: 100%;
+  color: #173B5E;
+  text-align: center;
+}
+
+@media(max-width: 900px) {
+  .quick-quote-card {
+    flex: 0 0 calc((100% - 25px) / 2);
+  }
+}
+
+@media(max-width: 600px) {
+  .quick-quotes {
+    padding: 40px 6%;
+  }
+
+  .quick-quote-card {
+    flex: 0 0 100%;
+  }
+
+  .quick-quote-text {
+    font-size: 18px;
+  }
+}
+
 </style>
 </head>
 
@@ -802,6 +889,25 @@ footer p {
   </div>
 
 </header>
+
+<!-- QUICK FIRE QUOTES -->
+
+<section class="quick-quotes">
+
+  <div class="quick-quotes-heading">
+    <div class="eyebrow">A little love from our customers</div>
+    <h2>Don't Just Take Our Word For It</h2>
+  </div>
+
+  <div class="quick-quotes-viewport">
+    <div id="quickQuotesTrack" class="quick-quotes-track">
+      <p class="quick-quotes-loading">
+        Loading kind words...
+      </p>
+    </div>
+  </div>
+
+</section>
 
 <!-- ABOUT -->
 
