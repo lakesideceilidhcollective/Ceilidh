@@ -16,8 +16,6 @@
 
 /* COLOUR SCHEME */
 
-
-  
 :root {
   --green: #245B85;
   --dark: #172F45;
@@ -380,162 +378,92 @@ section {
   color: #e3edf5;
 }
 
-<!-- ==============================
-     CONTACT
-============================== -->
+  
+/* CONTACT */
 
-<section class="contact" id="contact">
+.contact {
+  background: var(--white);
+}
 
-  <div class="contact-grid">
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 65px;
+  max-width: 1050px;
+  margin: auto;
+  align-items: start;
+}
 
-    <div class="contact-info">
+.contact h2 {
+  font-size: 43px;
+  color: var(--green);
+  margin-bottom: 20px;
+}
 
-      <div class="eyebrow">
-        Get in touch
-      </div>
+.contact-info p {
+  margin-bottom: 12px;
+}
 
-      <h2>
-        Let's Make Your Day Unforgettable.
-      </h2>
+.contact-info a {
+  color: var(--green);
+  overflow-wrap: anywhere;
+}
 
-      <p>
-        Tell us a little about your celebration and
-        we'll get back to you with a personalised quote.
-      </p>
+.contact-info a:hover {
+  text-decoration: underline;
+}
 
-      <br>
+.contact form {
+  display: grid;
+  gap: 16px;
+}
 
-      <p>
-        <strong>Coverage:</strong> All across the UK
-      </p>
+input, textarea, select {
+  width: 100%;
+  padding: 15px;
+  background: var(--cream);
+  border: 1px solid var(--sand);
+  font: inherit;
+  border-radius: 2px;
+  color: var(--text);
+}
 
-      <p>
-        <strong>Pricing:</strong> Personalised quotes on request
-      </p>
+textarea {
+  min-height: 140px;
+  resize: vertical;
+}
 
-      <p>
-        <strong>Optional Extras:</strong> Available on request
-      </p>
+input:focus, textarea:focus, select:focus {
+  outline: 2px solid var(--sage);
+  border-color: var(--green);
+}
 
-      <p>
-        <strong>Email:</strong>
-        <a href="mailto:lakesideceilidhcollective@gmail.com">
-          lakesideceilidhcollective@gmail.com
-        </a>
-      </p>
+.contact form button {
+  border: none;
+  cursor: pointer;
+}
 
-    </div>
+.form-note {
+  font-size: 12px;
+  color: #6d7b88;
+}
+.instagram-link {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 4px;
+  color: white;
+  margin: 15px 0;
+  font-size: 14px;
+}
 
-    <!-- CONTACT FORM -->
+.instagram-link strong {
+  color: #c8d7e4;
+  font-size: 13px;
+}
 
-    <div>
-
-      <form
-        id="contactForm"
-        action="https://formsubmit.co/lakesideceilidhcollective@gmail.com"
-        method="POST">
-
-        <input type="hidden" name="_subject" value="New Lakeside Ceilidh Band Website Enquiry">
-
-        <input type="hidden" name="_template" value="table">
-
-        <input type="hidden" name="_captcha" value="true">
-
-        <input type="hidden" name="_next" value="https://lakesideceilidhcollective.github.io/Ceilidh/?submitted=true#contact">
-
-        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
-
-        <input
-          type="text"
-          name="Name"
-          placeholder="Your name"
-          autocomplete="name"
-          required>
-
-        <input
-          type="email"
-          name="Email"
-          placeholder="Email address"
-          autocomplete="email"
-          required>
-
-        <input
-          type="tel"
-          name="Phone"
-          placeholder="Phone number"
-          autocomplete="tel">
-
-        <select name="Event type" required>
-          <option value="">What are you celebrating?</option>
-          <option>Wedding</option>
-          <option>Birthday</option>
-          <option>Private Party</option>
-          <option>Other Event</option>
-        </select>
-
-        <input type="date" name="Event date">
-
-        <input
-          type="text"
-          name="Location"
-          placeholder="Event location">
-
-        <select name="Optional extras">
-          <option value="">Interested in any extras?</option>
-          <option>Disco Till Late</option>
-          <option>DJ Till Late</option>
-          <option>Enhanced Lighting Rig</option>
-          <option>Multiple Extras</option>
-          <option>Not Sure Yet</option>
-        </select>
-
-        <textarea
-          name="Message"
-          placeholder="Tell us about your plans, guests and anything else you'd like us to know..."></textarea>
-
-        <button class="btn" type="submit">
-          Request My Quote
-        </button>
-
-        <p class="form-note">
-          Your enquiry will be sent directly to Lakeside Ceilidh Collective.
-        </p>
-
-      </form>
-
-      <!-- SUCCESS MESSAGE -->
-
-      <div
-        class="success-message"
-        id="successMessage"
-        style="display:none;"
-        role="status"
-        tabindex="-1">
-
-        <h3>Thank You for Your Enquiry!</h3>
-
-        <p>
-          Your enquiry has been submitted successfully.
-        </p>
-
-        <p>
-          Thank you for considering Lakeside Ceilidh Collective
-          for your celebration. We'll be in touch as soon
-          as possible.
-        </p>
-
-        <a href="#about" class="btn">
-          Back to Website
-        </a>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-
+.instagram-link:hover {
+  color: var(--sage);
+}
 /* FOOTER */
 
 footer {
@@ -555,7 +483,6 @@ footer p {
   color: #c8d7e4;
   margin-top: 10px;
 }
-
 
 /* ==============================
    MOBILE RESPONSIVENESS
@@ -1076,9 +1003,17 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
 
-  function loadGallery(data) {
+function loadGallery(data) {
 
-    if (!data.success) {
+    if (!data || data.success !== true) {
+      status.textContent = "Our gallery is temporarily unavailable.";
+      return;
+    }
+
+    if (!data.images || data.images.length === 0) {
+      status.textContent = "Our photos will be appearing here soon.";
+      return;
+    }
       status.textContent = "Our gallery is temporarily unavailable.";
       return;
     }
@@ -1132,6 +1067,7 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 </script>
 
+
 <!-- CONTACT -->
 
 <section class="contact" id="contact">
@@ -1140,13 +1076,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
     <div class="contact-info">
 
-      <div class="eyebrow">
-        Get in touch
-      </div>
+      <div class="eyebrow">Get in touch</div>
 
-      <h2>
-        Let's Make Your Day Unforgettable.
-      </h2>
+      <h2>Let's Make Your Day Unforgettable.</h2>
 
       <p>
         Tell us a little about your celebration and
@@ -1155,17 +1087,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
       <br>
 
-      <p>
-        <strong>Coverage:</strong> All across the UK
-      </p>
+      <p><strong>Coverage:</strong> All across the UK</p>
 
-      <p>
-        <strong>Pricing:</strong> Personalised quotes on request
-      </p>
+      <p><strong>Pricing:</strong> Personalised quotes on request</p>
 
-      <p>
-        <strong>Optional Extras:</strong> Available on request
-      </p>
+      <p><strong>Optional Extras:</strong> Available on request</p>
 
       <p>
         <strong>Email:</strong>
@@ -1176,72 +1102,84 @@ document.addEventListener("DOMContentLoaded", function() {
 
     </div>
 
+    <div>
 
-    <!-- CONTACT FORM -->
+      <form
+        id="contactForm"
+        action="https://formsubmit.co/lakesideceilidhcollective@gmail.com"
+        method="POST">
 
-<form
-  id="contactForm"
-  action="https://formsubmit.co/lakesideceilidhcollective@gmail.com"
-  method="POST">
+        <input type="hidden" name="_subject" value="New Lakeside Ceilidh Collective Website Enquiry">
 
-  <input type="hidden" name="_subject" value="New Lakeside Ceilidh Band Website Enquiry">
-  <input type="hidden" name="_template" value="table">
-  <input type="hidden" name="_captcha" value="true">
-  <input type="hidden" name="_next" value="https://lakesideceilidhcollective.github.io/Ceilidh/?submitted=true#contact">
+        <input type="hidden" name="_template" value="table">
 
-  <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+        <input type="hidden" name="_captcha" value="true">
 
-  <input type="text" name="Name" placeholder="Your name" autocomplete="name" required>
+        <input type="hidden" name="_next" value="https://lakesideceilidhcollective.github.io/Ceilidh/?submitted=true#contact">
 
-  <input type="email" name="Email" placeholder="Email address" autocomplete="email" required>
+        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
 
-  <input type="tel" name="Phone" placeholder="Phone number" autocomplete="tel">
+        <input type="text" name="Name" placeholder="Your name" required>
 
-  <select name="Event type" required>
-    <option value="">What are you celebrating?</option>
-    <option>Wedding</option>
-    <option>Birthday</option>
-    <option>Private Party</option>
-    <option>Other Event</option>
-  </select>
+        <input type="email" name="Email" placeholder="Email address" required>
 
-  <input type="date" name="Event date">
+        <input type="tel" name="Phone" placeholder="Phone number">
 
-  <input type="text" name="Location" placeholder="Event location">
+        <select name="Event type" required>
+          <option value="">What are you celebrating?</option>
+          <option>Wedding</option>
+          <option>Birthday</option>
+          <option>Private Party</option>
+          <option>Other Event</option>
+        </select>
 
-  <select name="Optional extras">
-    <option value="">Interested in any extras?</option>
-    <option>Disco Till Late</option>
-    <option>DJ Till Late</option>
-    <option>Enhanced Lighting Rig</option>
-    <option>Multiple Extras</option>
-    <option>Not Sure Yet</option>
-  </select>
+        <input type="date" name="Event date">
 
-  <textarea name="Message" placeholder="Tell us about your plans, guests and anything else you'd like us to know..."></textarea>
+        <input type="text" name="Location" placeholder="Event location">
 
-  <button class="btn" type="submit">
-    Request My Quote
-  </button>
+        <select name="Optional extras">
+          <option value="">Interested in any extras?</option>
+          <option>Disco Till Late</option>
+          <option>DJ Till Late</option>
+          <option>Enhanced Lighting Rig</option>
+          <option>Multiple Extras</option>
+          <option>Not Sure Yet</option>
+        </select>
 
-  <p class="form-note">
-    Your enquiry will be sent directly to Lakeside Ceilidh Band.
-  </p>
+        <textarea
+          name="Message"
+          placeholder="Tell us about your plans, guests and anything else you'd like us to know..."></textarea>
 
-</form>
+        <button class="btn" type="submit">
+          Request My Quote
+        </button>
 
-<div class="success-message" id="successMessage" style="display:none;">
+        <p class="form-note">
+          Your enquiry will be sent directly to Lakeside Ceilidh Collective.
+        </p>
 
-  <h3>Thank You for Your Enquiry!</h3>
+      </form>
 
-  <p>Your enquiry has been submitted successfully.</p>
+      <div class="success-message" id="successMessage" style="display:none;" role="status">
 
-  <p>
-    Thank you for considering Lakeside Ceilidh Band.
-    We'll be in touch as soon as possible.
-  </p>
+        <h3>Thank You for Your Enquiry!</h3>
 
-</div>
+        <p>Your enquiry has been submitted successfully.</p>
+
+        <p>
+          Thank you for considering Lakeside Ceilidh Collective.
+          We'll be in touch as soon as possible.
+        </p>
+
+        <a href="#about" class="btn">Back to Website</a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
@@ -1270,28 +1208,6 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 </script>
 
-    </form>
-    <div class="success-message" id="successMessage" style="display:none;">
-
-  <h3>Thank You for Your Enquiry!</h3>
-
-  <p>
-    Your enquiry has been submitted successfully.
-  </p>
-
-  <p>
-    Thank you for considering Lakeside Ceilidh Collective
-    for your celebration. We'll be in touch as soon
-    as possible.
-  </p>
-
-  <a href="#about" class="btn">Back to Website</a>
-
-</div>
-
-  </div>
-
-</section>
 
 
 <!-- FOOTER -->
@@ -1328,33 +1244,5 @@ document.addEventListener("DOMContentLoaded", function() {
   </p>
 
 </footer>
-
-</body>
-  <script>
-document.addEventListener("DOMContentLoaded", function() {
-
-  const params = new URLSearchParams(window.location.search);
-
-  const form = document.getElementById("contactForm");
-  const successMessage = document.getElementById("successMessage");
-
-  if (params.get("submitted") === "true") {
-
-    form.style.display = "none";
-    successMessage.style.display = "block";
-
-    window.history.replaceState(
-      {},
-      document.title,
-      window.location.pathname + "#contact"
-    );
-
-    document.getElementById("contact").scrollIntoView({
-      behavior: "smooth"
-    });
-
-  }
-
-});
-</script>
+  </body>
 </html>
