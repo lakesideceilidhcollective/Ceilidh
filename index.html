@@ -2071,5 +2071,144 @@ next.addEventListener("click", function() {
 });
 </script>
 
+<script>
+
+document.addEventListener("DOMContentLoaded", function() {
+
+  // CHANGE AUTO-SCROLL SPEED HERE (SECONDS)
+  const QUICK_QUOTES_SCROLL_SECONDS = 20;
+
+  // YOUR EXISTING GOOGLE APPS SCRIPT URL
+  const scriptUrl = "https://script.google.com/macros/s/AKfycbyLPdcVoo_s4-x0MAU3tPE7hg3Wi8axxJmPXSg3AM0Xq77HjSJ_7SDyHpJ8yDWcZsiPlw/exec";
+
+  const track = document.getElementById("quickQuotesTrack");
+  const viewport = document.querySelector(".quick-quotes-viewport");
+
+  if (!track || !viewport) return;
+
+  let autoScrollTimer = null;
+  let loaded = false;
+
+  function stopAutoScroll() {
+    if (autoScrollTimer) {
+      clearInterval(autoScrollTimer);
+      autoScrollTimer = null;
+    }
+  }
+
+  function moveQuotes() {
+
+    const cards = track.querySelectorAll(".quick-quote-card");
+
+    if (!cards.length) return;
+
+    const gap = parseFloat(getComputedStyle(track).gap) || 0;
+    const cardWidth = cards[0].offsetWidth + gap;
+
+    const maxScroll = viewport.scrollWidth - viewport.clientWidth;
+
+    if (viewport.scrollLeft >= maxScroll - 5) {
+
+      viewport.scrollTo({
+        left: 0,
+        behavior: "smooth"
+      });
+
+    } else {
+
+      viewport.scrollBy({
+        left: cardWidth,
+        behavior: "smooth"
+      });
+
+    }
+
+  }
+
+  function startAutoScroll() {
+
+    stopAutoScroll();
+
+    if (track.querySelectorAll(".quick-quote-card").length < 2) {
+      return;
+    }
+
+    autoScrollTimer = setInterval(
+      moveQuotes,
+      QUICK_QUOTES_SCROLL_SECONDS * 1000
+    );
+
+  }
+
+  function loadQuotes(data) {
+
+    if (loaded) return;
+
+    if (!data || !data.success ||
+        !Array.isArray(data.quickQuotes) ||
+        !data.quickQuotes.length) {
+
+      track.innerHTML =
+        '<p class="quick-quotes-loading">More kind words coming soon.</p>';
+
+      return;
+    }
+
+    loaded = true;
+    track.innerHTML = "";
+
+    data.quickQuotes.forEach(function(item) {
+
+      const card = document.createElement("div");
+      card.className = "quick-quote-card";
+
+      const quote = document.createElement("p");
+      quote.className = "quick-quote-text";
+      quote.textContent = "“" + item.quote + "”";
+
+      card.appendChild(quote);
+
+      if (item.from) {
+
+        const from = document.createElement("p");
+        from.className = "quick-quote-from";
+        from.textContent = "— " + item.from;
+
+        card.appendChild(from);
+
+      }
+
+      track.appendChild(card);
+
+    });
+
+    startAutoScroll();
+
+  }
+
+  window.lakesideQuickQuotesCallback = loadQuotes;
+
+  const script = document.createElement("script");
+
+  script.src = scriptUrl +
+    "?sheet=Quick%20Quotes&callback=lakesideQuickQuotesCallback";
+
+  script.async = true;
+
+  script.onerror = function() {
+    track.innerHTML =
+      '<p class="quick-quotes-loading">Our kind words are temporarily unavailable.</p>';
+  };
+
+  document.body.appendChild(script);
+
+  window.addEventListener("resize", function() {
+    startAutoScroll();
+  });
+
+});
+
+</script>
+
 </body>
 </html>
