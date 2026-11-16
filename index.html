@@ -1755,6 +1755,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
 </footer>
 <script> 
+
+<script>
 document.addEventListener("DOMContentLoaded", function() {
 
   const scriptUrl = "https://script.google.com/macros/s/AKfycbzejPrGPg5Sf5gEKRmWSQE5mufD5o75ZiTdTCnaAK8GQ5TiS__POwi-qiGyByhCsnhw/exec";
@@ -1767,7 +1769,27 @@ document.addEventListener("DOMContentLoaded", function() {
 
   if (!track || !viewport || !prev || !next) return;
 
+  let loaded = false;
+  let timeout;
+
+  function showMessage(message) {
+    if (loaded) return;
+
+    loaded = true;
+    clearTimeout(timeout);
+
+    track.innerHTML = "";
+
+    const p = document.createElement("p");
+    p.className = "testimonial-loading";
+    p.textContent = message;
+
+    track.appendChild(p);
+    status.textContent = "";
+  }
+
   function updateControls() {
+
     const maxScroll = viewport.scrollWidth - viewport.clientWidth;
 
     prev.disabled = viewport.scrollLeft <= 2;
@@ -1776,18 +1798,19 @@ document.addEventListener("DOMContentLoaded", function() {
     const cards = track.querySelectorAll(".testimonial-card");
 
     if (cards.length) {
-      const cardWidth = cards[0].offsetWidth;
+      const width = cards[0].offsetWidth;
       const gap = parseFloat(getComputedStyle(track).gap) || 0;
+
       const position = Math.round(
-        viewport.scrollLeft / (cardWidth + gap)
+        viewport.scrollLeft / (width + gap)
       ) + 1;
 
-      status.textContent =
-        position + " / " + cards.length;
+      status.textContent = position + " / " + cards.length;
     }
   }
 
   function moveCarousel(direction) {
+
     const card = track.querySelector(".testimonial-card");
 
     if (!card) return;
@@ -1812,16 +1835,32 @@ document.addEventListener("DOMContentLoaded", function() {
 
   function loadTestimonials(data) {
 
-    if (!Array.isArray(data) || data.length === 0) {
-      track.innerHTML =
-        '<p class="testimonial-loading">Our testimonials will be appearing here soon.</p>';
-      status.textContent = "";
+    if (loaded) return;
+
+    let testimonials = Array.isArray(data)
+      ? data
+      : data && Array.isArray(data.testimonials)
+        ? data.testimonials
+        : [];
+
+    testimonials = testimonials.filter(function(item) {
+      return item &&
+        typeof item.testimonial === "string" &&
+        item.testimonial.trim() &&
+        typeof item.from === "string";
+    });
+
+    if (!testimonials.length) {
+      showMessage("Our testimonials will be appearing here soon.");
       return;
     }
 
+    loaded = true;
+    clearTimeout(timeout);
+
     track.innerHTML = "";
 
-    data.forEach(function(item) {
+    testimonials.forEach(function(item) {
 
       const card = document.createElement("div");
       card.className = "testimonial-card";
@@ -1838,11 +1877,9 @@ document.addEventListener("DOMContentLoaded", function() {
       card.appendChild(from);
 
       track.appendChild(card);
-
     });
 
     updateControls();
-
   }
 
   window.lakesideTestimonialsCallback = loadTestimonials;
@@ -1852,17 +1889,25 @@ document.addEventListener("DOMContentLoaded", function() {
   script.src = scriptUrl +
     "?callback=lakesideTestimonialsCallback";
 
+  script.async = true;
+
   script.onerror = function() {
-    track.innerHTML =
-      '<p class="testimonial-loading">Unable to load testimonials just now.</p>';
-    status.textContent = "";
+    showMessage("Unable to connect to our testimonials service. Please try again later.");
   };
+
+  timeout = setTimeout(function() {
+    showMessage("Our testimonials are taking too long to load. Please try again later.");
+  }, 12000);
 
   document.body.appendChild(script);
 
   window.addEventListener("resize", updateControls);
 
 });
+</script>
+</body>
+</html>
+
 </script>
 </body>
 </html>
