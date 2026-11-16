@@ -22,7 +22,7 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="Lakeside Ceilidh Collective | UK Wedding Ceilidh Band ">
 <meta property="og:description" content="Live folk music, ceilidh dancing and unforgettable wedding entertainment throughout the UK.">
-<meta property="og:url" content="https://lakesideceilidhcollective.github.io/Ceilidh/">
+<meta property="og:" content="https://lakesideceilidhcollective.github.io/Ceilidh/">
 <meta property="og:site_name" content="Lakeside Ceilidh Collective">
 
 <meta name="twitter:card" content="summary_large_image">
@@ -36,7 +36,7 @@
   "@context": "https://schema.org",
   "@type": "MusicGroup",
   "name": "Lakeside Ceilidh Collective",
-  "url": "https://lakesideceilidhcollective.github.io/Ceilidh/",
+  "": "https://lakesideceilidhcollective.github.io/Ceilidh/",
   "description": "Live ceilidh music, traditional dancing and wedding entertainment across the UK.",
   "areaServed": {
     "@type": "Country",
@@ -194,7 +194,7 @@ nav {
 
 background:
   linear-gradient(#172f4575,#172f4585),
- url('https://lh3.googleusercontent.com/d/1kQiq7yFZ7N5s_wxB3FwrcBEaH3xZYhqF')
+ ('https://lh3.googleusercontent.com/d/1kQiq7yFZ7N5s_wxB3FwrcBEaH3xZYhqF')
   center/cover;
 }
 
@@ -706,7 +706,7 @@ footer p {
 
     <div class="video-wrapper">
       <iframe
-        src="https://www.youtube-nocookie.com/embed/RaH1lGOBVdM"
+        src="https://youtu.be/pm2brnwqBQ0"
         title="Lakeside Ceilidh Collective Performance"
         loading="lazy"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -716,7 +716,7 @@ footer p {
 
     <div class="video-wrapper">
       <iframe
-        src="https://www.youtube-nocookie.com/embed/HL7WMSeZHF0"
+        src="https://youtu.be/KgDSyAQoETo"
         title="Lakeside Ceilidh Collective Video"
         loading="lazy"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -1010,7 +1010,7 @@ footer p {
 
 document.addEventListener("DOMContentLoaded", function() {
 
-  const galleryUrl =
+  const gallery =
     "https://script.google.com/macros/s/AKfycbwRyB0sewJw1MIrnU-ZNTZDE4W3kWgN-jMT8jGwstTskWuZ3TrdvKjQYAy4mJtWb-Y/exec";
 
   const grid = document.getElementById("galleryGrid");
@@ -1034,7 +1034,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     currentIndex = (index + photos.length) % photos.length;
 
-    enlarged.src = photos[currentIndex].url;
+    enlarged.src = photos[currentIndex].;
     enlarged.alt = photos[currentIndex].name || "Gallery photograph";
 
     lightbox.classList.add("active");
@@ -1108,7 +1108,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     photos = data.images.filter(function(photo) {
-      return photo.url;
+      return photo.;
     });
 
     if (!photos.length) {
@@ -1127,7 +1127,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
       const img = document.createElement("img");
 
-      img.src = photo.url;
+      img.src = photo.;
       img.alt = photo.name || "Lakeside Ceilidh Collective event";
       img.loading = index < 3 ? "eager" : "lazy";
       img.decoding = "async";
@@ -1156,7 +1156,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   const script = document.createElement("script");
 
-  script.src = galleryUrl + "?callback=lakesideGalleryCallback";
+  script.src = gallery + "?callback=lakesideGalleryCallback";
   script.async = true;
 
   const timeout = setTimeout(function() {
@@ -1411,7 +1411,7 @@ document.addEventListener("DOMContentLoaded", function() {
 <script>
 document.addEventListener("DOMContentLoaded", function() {
 
-  const params = new URLSearchParams(window.location.search);
+  const params = new SearchParams(window.location.search);
   const form = document.getElementById("contactForm");
   const successMessage = document.getElementById("successMessage");
 
