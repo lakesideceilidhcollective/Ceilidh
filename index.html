@@ -891,6 +891,7 @@ footer p {
 </style>
 
 <script>
+
 document.addEventListener("DOMContentLoaded", function() {
 
   const galleryUrl =
@@ -899,6 +900,10 @@ document.addEventListener("DOMContentLoaded", function() {
   const grid = document.getElementById("galleryGrid");
   const status = document.getElementById("galleryStatus");
   const lightbox = document.getElementById("gallery-lightbox");
+
+  let galleryLoaded = false;
+
+  // CLOSE ENLARGED IMAGE
 
   lightbox.querySelector("button").addEventListener("click", function() {
     lightbox.classList.remove("active");
@@ -916,53 +921,71 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
 
-function loadGallery(data) {
+  // LOAD GALLERY PHOTOS
 
-    if (!data || data.success !== true) {
-      status.textContent = "Our gallery is temporarily unavailable.";
+  function loadGallery(data) {
+
+    if (galleryLoaded) return;
+
+    if (!data || !data.success || !Array.isArray(data.images)) {
+      status.textContent =
+        "Our gallery is temporarily unavailable. Please try again later.";
       return;
     }
 
-    if (!data.images || data.images.length === 0) {
-      status.textContent = "Our photos will be appearing here soon.";
-      return;
-    }
-      status.textContent = "Our gallery is temporarily unavailable.";
-      return;
-    }
-
-    if (!data.images || data.images.length === 0) {
-      status.textContent = "Our photos will be appearing here soon.";
+    if (data.images.length === 0) {
+      status.textContent =
+        "Our photos will be appearing here soon.";
+      galleryLoaded = true;
       return;
     }
 
-    status.remove();
+    galleryLoaded = true;
 
-    data.images.forEach(function(photo) {
+    status.textContent = "Loading photos...";
+
+    data.images.forEach(function(photo, index) {
+
+      if (!photo.url) return;
 
       const button = document.createElement("button");
       button.className = "gallery-item";
       button.type = "button";
+      button.setAttribute("aria-label", "View " + (photo.name || "gallery photo"));
 
       const img = document.createElement("img");
+
       img.src = photo.url;
-      img.alt = photo.name;
-      img.loading = "lazy";
+      img.alt = photo.name || "Lakeside Ceilidh Collective event";
+      img.loading = index < 3 ? "eager" : "lazy";
+      img.decoding = "async";
 
       button.appendChild(img);
 
+      img.onerror = function() {
+        button.remove();
+      };
+
       button.addEventListener("click", function() {
+
         const enlarged = lightbox.querySelector("img");
+
         enlarged.src = photo.url;
-        enlarged.alt = photo.name;
+        enlarged.alt = img.alt;
+
         lightbox.classList.add("active");
+
       });
 
       grid.appendChild(button);
 
     });
 
+    status.remove();
+
   }
+
+  // GOOGLE APPS SCRIPT CONNECTION
 
   window.lakesideGalleryCallback = loadGallery;
 
@@ -970,9 +993,33 @@ function loadGallery(data) {
 
   script.src = galleryUrl + "?callback=lakesideGalleryCallback";
 
+  script.async = true;
+
+  const timeout = setTimeout(function() {
+
+    if (!galleryLoaded) {
+      status.textContent =
+        "Our gallery is taking longer than expected to load. Please refresh the page to try again.";
+    }
+
+  }, 12000);
+
   script.onerror = function() {
+
+    clearTimeout(timeout);
+
     status.textContent =
       "Unable to load our gallery just now. Please try again later.";
+
+  };
+
+  const originalCallback = window.lakesideGalleryCallback;
+
+  window.lakesideGalleryCallback = function(data) {
+
+    clearTimeout(timeout);
+    originalCallback(data);
+
   };
 
   document.body.appendChild(script);
