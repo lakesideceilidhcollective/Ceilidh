@@ -1,42 +1,40 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-
-<!-- SEO: PAGE TITLE AND DESCRIPTION -->
+<!-- SEO -->
 
 <title>Lakeside Ceilidh Collective | UK Wedding Ceilidh Band</title>
 
 <meta name="description" content="Looking for a wedding ceilidh band in the UK? Lakeside Ceilidh Collective brings live folk music, traditional ceilidh dancing and unforgettable entertainment to weddings and events across the UK.">
 
-<!-- SEO: SEARCH ENGINE SETTINGS -->
-
 <meta name="robots" content="index, follow">
 
 <link rel="canonical" href="https://lakesideceilidhcollective.github.io/Ceilidh/">
 
-<!-- SEO: SOCIAL MEDIA SHARING -->
+<!-- SOCIAL MEDIA -->
 
 <meta property="og:type" content="website">
-<meta property="og:title" content="Lakeside Ceilidh Collective | UK Wedding Ceilidh Band ">
+<meta property="og:title" content="Lakeside Ceilidh Collective | UK Wedding Ceilidh Band">
 <meta property="og:description" content="Live folk music, ceilidh dancing and unforgettable wedding entertainment throughout the UK.">
-<meta property="og:" content="https://lakesideceilidhcollective.github.io/Ceilidh/">
+<meta property="og:url" content="https://lakesideceilidhcollective.github.io/Ceilidh/">
 <meta property="og:site_name" content="Lakeside Ceilidh Collective">
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Lakeside Ceilidh Collective | Wedding Ceilidh Band">
 <meta name="twitter:description" content="Live ceilidh music and wedding entertainment across the UK.">
 
-<!-- SEO: BUSINESS INFORMATION -->
+<!-- BUSINESS INFORMATION -->
 
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "MusicGroup",
   "name": "Lakeside Ceilidh Collective",
-  "": "https://lakesideceilidhcollective.github.io/Ceilidh/",
+  "url": "https://lakesideceilidhcollective.github.io/Ceilidh/",
   "description": "Live ceilidh music, traditional dancing and wedding entertainment across the UK.",
   "areaServed": {
     "@type": "Country",
@@ -48,9 +46,11 @@
 }
 </script>
 
+<!-- FONTS -->
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
 
 <style>
@@ -78,28 +78,6 @@ html {
   scroll-padding-top: 90px;
 }
 
-.success-message {
-  background: var(--cream);
-  border-left: 4px solid var(--green);
-  padding: 30px;
-  color: var(--green);
-}
-
-.success-message h3 {
-  font-size: 27px;
-  margin-bottom: 12px;
-}
-
-.success-message p {
-  color: var(--text);
-  margin-bottom: 10px;
-}
-
-.success-message .btn {
-  margin-top: 20px;
-  display: inline-block;
-}
-  
 body {
   font-family: 'DM Sans', sans-serif;
   color: var(--text);
@@ -191,11 +169,10 @@ nav {
   text-align: center;
   color: white;
   padding: 100px 20px;
-
-background:
-  linear-gradient(#172f4575,#172f4585),
- ('https://lh3.googleusercontent.com/d/1kQiq7yFZ7N5s_wxB3FwrcBEaH3xZYhqF')
-  center/cover;
+  background:
+    linear-gradient(#172f4575, #172f4585),
+    url("https://lh3.googleusercontent.com/d/1kQiq7yFZ7N5s_wxB3FwrcBEaH3xZYhqF")
+    center / cover no-repeat;
 }
 
 .hero-content {
@@ -249,10 +226,7 @@ section {
   color: #6d7b88;
 }
 
-/* ABOUT AND YOUTUBE VIDEO */
-
-
-/* TWO VIDEO LAYOUT */
+/* ABOUT AND VIDEOS */
 
 .video-grid {
   display: grid;
@@ -289,16 +263,11 @@ section {
   margin-bottom: 20px;
 }
 
-/* MOBILE VIDEO LAYOUT */
-
-@media (max-width: 800px) {
-  .video-grid {
-    grid-template-columns: 1fr;
-    gap: 25px;
-  }
+.italic {
+  font-style: italic;
 }
 
-/* WHAT WE DO */
+/* SERVICES */
 
 .services {
   background: var(--white);
@@ -432,17 +401,6 @@ section {
   color: #e3edf5;
 }
 
-/* MOBILE RESPONSIVENESS */
-
-@media(max-width: 800px) {
-  .extras-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .extras-bottom {
-    padding: 30px 20px;
-  }
-}
 /* CONTACT */
 
 .contact {
@@ -511,6 +469,33 @@ input:focus, textarea:focus, select:focus {
   font-size: 12px;
   color: #6d7b88;
 }
+
+/* SUCCESS MESSAGE */
+
+.success-message {
+  background: var(--cream);
+  border-left: 4px solid var(--green);
+  padding: 30px;
+  color: var(--green);
+}
+
+.success-message h3 {
+  font-size: 27px;
+  margin-bottom: 12px;
+}
+
+.success-message p {
+  color: var(--text);
+  margin-bottom: 10px;
+}
+
+.success-message .btn {
+  margin-top: 20px;
+  display: inline-block;
+}
+
+/* INSTAGRAM */
+
 .instagram-link {
   display: inline-flex;
   flex-direction: column;
@@ -528,6 +513,7 @@ input:focus, textarea:focus, select:focus {
 .instagram-link:hover {
   color: var(--sage);
 }
+
 /* FOOTER */
 
 footer {
@@ -548,9 +534,7 @@ footer p {
   margin-top: 10px;
 }
 
-/* ==============================
-   MOBILE RESPONSIVENESS
-============================== */
+/* MOBILE RESPONSIVENESS */
 
 @media(max-width: 800px) {
 
@@ -569,29 +553,21 @@ footer p {
     display: none;
   }
 
-  .about-grid,
+  .video-grid,
   .contact-grid {
     grid-template-columns: 1fr;
     gap: 35px;
   }
 
-  .cards {
-    grid-template-columns: 1fr;
-  }
-
+  .cards,
   .extras-grid {
     grid-template-columns: 1fr;
-  }
-
-  .gallery-grid {
-    grid-template-columns: repeat(2, 1fr);
   }
 
   section {
     padding: 75px 6%;
   }
 
-  .about-text h2,
   .contact h2 {
     font-size: 35px;
   }
@@ -622,10 +598,6 @@ footer p {
     font-size: 11px;
   }
 
-  .gallery-grid {
-    grid-template-columns: 1fr;
-  }
-
   .hero h1 {
     font-size: 43px;
   }
@@ -635,6 +607,8 @@ footer p {
 </style>
 </head>
 
+
+  
 <body>
 
 <!-- NAVIGATION -->
@@ -655,7 +629,6 @@ footer p {
   </div>
 
 </nav>
-
 
 <!-- HERO -->
 
@@ -686,54 +659,55 @@ footer p {
 
 </header>
 
-
 <!-- ABOUT -->
-
-<!-- ABOUT SECTION -->
 
 <section id="about">
 
   <div class="section-heading">
+
     <div class="eyebrow">A little about us</div>
+
     <h2>Tradition with a Modern Twist</h2>
+
     <p>
       Bringing people together through live folk music,
       ceilidh dancing and unforgettable celebrations.
     </p>
+
   </div>
+
+  <!-- VIDEO GRID -->
 
   <div class="video-grid">
 
     <div class="video-wrapper">
-    <div class="video-grid">
 
-  <!-- LEFT VIDEO -->
-  <div class="video-wrapper">
-    <iframe
-      src="https://www.youtube-nocookie.com/embed/pm2brnwqBQ0"
-      title="Lakeside Ceilidh Collective – Video 1"
-      loading="lazy"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      allowfullscreen>
-    </iframe>
-  </div>
+      <iframe
+        src="https://www.youtube-nocookie.com/embed/pm2brnwqBQ0"
+        title="Lakeside Ceilidh Collective – Video 1"
+        loading="lazy"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen>
+      </iframe>
 
-  <!-- RIGHT VIDEO -->
-  <div class="video-wrapper">
-    <iframe
-      src="https://www.youtube-nocookie.com/embed/KgDSyAQoETo"
-      title="Lakeside Ceilidh Collective – Video 2"
-      loading="lazy"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      allowfullscreen>
-    </iframe>
-  </div>
+    </div>
 
-</div>
+    <div class="video-wrapper">
+
+      <iframe
+        src="https://www.youtube-nocookie.com/embed/KgDSyAQoETo"
+        title="Lakeside Ceilidh Collective – Video 2"
+        loading="lazy"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen>
+      </iframe>
+
+    </div>
 
   </div>
 
   <div class="about-text">
+
     <p>
       At Lakeside Ceilidh Collective, we believe the best
       celebrations are the ones where everyone gets involved.
@@ -749,6 +723,7 @@ footer p {
     <p class="italic">
       Good music. Great people. Unforgettable memories.
     </p>
+
   </div>
 
 </section>
@@ -774,7 +749,6 @@ footer p {
 
   </div>
 
-
   <div class="cards">
 
     <div class="card">
@@ -788,7 +762,6 @@ footer p {
 
     </div>
 
-
     <div class="card">
 
       <h3>Live Music</h3>
@@ -799,7 +772,6 @@ footer p {
       </p>
 
     </div>
-
 
     <div class="card">
 
@@ -815,7 +787,6 @@ footer p {
   </div>
 
 </section>
-
 
 <!-- EXPERIENCE -->
 
@@ -840,8 +811,11 @@ footer p {
   </a>
 
 </section>
+</body>
 
-<!-- LAKESIDE GALLERY -->
+
+  
+<!-- GALLERY -->
 
 <section id="gallery">
 
@@ -859,23 +833,32 @@ footer p {
 
 </section>
 
+<!-- GALLERY LIGHTBOX -->
 
-<!-- ENLARGED PHOTO VIEW -->
+<div id="gallery-lightbox"
+     role="dialog"
+     aria-modal="true"
+     aria-label="Enlarged gallery photo">
 
-<div id="gallery-lightbox" role="dialog" aria-modal="true" aria-label="Enlarged gallery photo">
+  <button type="button"
+          class="lightbox-close"
+          aria-label="Close image">&times;</button>
 
-  <button type="button" class="lightbox-close" aria-label="Close image">&times;</button>
-
-  <button type="button" class="lightbox-prev" aria-label="Previous photo">&#10094;</button>
+  <button type="button"
+          class="lightbox-prev"
+          aria-label="Previous photo">&#10094;</button>
 
   <img src="" alt="Lakeside Ceilidh Collective photograph">
 
-  <button type="button" class="lightbox-next" aria-label="Next photo">&#10095;</button>
+  <button type="button"
+          class="lightbox-next"
+          aria-label="Next photo">&#10095;</button>
 
 </div>
 
-
 <style>
+
+/* GALLERY */
 
 #gallery {
   background: var(--cream);
@@ -916,7 +899,7 @@ footer p {
   color: var(--text);
 }
 
-/* ENLARGED PHOTO VIEW */
+/* LIGHTBOX */
 
 #gallery-lightbox {
   display: none;
@@ -974,9 +957,10 @@ footer p {
   color: var(--sage);
 }
 
-/* MOBILE */
+/* MOBILE GALLERY */
 
-@media(max-width:800px) {
+@media(max-width: 800px) {
+
   .gallery-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -1002,14 +986,16 @@ footer p {
   .lightbox-next {
     font-size: 27px;
   }
+
 }
 
-@media(max-width:450px) {
+@media(max-width: 450px) {
+
   .gallery-grid {
     grid-template-columns: 1fr;
   }
+
 }
-</style>
 
 </style>
 
@@ -1033,6 +1019,14 @@ document.addEventListener("DOMContentLoaded", function() {
   let currentIndex = 0;
   let galleryLoaded = false;
 
+  // GET IMAGE URL
+
+  function getImageUrl(photo) {
+
+    return photo.url || photo.imageUrl || photo.src || "";
+
+  }
+
   // OPEN PHOTO
 
   function openPhoto(index) {
@@ -1041,10 +1035,16 @@ document.addEventListener("DOMContentLoaded", function() {
 
     currentIndex = (index + photos.length) % photos.length;
 
-    enlarged.src = photos[currentIndex].;
-    enlarged.alt = photos[currentIndex].name || "Gallery photograph";
+    enlarged.src = getImageUrl(photos[currentIndex]);
+
+    enlarged.alt =
+      photos[currentIndex].name || "Gallery photograph";
 
     lightbox.classList.add("active");
+
+    document.body.style.overflow = "hidden";
+
+    closeButton.focus();
 
   }
 
@@ -1063,12 +1063,19 @@ document.addEventListener("DOMContentLoaded", function() {
   // CLOSE PHOTO
 
   function closePhoto() {
+
     lightbox.classList.remove("active");
+
     enlarged.src = "";
+
+    document.body.style.overflow = "";
+
   }
 
   closeButton.addEventListener("click", closePhoto);
+
   nextButton.addEventListener("click", nextPhoto);
+
   prevButton.addEventListener("click", previousPhoto);
 
   lightbox.addEventListener("click", function(e) {
@@ -1086,7 +1093,9 @@ document.addEventListener("DOMContentLoaded", function() {
     if (!lightbox.classList.contains("active")) return;
 
     if (e.key === "Escape") closePhoto();
+
     if (e.key === "ArrowRight") nextPhoto();
+
     if (e.key === "ArrowLeft") previousPhoto();
 
   });
@@ -1106,22 +1115,23 @@ document.addEventListener("DOMContentLoaded", function() {
 
     }
 
-    if (data.images.length === 0) {
-
-      status.textContent = "Our photos will be appearing here soon.";
-      galleryLoaded = true;
-      return;
-
-    }
-
     photos = data.images.filter(function(photo) {
-      return photo.;
+
+      return photo &&
+        typeof getImageUrl(photo) === "string" &&
+        getImageUrl(photo).trim() !== "";
+
     });
 
     if (!photos.length) {
-      status.textContent = "Our photos will be appearing here soon.";
+
+      status.textContent =
+        "Our photos will be appearing here soon.";
+
       galleryLoaded = true;
+
       return;
+
     }
 
     galleryLoaded = true;
@@ -1129,24 +1139,38 @@ document.addEventListener("DOMContentLoaded", function() {
     photos.forEach(function(photo, index) {
 
       const button = document.createElement("button");
+
       button.className = "gallery-item";
       button.type = "button";
 
+      button.setAttribute(
+        "aria-label",
+        "View gallery photograph " + (index + 1)
+      );
+
       const img = document.createElement("img");
 
-      img.src = photo.;
-      img.alt = photo.name || "Lakeside Ceilidh Collective event";
+      img.src = getImageUrl(photo);
+
+      img.alt =
+        photo.name || "Lakeside Ceilidh Collective event";
+
       img.loading = index < 3 ? "eager" : "lazy";
+
       img.decoding = "async";
 
       button.appendChild(img);
 
       img.onerror = function() {
+
         button.remove();
+
       };
 
       button.addEventListener("click", function() {
+
         openPhoto(index);
+
       });
 
       grid.appendChild(button);
@@ -1159,14 +1183,24 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // GOOGLE APPS SCRIPT CONNECTION
 
-  window.lakesideGalleryCallback = loadGallery;
+  let timeout;
+
+  window.lakesideGalleryCallback = function(data) {
+
+    clearTimeout(timeout);
+
+    loadGallery(data);
+
+  };
 
   const script = document.createElement("script");
 
-  script.src = gallery + "?callback=lakesideGalleryCallback";
+  script.src =
+    gallery + "?callback=lakesideGalleryCallback";
+
   script.async = true;
 
-  const timeout = setTimeout(function() {
+  timeout = setTimeout(function() {
 
     if (!galleryLoaded) {
 
@@ -1186,17 +1220,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
   };
 
-  window.lakesideGalleryCallback = function(data) {
-
-    clearTimeout(timeout);
-    loadGallery(data);
-
-  };
-
   document.body.appendChild(script);
 
 });
-</script>
 
 </script>
 
@@ -1223,7 +1249,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
   </div>
 
-
   <div class="extras-grid">
 
     <div class="extra-card">
@@ -1236,11 +1261,10 @@ document.addEventListener("DOMContentLoaded", function() {
       </p>
 
       <span class="extra-label">
-        PA & Lighting Included
+        PA &amp; Lighting Included
       </span>
 
     </div>
-
 
     <div class="extra-card">
 
@@ -1252,11 +1276,10 @@ document.addEventListener("DOMContentLoaded", function() {
       </p>
 
       <span class="extra-label">
-        PA & Lighting Included
+        PA &amp; Lighting Included
       </span>
 
     </div>
-
 
     <div class="extra-card">
 
@@ -1269,7 +1292,6 @@ document.addEventListener("DOMContentLoaded", function() {
       </p>
 
     </div>
-
 
     <div class="extra-card">
 
@@ -1284,7 +1306,6 @@ document.addEventListener("DOMContentLoaded", function() {
     </div>
 
   </div>
-
 
   <div class="extras-bottom">
 
@@ -1303,13 +1324,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
 </section>
 
-
-
 <!-- CONTACT -->
 
 <section class="contact" id="contact">
 
   <div class="contact-grid">
+
+    <!-- CONTACT INFORMATION -->
 
     <div class="contact-info">
 
@@ -1324,17 +1345,29 @@ document.addEventListener("DOMContentLoaded", function() {
 
       <br>
 
-      <p>We travel throughout the UK, bringing ceilidh music and dancing to weddings, parties and special occasions.</p>
+      <p>
+        We travel throughout the UK, bringing ceilidh music
+        and dancing to weddings, parties and special occasions.
+      </p>
 
-      <p>Every event is different, so get in touch for a quote tailored to your plans. If you'd like to add a disco, DJ or extra lighting, just let us know and we can chat through the options. </p>
+      <p>
+        Every event is different, so get in touch for a quote
+        tailored to your plans. If you'd like to add a disco,
+        DJ or extra lighting, just let us know and we can
+        chat through the options.
+      </p>
 
-        <strong> Get in touch:</strong>
+      <p>
+        <strong>Get in touch:</strong><br>
+
         <a href="mailto:lakesideceilidhcollective@gmail.com">
           lakesideceilidhcollective@gmail.com
         </a>
       </p>
 
     </div>
+
+    <!-- CONTACT FORM -->
 
     <div>
 
@@ -1343,42 +1376,89 @@ document.addEventListener("DOMContentLoaded", function() {
         action="https://formsubmit.co/lakesideceilidhcollective@gmail.com"
         method="POST">
 
-        <input type="hidden" name="_subject" value="New Lakeside Ceilidh Collective Website Enquiry">
+        <input
+          type="hidden"
+          name="_subject"
+          value="New Lakeside Ceilidh Collective Website Enquiry">
 
-        <input type="hidden" name="_template" value="table">
+        <input
+          type="hidden"
+          name="_template"
+          value="table">
 
-        <input type="hidden" name="_captcha" value="true">
+        <input
+          type="hidden"
+          name="_captcha"
+          value="true">
 
-        <input type="hidden" name="_next" value="https://lakesideceilidhcollective.github.io/Ceilidh/?submitted=true#contact">
+        <input
+          type="hidden"
+          name="_next"
+          value="https://lakesideceilidhcollective.github.io/Ceilidh/?submitted=true#contact">
 
-        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+        <!-- SPAM PROTECTION -->
 
-        <input type="text" name="Name" placeholder="Your name" required>
+        <input
+          type="text"
+          name="_honey"
+          style="display:none"
+          tabindex="-1"
+          autocomplete="off">
 
-        <input type="email" name="Email" placeholder="Email address" required>
+        <!-- CUSTOMER DETAILS -->
 
-        <input type="tel" name="Phone" placeholder="Phone number">
+        <input
+          type="text"
+          name="Name"
+          placeholder="Your name"
+          required>
+
+        <input
+          type="email"
+          name="Email"
+          placeholder="Email address"
+          required>
+
+        <input
+          type="tel"
+          name="Phone"
+          placeholder="Phone number">
+
+        <!-- EVENT TYPE -->
 
         <select name="Event type" required>
+
           <option value="">What are you celebrating?</option>
           <option>Wedding</option>
           <option>Birthday</option>
           <option>Private Party</option>
           <option>Other Event</option>
+
         </select>
 
-        <input type="date" name="Event date">
+        <input
+          type="date"
+          name="Event date">
 
-        <input type="text" name="Location" placeholder="Event location">
+        <input
+          type="text"
+          name="Location"
+          placeholder="Event location">
+
+        <!-- OPTIONAL EXTRAS -->
 
         <select name="Optional extras">
+
           <option value="">Interested in any extras?</option>
           <option>Disco Till Late</option>
           <option>DJ Till Late</option>
           <option>Enhanced Lighting Rig</option>
           <option>Multiple Extras</option>
           <option>Not Sure Yet</option>
+
         </select>
+
+        <!-- MESSAGE -->
 
         <textarea
           name="Message"
@@ -1394,7 +1474,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
       </form>
 
-      <div class="success-message" id="successMessage" style="display:none;" role="status">
+      <!-- SUCCESS MESSAGE -->
+
+      <div
+        class="success-message"
+        id="successMessage"
+        style="display:none;"
+        role="status">
 
         <h3>Thank You for Your Enquiry!</h3>
 
@@ -1405,7 +1491,9 @@ document.addEventListener("DOMContentLoaded", function() {
           We'll be in touch as soon as possible.
         </p>
 
-        <a href="#about" class="btn">Back to Website</a>
+        <a href="#about" class="btn">
+          Back to Website
+        </a>
 
       </div>
 
@@ -1415,16 +1503,24 @@ document.addEventListener("DOMContentLoaded", function() {
 
 </section>
 
+
+<!-- CONTACT FORM SUCCESS HANDLING -->
+
 <script>
+
 document.addEventListener("DOMContentLoaded", function() {
 
-  const params = new SearchParams(window.location.search);
+  const params = new URLSearchParams(window.location.search);
+
   const form = document.getElementById("contactForm");
-  const successMessage = document.getElementById("successMessage");
+
+  const successMessage =
+    document.getElementById("successMessage");
 
   if (params.get("submitted") === "true") {
 
     form.style.display = "none";
+
     successMessage.style.display = "block";
 
     window.history.replaceState(
@@ -1440,8 +1536,8 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
 });
-</script>
 
+</script>
 
 
 <!-- FOOTER -->
@@ -1461,6 +1557,7 @@ document.addEventListener("DOMContentLoaded", function() {
     class="instagram-link">
 
     <span>📸 Follow us on Instagram</span>
+
     <strong>@lakesideceilidhband</strong>
 
   </a>
@@ -1478,5 +1575,6 @@ document.addEventListener("DOMContentLoaded", function() {
   </p>
 
 </footer>
-  </body>
+
+</body>
 </html>
