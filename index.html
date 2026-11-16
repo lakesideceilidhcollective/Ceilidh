@@ -380,91 +380,161 @@ section {
   color: #e3edf5;
 }
 
-/* CONTACT */
+<!-- ==============================
+     CONTACT
+============================== -->
 
-.contact {
-  background: var(--white);
-}
+<section class="contact" id="contact">
 
-.contact-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 65px;
-  max-width: 1050px;
-  margin: auto;
-}
+  <div class="contact-grid">
 
-.contact h2 {
-  font-size: 43px;
-  color: var(--green);
-  margin-bottom: 20px;
-}
+    <div class="contact-info">
 
-.contact-info p {
-  margin-bottom: 12px;
-}
+      <div class="eyebrow">
+        Get in touch
+      </div>
 
-.contact-info a {
-  color: var(--green);
-  overflow-wrap: anywhere;
-}
+      <h2>
+        Let's Make Your Day Unforgettable.
+      </h2>
 
-.contact-info a:hover {
-  text-decoration: underline;
-}
+      <p>
+        Tell us a little about your celebration and
+        we'll get back to you with a personalised quote.
+      </p>
 
-.contact form {
-  display: grid;
-  gap: 16px;
-}
+      <br>
 
-input, textarea, select {
-  width: 100%;
-  padding: 15px;
-  background: var(--cream);
-  border: 1px solid var(--sand);
-  font: inherit;
-  border-radius: 2px;
-  color: var(--text);
-}
+      <p>
+        <strong>Coverage:</strong> All across the UK
+      </p>
 
-textarea {
-  min-height: 140px;
-  resize: vertical;
-}
+      <p>
+        <strong>Pricing:</strong> Personalised quotes on request
+      </p>
 
-input:focus, textarea:focus, select:focus {
-  outline: 2px solid var(--sage);
-  border-color: var(--green);
-}
+      <p>
+        <strong>Optional Extras:</strong> Available on request
+      </p>
 
-.contact form button {
-  border: none;
-  cursor: pointer;
-  font: inherit;
-}
+      <p>
+        <strong>Email:</strong>
+        <a href="mailto:lakesideceilidhcollective@gmail.com">
+          lakesideceilidhcollective@gmail.com
+        </a>
+      </p>
 
-/* INSTAGRAM */
+    </div>
 
-.instagram-link {
-  display: inline-flex;
-  flex-direction: column;
-  gap: 3px;
-  margin: 15px 0;
-  color: white;
-  font-size: 13px;
-  transition: .3s;
-}
+    <!-- CONTACT FORM -->
 
-.instagram-link strong {
-  color: #A9C8E2;
-  font-size: 15px;
-}
+    <div>
 
-.instagram-link:hover {
-  color: #A9C8E2;
-  transform: translateY(-2px);
-}
+      <form
+        id="contactForm"
+        action="https://formsubmit.co/lakesideceilidhcollective@gmail.com"
+        method="POST">
+
+        <input type="hidden" name="_subject" value="New Lakeside Ceilidh Band Website Enquiry">
+
+        <input type="hidden" name="_template" value="table">
+
+        <input type="hidden" name="_captcha" value="true">
+
+        <input type="hidden" name="_next" value="https://lakesideceilidhcollective.github.io/Ceilidh/?submitted=true#contact">
+
+        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+
+        <input
+          type="text"
+          name="Name"
+          placeholder="Your name"
+          autocomplete="name"
+          required>
+
+        <input
+          type="email"
+          name="Email"
+          placeholder="Email address"
+          autocomplete="email"
+          required>
+
+        <input
+          type="tel"
+          name="Phone"
+          placeholder="Phone number"
+          autocomplete="tel">
+
+        <select name="Event type" required>
+          <option value="">What are you celebrating?</option>
+          <option>Wedding</option>
+          <option>Birthday</option>
+          <option>Private Party</option>
+          <option>Other Event</option>
+        </select>
+
+        <input type="date" name="Event date">
+
+        <input
+          type="text"
+          name="Location"
+          placeholder="Event location">
+
+        <select name="Optional extras">
+          <option value="">Interested in any extras?</option>
+          <option>Disco Till Late</option>
+          <option>DJ Till Late</option>
+          <option>Enhanced Lighting Rig</option>
+          <option>Multiple Extras</option>
+          <option>Not Sure Yet</option>
+        </select>
+
+        <textarea
+          name="Message"
+          placeholder="Tell us about your plans, guests and anything else you'd like us to know..."></textarea>
+
+        <button class="btn" type="submit">
+          Request My Quote
+        </button>
+
+        <p class="form-note">
+          Your enquiry will be sent directly to Lakeside Ceilidh Collective.
+        </p>
+
+      </form>
+
+      <!-- SUCCESS MESSAGE -->
+
+      <div
+        class="success-message"
+        id="successMessage"
+        style="display:none;"
+        role="status"
+        tabindex="-1">
+
+        <h3>Thank You for Your Enquiry!</h3>
+
+        <p>
+          Your enquiry has been submitted successfully.
+        </p>
+
+        <p>
+          Thank you for considering Lakeside Ceilidh Collective
+          for your celebration. We'll be in touch as soon
+          as possible.
+        </p>
+
+        <a href="#about" class="btn">
+          Back to Website
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
 
 /* FOOTER */
 
@@ -486,13 +556,17 @@ footer p {
   margin-top: 10px;
 }
 
-/* MOBILE */
+
+/* ==============================
+   MOBILE RESPONSIVENESS
+============================== */
 
 @media(max-width: 800px) {
 
   nav {
     padding: 15px 5%;
     height: auto;
+    gap: 15px;
   }
 
   .nav-links {
@@ -518,6 +592,10 @@ footer p {
     grid-template-columns: 1fr;
   }
 
+  .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   section {
     padding: 75px 6%;
   }
@@ -534,6 +612,33 @@ footer p {
   .hero {
     min-height: 550px;
   }
+
+}
+
+@media(max-width: 450px) {
+
+  .logo {
+    font-size: 19px;
+  }
+
+  .logo span {
+    font-size: 9px;
+    letter-spacing: 3px;
+  }
+
+  .nav-links .btn {
+    padding: 11px 15px;
+    font-size: 11px;
+  }
+
+  .gallery-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero h1 {
+    font-size: 43px;
+  }
+
 }
 
 </style>
