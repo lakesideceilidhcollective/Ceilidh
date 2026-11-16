@@ -58,11 +58,11 @@
 /* COLOUR SCHEME */
 
 :root {
-  --green: #245B85;
+  --Blue: #245B85;
   --dark: #172F45;
-  --sage: #789BB8;
-  --cream: #F2F6FA;
-  --sand: #DCE6EF;
+  --dusty: #789BB8;
+  --pale: #F2F6FA;
+  --LiGrey: #DCE6EF;
   --white: #FFFFFF;
   --text: #3F4D5B;
 }
@@ -81,7 +81,7 @@ html {
 body {
   font-family: 'DM Sans', sans-serif;
   color: var(--text);
-  background: var(--cream);
+  background: var(--pale);
   line-height: 1.7;
 }
 
@@ -113,7 +113,7 @@ nav {
 
 .logo {
   font-family: 'Playfair Display', serif;
-  color: var(--green);
+  color: var(--Blue);
   font-size: 27px;
   font-weight: 700;
   line-height: 1.2;
@@ -136,14 +136,14 @@ nav {
 }
 
 .nav-links a:hover {
-  color: var(--sage);
+  color: var(--dusty);
 }
 
 /* BUTTONS */
 
 .btn {
   display: inline-block;
-  background: var(--green);
+  background: var(--Blue);
   color: white;
   padding: 14px 28px;
   border-radius: 3px;
@@ -204,8 +204,8 @@ nav {
 }
 
 .hero .btn {
-  background: var(--cream);
-  color: var(--green);
+  background: var(--pale);
+  color: var(--Blue);
 }
 
 /* GENERAL SECTIONS */
@@ -222,7 +222,7 @@ section {
 
 .section-heading h2 {
   font-size: clamp(32px, 4vw, 46px);
-  color: var(--green);
+  color: var(--Blue);
   margin-bottom: 18px;
 }
 
@@ -286,10 +286,10 @@ section {
 }
 
 .card {
-  background: var(--cream);
+  background: var(--pale);
   padding: 45px 30px;
   text-align: center;
-  border-bottom: 3px solid var(--sage);
+  border-bottom: 3px solid var(--dusty);
   transition: .3s;
 }
 
@@ -298,7 +298,7 @@ section {
 }
 
 .card h3 {
-  color: var(--green);
+  color: var(--Blue);
   font-size: 25px;
   margin-bottom: 18px;
 }
@@ -306,7 +306,7 @@ section {
 /* EXPERIENCE */
 
 .experience {
-  background: var(--green);
+  background: var(--Blue);
   color: white;
   text-align: center;
 }
@@ -325,14 +325,14 @@ section {
 
 .experience .btn {
   margin-top: 30px;
-  background: var(--cream);
-  color: var(--green);
+  background: var(--pale);
+  color: var(--Blue);
 }
   
 /* TESTIMONIALS */
 
 .testimonials {
-  background: var(--green);
+  background: var(--Blue);
   color: white;
   width: 100%;
   max-width: none;
@@ -379,7 +379,7 @@ section {
 .testimonial-card {
   flex: 0 0 calc((100% - 40px) / 3);
   min-width: 0;
-  background: var(--sage);
+  background: var(--dusty);
   color: var(--dark);
   padding: 30px 25px;
   border-radius: 4px;
@@ -399,7 +399,7 @@ section {
 }
 
 .testimonial-from {
-  color: var(--green);
+  color: var(--Blue);
   font-size: 13px;
   font-weight: 700;
 }
@@ -425,7 +425,7 @@ section {
 
 .testimonial-controls button:hover {
   background: white;
-  color: var(--green);
+  color: var(--Blue);
 }
 
 .testimonial-controls button:disabled {
@@ -476,7 +476,7 @@ section {
 /* OPTIONAL EXTRAS */
 
 .extras {
-  background: var(--green);
+  background: var(--Blue);
   color: white;
 }
 
@@ -498,7 +498,7 @@ section {
   background: var(--white);
   padding: 40px 35px;
   text-align: center;
-  border: 1px solid var(--sand);
+  border: 1px solid var(--LiGrey);
   border-radius: 3px;
   transition: .3s;
 }
@@ -509,7 +509,7 @@ section {
 }
 
 .extra-card h3 {
-  color: var(--green);
+  color: var(--Blue);
   font-size: 26px;
   margin-bottom: 15px;
 }
@@ -522,7 +522,7 @@ section {
 .extra-label {
   display: inline-block;
   background: #e3edf5;
-  color: var(--green);
+  color: var(--Blue);
   padding: 7px 15px;
   font-size: 11px;
   font-weight: 700;
@@ -566,7 +566,7 @@ section {
 
 .contact h2 {
   font-size: 43px;
-  color: var(--green);
+  color: var(--Blue);
   margin-bottom: 20px;
 }
 
@@ -575,7 +575,7 @@ section {
 }
 
 .contact-info a {
-  color: var(--green);
+  color: var(--Blue);
   overflow-wrap: anywhere;
 }
 
@@ -591,8 +591,8 @@ section {
 input, textarea, select {
   width: 100%;
   padding: 15px;
-  background: var(--cream);
-  border: 1px solid var(--sand);
+  background: var(--pale);
+  border: 1px solid var(--LiGrey);
   font: inherit;
   border-radius: 2px;
   color: var(--text);
@@ -604,8 +604,8 @@ textarea {
 }
 
 input:focus, textarea:focus, select:focus {
-  outline: 2px solid var(--sage);
-  border-color: var(--green);
+  outline: 2px solid var(--dusty);
+  border-color: var(--Blue);
 }
 
 .contact form button {
@@ -621,10 +621,10 @@ input:focus, textarea:focus, select:focus {
 /* SUCCESS MESSAGE */
 
 .success-message {
-  background: var(--cream);
-  border-left: 4px solid var(--green);
+  background: var(--pale);
+  border-left: 4px solid var(--Blue);
   padding: 30px;
-  color: var(--green);
+  color: var(--Blue);
 }
 
 .success-message h3 {
@@ -659,7 +659,7 @@ input:focus, textarea:focus, select:focus {
 }
 
 .instagram-link:hover {
-  color: var(--sage);
+  color: var(--dusty);
 }
 
 /* FOOTER */
@@ -1150,7 +1150,7 @@ footer p {
 /* GALLERY */
 
 #gallery {
-  background: var(--cream);
+  background: var(--pale);
 }
 
 .gallery-grid {
@@ -1243,7 +1243,7 @@ footer p {
 }
 
 #gallery-lightbox button:hover {
-  color: var(--sage);
+  color: var(--dusty);
 }
 
 /* MOBILE GALLERY */
