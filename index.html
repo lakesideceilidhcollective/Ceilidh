@@ -705,12 +705,30 @@
   text-align: left;
   z-index: 2;
   pointer-events: none;
+
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
-    .gallery-status {
-      padding: 30px;
-      color: var(--text);
-      text-align: center;
-    }
+
+/* SHOW ON HOVER */
+
+.gallery-item:hover .gallery-credit {
+  opacity: 1;
+}
+
+/* KEYBOARD ACCESSIBILITY */
+
+.gallery-item:focus-visible .gallery-credit {
+  opacity: 1;
+}
+
+/* TOUCH DEVICES */
+
+@media (hover: none) {
+  .gallery-credit {
+    opacity: 0;
+  }
+}
 
     /* Gallery lightbox */
     #gallery-lightbox {
