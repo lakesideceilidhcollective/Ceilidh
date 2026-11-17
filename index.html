@@ -729,7 +729,11 @@
     opacity: 0;
   }
 }
+/* INDIVIDUAL IMAGE FADE */
 
+.gallery-item {
+  transition: opacity 0.8s ease;
+}
     /* Gallery lightbox */
     #gallery-lightbox {
       display: none;
@@ -1948,7 +1952,9 @@ document.addEventListener("DOMContentLoaded", function() {
   // GALLERY SETTINGS
   // =====================================
 
-  const ROTATION_SECONDS = 15;
+  const INITIAL_DELAY_SECONDS = 20;
+  const ROTATION_SECONDS = 6;
+  const FADE_DURATION = 800;
 
   const DESKTOP_LIMIT = 9;
   const TABLET_LIMIT = 6;
@@ -1956,9 +1962,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   const FADE_DURATION = 800;
 
-  // =====================================
   // ELEMENTS
-  // =====================================
 
   const grid = document.getElementById("galleryGrid");
   const status = document.getElementById("galleryStatus");
@@ -2080,57 +2084,163 @@ document.addEventListener("DOMContentLoaded", function() {
 
   }
 
-  // =====================================
-  // AUTOMATIC PHOTO ROTATION
-  // =====================================
+ 
+// =====================================
+// INDIVIDUAL RANDOM PHOTO ROTATION
+// =====================================
 
-  function rotateGallery() {
+let rotationTimer = null;
+let initialRotationTimer = null;
+let rotating = false;
 
-    if (rotating || photos.length <= getPhotoLimit()) {
-      return;
+function rotateGallery() {
+
+  if (rotating) return;
+
+  const items = Array.from(
+    grid.querySelectorAll(".gallery-item")
+  );
+
+  if (!items.length) return;
+
+  // Find photos not currently displayed
+
+  const visiblePhotos = visiblePhotosList();
+
+  const availablePhotos = photos.filter(function(photo) {
+    return !visiblePhotos.includes(photo);
+  });
+
+  if (!availablePhotos.length) return;
+
+  rotating = true;
+
+  // Pick a random visible image
+
+  const randomIndex = Math.floor(
+    Math.random() * items.length
+  );
+
+  const selectedItem = items[randomIndex];
+
+  selectedItem.style.opacity = "0";
+
+  setTimeout(function() {
+
+    // Pick a random replacement
+
+    const replacementIndex = Math.floor(
+      Math.random() * availablePhotos.length
+    );
+
+    const replacement = availablePhotos[replacementIndex];
+
+    const oldPhoto = visiblePhotos[randomIndex];
+
+    const img = selectedItem.querySelector("img");
+
+    const oldCredit = selectedItem.querySelector(
+      ".gallery-credit"
+    );
+
+    // Update image
+
+    img.src = getImageUrl(replacement);
+
+    img.alt = replacement.name ||
+      "Lakeside Ceilidh Collective event";
+
+    // Update photographer credit
+
+    if (oldCredit) {
+      oldCredit.remove();
     }
 
-    rotating = true;
+    const photographer = (replacement.name || "").trim();
 
-    grid.classList.add("gallery-fading");
+    if (
+      photographer &&
+      photographer.toLowerCase() !== "unknown"
+    ) {
 
-    setTimeout(function() {
+      const credit = document.createElement("span");
 
-      currentStart =
-        (currentStart + getPhotoLimit()) % photos.length;
+      credit.className = "gallery-credit";
+      credit.textContent = photographer;
 
-      renderGallery();
+      selectedItem.appendChild(credit);
 
-      requestAnimationFrame(function() {
+    }
 
-        requestAnimationFrame(function() {
+    // Update photo reference
 
-          grid.classList.remove("gallery-fading");
+    selectedItem.setAttribute(
+      "aria-label",
+      "View gallery photograph"
+    );
 
-          rotating = false;
+    selectedItem.onclick = function() {
+      openPhoto(replacement);
+    };
 
-        });
+    // Update visible photo tracking
 
-      });
+    const position = visiblePhotos.indexOf(oldPhoto);
 
-    }, FADE_DURATION);
+    if (position !== -1) {
+      visiblePhotos[position] = replacement;
+    }
 
+    selectedItem.style.opacity = "1";
+
+    rotating = false;
+
+  }, FADE_DURATION);
+
+}
+
+function visiblePhotosList() {
+
+  return Array.from(
+    grid.querySelectorAll(".gallery-item")
+  ).map(function(item) {
+
+    const img = item.querySelector("img");
+
+    return photos.find(function(photo) {
+      return getImageUrl(photo) === img.src;
+    });
+
+  }).filter(Boolean);
+
+}
+
+// =====================================
+// START ROTATION AFTER INITIAL DELAY
+// =====================================
+
+function startRotation() {
+
+  clearTimeout(initialRotationTimer);
+  clearInterval(rotationTimer);
+
+  if (photos.length <= getPhotoLimit()) {
+    return;
   }
 
-  function startRotation() {
+  initialRotationTimer = setTimeout(function() {
 
-    clearInterval(rotationTimer);
-
-    if (photos.length <= getPhotoLimit()) {
-      return;
-    }
+    rotateGallery();
 
     rotationTimer = setInterval(
       rotateGallery,
       ROTATION_SECONDS * 1000
     );
 
-  }
+  }, INITIAL_DELAY_SECONDS * 1000);
+
+}
+
 
   // =====================================
   // LIGHTBOX
