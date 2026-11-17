@@ -1942,6 +1942,9 @@ nav {
 
     });
   </script>
+  
+  <!-- Gallery -->
+
 <script>
 document.addEventListener("DOMContentLoaded", function() {
 
@@ -1960,13 +1963,15 @@ document.addEventListener("DOMContentLoaded", function() {
   const TABLET_LIMIT = 6;
   const MOBILE_LIMIT = 4;
 
-  const FADE_DURATION = 800;
-
+  // =====================================
   // ELEMENTS
+  // =====================================
 
   const grid = document.getElementById("galleryGrid");
   const status = document.getElementById("galleryStatus");
   const lightbox = document.getElementById("gallery-lightbox");
+
+  if (!grid || !status || !lightbox) return;
 
   const enlarged = lightbox.querySelector("img");
   const closeButton = lightbox.querySelector(".lightbox-close");
@@ -1974,12 +1979,13 @@ document.addEventListener("DOMContentLoaded", function() {
   const nextButton = lightbox.querySelector(".lightbox-next");
 
   let photos = [];
-  let visiblePhotos = [];
   let currentIndex = 0;
   let galleryLoaded = false;
+
   let rotationTimer = null;
-  let currentStart = 0;
+  let initialRotationTimer = null;
   let rotating = false;
+  let resizeTimer = null;
 
   // =====================================
   // IMAGE URL
@@ -2008,126 +2014,129 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   // =====================================
-  // BUILD GALLERY
+  // PHOTOGRAPHER CREDIT
+  // =====================================
+
+  function addCredit(button, photo) {
+
+    const photographer = (photo.name || "").trim();
+
+    if (
+      !photographer ||
+      photographer.toLowerCase() === "unknown"
+    ) {
+      return;
+    }
+
+    const credit = document.createElement("span");
+
+    credit.className = "gallery-credit";
+    credit.textContent = photographer;
+
+    button.appendChild(credit);
+
+  }
+
+  // =====================================
+  // CREATE GALLERY ITEM
+  // =====================================
+
+  function createGalleryItem(photo, index) {
+
+    const button = document.createElement("button");
+
+    button.className = "gallery-item";
+    button.type = "button";
+
+    button.setAttribute(
+      "aria-label",
+      "View gallery photograph " + (index + 1)
+    );
+
+    button._photo = photo;
+
+    const img = document.createElement("img");
+
+    img.src = getImageUrl(photo);
+
+    img.alt = photo.name || "Lakeside Ceilidh Collective event";
+
+    img.loading = "lazy";
+    img.decoding = "async";
+
+    button.appendChild(img);
+
+    addCredit(button, photo);
+
+    img.onerror = function() {
+      button.remove();
+    };
+
+    button.addEventListener("click", function() {
+      openPhoto(button._photo);
+    });
+
+    return button;
+
+  }
+
+  // =====================================
+  // RENDER GALLERY
   // =====================================
 
   function renderGallery() {
 
     const limit = getPhotoLimit();
 
-    visiblePhotos = [];
-
-    for (let i = 0; i < limit; i++) {
-
-      const index = (currentStart + i) % photos.length;
-
-      if (photos[index]) {
-        visiblePhotos.push(photos[index]);
-      }
-
-    }
+    const visible = photos.slice(0, limit);
 
     grid.innerHTML = "";
 
-    visiblePhotos.forEach(function(photo, index) {
+    visible.forEach(function(photo, index) {
 
-      const button = document.createElement("button");
-
-      button.className = "gallery-item";
-      button.type = "button";
-
-      button.setAttribute(
-        "aria-label",
-        "View gallery photograph " + (index + 1)
+      grid.appendChild(
+        createGalleryItem(photo, index)
       );
-
-      const img = document.createElement("img");
-
-      img.src = getImageUrl(photo);
-
-      img.alt = photo.name || "Lakeside Ceilidh Collective event";
-
-      img.loading = "lazy";
-      img.decoding = "async";
-
-      button.appendChild(img);
-
-      // PHOTOGRAPHER CREDIT
-
-      const photographer = (photo.name || "").trim();
-
-      if (
-        photographer &&
-        photographer.toLowerCase() !== "unknown"
-      ) {
-
-        const credit = document.createElement("span");
-
-        credit.className = "gallery-credit";
-        credit.textContent = photographer;
-
-        button.appendChild(credit);
-
-      }
-
-      img.onerror = function() {
-        button.remove();
-      };
-
-      button.addEventListener("click", function() {
-        openPhoto(photo);
-      });
-
-      grid.appendChild(button);
 
     });
 
   }
 
- 
-// =====================================
-// INDIVIDUAL RANDOM PHOTO ROTATION
-// =====================================
+  // =====================================
+  // RANDOM INDIVIDUAL PHOTO ROTATION
+  // =====================================
 
-let rotationTimer = null;
-let initialRotationTimer = null;
-let rotating = false;
+  function rotateGallery() {
 
-function rotateGallery() {
+    if (rotating) return;
 
-  if (rotating) return;
+    const items = Array.from(
+      grid.querySelectorAll(".gallery-item")
+    );
 
-  const items = Array.from(
-    grid.querySelectorAll(".gallery-item")
-  );
+    if (!items.length) return;
 
-  if (!items.length) return;
+    const visiblePhotos = items.map(function(item) {
+      return item._photo;
+    });
 
-  // Find photos not currently displayed
+    const availablePhotos = photos.filter(function(photo) {
+      return !visiblePhotos.includes(photo);
+    });
 
-  const visiblePhotos = visiblePhotosList();
+    if (!availablePhotos.length) return;
 
-  const availablePhotos = photos.filter(function(photo) {
-    return !visiblePhotos.includes(photo);
-  });
+    rotating = true;
 
-  if (!availablePhotos.length) return;
+    // Select one random visible image
 
-  rotating = true;
+    const randomIndex = Math.floor(
+      Math.random() * items.length
+    );
 
-  // Pick a random visible image
+    const selectedItem = items[randomIndex];
 
-  const randomIndex = Math.floor(
-    Math.random() * items.length
-  );
-
-  const selectedItem = items[randomIndex];
-
-  selectedItem.style.opacity = "0";
-
-  setTimeout(function() {
-
-    // Pick a random replacement
+    // Select a random replacement
 
     const replacementIndex = Math.floor(
       Math.random() * availablePhotos.length
@@ -2135,112 +2144,90 @@ function rotateGallery() {
 
     const replacement = availablePhotos[replacementIndex];
 
-    const oldPhoto = visiblePhotos[randomIndex];
+    // Preload replacement before fading
 
-    const img = selectedItem.querySelector("img");
+    const preloadedImage = new Image();
 
-    const oldCredit = selectedItem.querySelector(
-      ".gallery-credit"
-    );
+    preloadedImage.onload = function() {
 
-    // Update image
+      selectedItem.style.opacity = "0";
 
-    img.src = getImageUrl(replacement);
+      setTimeout(function() {
 
-    img.alt = replacement.name ||
-      "Lakeside Ceilidh Collective event";
+        const oldImage = selectedItem.querySelector("img");
 
-    // Update photographer credit
+        oldImage.src = getImageUrl(replacement);
 
-    if (oldCredit) {
-      oldCredit.remove();
-    }
+        oldImage.alt = replacement.name ||
+          "Lakeside Ceilidh Collective event";
 
-    const photographer = (replacement.name || "").trim();
+        // Update photographer credit
 
-    if (
-      photographer &&
-      photographer.toLowerCase() !== "unknown"
-    ) {
+        const oldCredit = selectedItem.querySelector(
+          ".gallery-credit"
+        );
 
-      const credit = document.createElement("span");
+        if (oldCredit) {
+          oldCredit.remove();
+        }
 
-      credit.className = "gallery-credit";
-      credit.textContent = photographer;
+        addCredit(selectedItem, replacement);
 
-      selectedItem.appendChild(credit);
+        // Update photo reference
 
-    }
+        selectedItem._photo = replacement;
 
-    // Update photo reference
+        selectedItem.setAttribute(
+          "aria-label",
+          "View gallery photograph"
+        );
 
-    selectedItem.setAttribute(
-      "aria-label",
-      "View gallery photograph"
-    );
+        selectedItem.style.opacity = "1";
 
-    selectedItem.onclick = function() {
-      openPhoto(replacement);
+        rotating = false;
+
+      }, FADE_DURATION);
+
     };
 
-    // Update visible photo tracking
+    preloadedImage.onerror = function() {
+      rotating = false;
+    };
 
-    const position = visiblePhotos.indexOf(oldPhoto);
+    preloadedImage.src = getImageUrl(replacement);
 
-    if (position !== -1) {
-      visiblePhotos[position] = replacement;
-    }
-
-    selectedItem.style.opacity = "1";
-
-    rotating = false;
-
-  }, FADE_DURATION);
-
-}
-
-function visiblePhotosList() {
-
-  return Array.from(
-    grid.querySelectorAll(".gallery-item")
-  ).map(function(item) {
-
-    const img = item.querySelector("img");
-
-    return photos.find(function(photo) {
-      return getImageUrl(photo) === img.src;
-    });
-
-  }).filter(Boolean);
-
-}
-
-// =====================================
-// START ROTATION AFTER INITIAL DELAY
-// =====================================
-
-function startRotation() {
-
-  clearTimeout(initialRotationTimer);
-  clearInterval(rotationTimer);
-
-  if (photos.length <= getPhotoLimit()) {
-    return;
   }
 
-  initialRotationTimer = setTimeout(function() {
+  // =====================================
+  // START ROTATION
+  // =====================================
 
-    rotateGallery();
+  function startRotation() {
 
-    rotationTimer = setInterval(
-      rotateGallery,
-      ROTATION_SECONDS * 1000
-    );
+    clearTimeout(initialRotationTimer);
+    clearInterval(rotationTimer);
 
-  }, INITIAL_DELAY_SECONDS * 1000);
+    if (photos.length <= getPhotoLimit()) {
+      return;
+    }
 
-}
+    // Wait 20 seconds before the first change
 
+    initialRotationTimer = setTimeout(function() {
+
+      rotateGallery();
+
+      // Change one random image every 6 seconds
+
+      rotationTimer = setInterval(function() {
+
+        rotateGallery();
+
+      }, ROTATION_SECONDS * 1000);
+
+    }, INITIAL_DELAY_SECONDS * 1000);
+
+  }
 
   // =====================================
   // LIGHTBOX
@@ -2360,8 +2347,6 @@ function startRotation() {
 
     galleryLoaded = true;
 
-    currentStart = 0;
-
     renderGallery();
 
     status.remove();
@@ -2391,6 +2376,15 @@ function startRotation() {
 
   script.async = true;
 
+  script.onerror = function() {
+
+    clearTimeout(timeout);
+
+    status.textContent =
+      "Unable to load our gallery just now. Please try again later.";
+
+  };
+
   timeout = setTimeout(function() {
 
     if (!galleryLoaded) {
@@ -2402,22 +2396,11 @@ function startRotation() {
 
   }, 12000);
 
-  script.onerror = function() {
-
-    clearTimeout(timeout);
-
-    status.textContent =
-      "Unable to load our gallery just now. Please try again later.";
-
-  };
-
   document.body.appendChild(script);
 
   // =====================================
   // HANDLE SCREEN RESIZING
   // =====================================
-
-  let resizeTimer;
 
   window.addEventListener("resize", function() {
 
@@ -2426,8 +2409,6 @@ function startRotation() {
     resizeTimer = setTimeout(function() {
 
       if (!galleryLoaded) return;
-
-      currentStart = 0;
 
       renderGallery();
 
@@ -2438,7 +2419,8 @@ function startRotation() {
   });
 
 });
-    </script>
+</script>
+
 
 </body>
 </html>
