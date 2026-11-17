@@ -1511,13 +1511,23 @@ nav {
 
   <!-- Testimonials -->
 
+
 <script>
 document.addEventListener("DOMContentLoaded", function() {
 
   const scriptUrl =
     "https://script.google.com/macros/s/AKfycbyLPdcVoo_s4-x0MAU3tPE7hg3Wi8axxJmPXSg3AM0Xq77HjSJ_7SDyHpJ8yDWcZsiPlw/exec";
 
+  // =====================================
+  // SETTINGS
+  // =====================================
+
   const AUTO_SCROLL_SECONDS = 13;
+  const SCROLL_DURATION = 500;
+
+  // =====================================
+  // ELEMENTS
+  // =====================================
 
   const track = document.getElementById("testimonialTrack");
   const viewport = document.querySelector(".testimonial-viewport");
@@ -1527,17 +1537,16 @@ document.addEventListener("DOMContentLoaded", function() {
 
   if (!track || !viewport || !prev || !next || !status) return;
 
-  let autoScrollTimer = null;
   let loaded = false;
+  let autoScrollTimer = null;
   let timeout = null;
+  let scrollDebounce = null;
   let originalCount = 0;
-  let cardWidth = 0;
-  let gap = 0;
-  let originalSetWidth = 0;
-  let manualScrolling = false;
+  let setWidth = 0;
+  let moving = false;
 
   // =====================================
-  // LOADING / ERROR MESSAGES
+  // LOADING MESSAGE
   // =====================================
 
   function showMessage(message) {
@@ -1545,133 +1554,161 @@ document.addEventListener("DOMContentLoaded", function() {
     if (loaded) return;
 
     loaded = true;
-
     clearTimeout(timeout);
 
     track.innerHTML = "";
 
     const p = document.createElement("p");
-
     p.className = "testimonial-loading";
     p.textContent = message;
 
     track.appendChild(p);
-
     status.textContent = "";
-
-    prev.disabled = true;
-    next.disabled = true;
 
   }
 
   // =====================================
-  // MEASURE CARDS
+  // BUILD TESTIMONIAL CARD
   // =====================================
 
-  function measureCards() {
+  function createCard(item) {
+
+    const card = document.createElement("div");
+    card.className = "testimonial-card";
+
+    const quote = document.createElement("p");
+    quote.className = "testimonial-quote";
+    quote.textContent = "“" + item.testimonial + "”";
+
+    const from = document.createElement("p");
+    from.className = "testimonial-from";
+    from.textContent = "— " + item.from;
+
+    card.appendChild(quote);
+    card.appendChild(from);
+
+    return card;
+
+  }
+
+  // =====================================
+  // MEASURE CAROUSEL
+  // =====================================
+
+  function measureCarousel() {
 
     const cards = track.querySelectorAll(".testimonial-card");
 
     if (!cards.length) return;
 
-    gap = parseFloat(getComputedStyle(track).gap) || 0;
+    const gap = parseFloat(
+      getComputedStyle(track).gap
+    ) || 0;
 
-    cardWidth = cards[0].offsetWidth + gap;
-
-    originalSetWidth = cardWidth * originalCount;
-
-  }
-
-  // =====================================
-  // UPDATE STATUS
-  // =====================================
-
-  function updateControls() {
-
-    if (!originalCount || !cardWidth) return;
-
-    let position = Math.floor(
-      (viewport.scrollLeft % originalSetWidth) / cardWidth
-    ) + 1;
-
-    position = ((position - 1) % originalCount) + 1;
-
-    status.textContent = position + " / " + originalCount;
-
-    prev.disabled = false;
-    next.disabled = false;
+    setWidth = (cards[0].offsetWidth + gap) * originalCount;
 
   }
 
   // =====================================
-  // CONTINUOUS SCROLLING
+  // UPDATE POSITION INDICATOR
+  // =====================================
+
+  function updateStatus() {
+
+    if (!originalCount || !setWidth) return;
+
+    const cards = track.querySelectorAll(".testimonial-card");
+
+    if (!cards.length) return;
+
+    const gap = parseFloat(
+      getComputedStyle(track).gap
+    ) || 0;
+
+    const cardWidth = cards[0].offsetWidth + gap;
+
+    let position = Math.round(
+      (viewport.scrollLeft - setWidth) / cardWidth
+    );
+
+    position = ((position % originalCount) + originalCount)
+      % originalCount;
+
+    status.textContent =
+      (position + 1) + " / " + originalCount;
+
+  }
+
+  // =====================================
+  // INFINITE LOOP RECENTRING
+  // =====================================
+
+  function checkInfiniteLoop() {
+
+    if (!setWidth) return;
+
+    // Reposition without animation when nearing
+    // either end of the duplicated content.
+
+    if (viewport.scrollLeft < setWidth * 0.5) {
+
+      viewport.scrollLeft += setWidth;
+
+    } else if (viewport.scrollLeft > setWidth * 2.5) {
+
+      viewport.scrollLeft -= setWidth;
+
+    }
+
+    updateStatus();
+
+  }
+
+  // =====================================
+  // MOVE CAROUSEL
   // =====================================
 
   function moveCarousel(direction) {
 
-    if (!cardWidth) return;
+    if (moving || !originalCount) return;
 
-    stopAutoScroll();
+    const cards = track.querySelectorAll(".testimonial-card");
 
-    manualScrolling = true;
+    if (!cards.length) return;
+
+    const gap = parseFloat(
+      getComputedStyle(track).gap
+    ) || 0;
+
+    const distance = cards[0].offsetWidth + gap;
+
+    moving = true;
 
     viewport.scrollBy({
-      left: direction * cardWidth,
+      left: direction * distance,
       behavior: "smooth"
     });
 
     setTimeout(function() {
 
-      manualScrolling = false;
+      checkInfiniteLoop();
+      moving = false;
 
-      startAutoScroll();
-
-    }, 700);
-
-  }
-
-  // =====================================
-  // SEAMLESS LOOP RESET
-  // =====================================
-
-  function handleLoop() {
-
-    if (!originalSetWidth) return;
-
-    if (viewport.scrollLeft >= originalSetWidth) {
-
-      viewport.scrollLeft -= originalSetWidth;
-
-    }
-
-    if (viewport.scrollLeft < 0) {
-
-      viewport.scrollLeft += originalSetWidth;
-
-    }
-
-    updateControls();
+    }, SCROLL_DURATION + 100);
 
   }
 
   // =====================================
-  // AUTOMATIC SCROLL
+  // AUTOMATIC SCROLLING
   // =====================================
 
   function startAutoScroll() {
 
     stopAutoScroll();
 
-    if (originalCount < 2) return;
-
     autoScrollTimer = setInterval(function() {
 
-      if (manualScrolling) return;
-
-      viewport.scrollBy({
-        left: cardWidth,
-        behavior: "smooth"
-      });
+      moveCarousel(1);
 
     }, AUTO_SCROLL_SECONDS * 1000);
 
@@ -1682,7 +1719,6 @@ document.addEventListener("DOMContentLoaded", function() {
     if (autoScrollTimer) {
 
       clearInterval(autoScrollTimer);
-
       autoScrollTimer = null;
 
     }
@@ -1690,18 +1726,42 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   // =====================================
-  // NAVIGATION BUTTONS
+  // BUTTONS
   // =====================================
 
   prev.addEventListener("click", function() {
 
+    stopAutoScroll();
+
     moveCarousel(-1);
+
+    startAutoScroll();
 
   });
 
   next.addEventListener("click", function() {
 
+    stopAutoScroll();
+
     moveCarousel(1);
+
+    startAutoScroll();
+
+  });
+
+  // =====================================
+  // HANDLE MANUAL SWIPING
+  // =====================================
+
+  viewport.addEventListener("scroll", function() {
+
+    clearTimeout(scrollDebounce);
+
+    scrollDebounce = setTimeout(function() {
+
+      checkInfiniteLoop();
+
+    }, 120);
 
   });
 
@@ -1739,68 +1799,48 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     loaded = true;
-
     clearTimeout(timeout);
 
     track.innerHTML = "";
 
-    // Create original testimonial cards
-
-    valid.forEach(function(item) {
-
-      const card = document.createElement("div");
-
-      card.className = "testimonial-card";
-
-      const quote = document.createElement("p");
-
-      quote.className = "testimonial-quote";
-
-      quote.textContent = "“" + item.testimonial + "”";
-
-      const from = document.createElement("p");
-
-      from.className = "testimonial-from";
-
-      from.textContent = "— " + item.from;
-
-      card.appendChild(quote);
-
-      card.appendChild(from);
-
-      track.appendChild(card);
-
-    });
-
     originalCount = valid.length;
 
-    // Duplicate cards to create continuous looping
+    // =====================================
+    // CREATE THREE COPIES
+    // =====================================
 
-    const originals = Array.from(
-      track.querySelectorAll(".testimonial-card")
-    );
+    // Previous set
+    valid.forEach(function(item) {
 
-    originals.forEach(function(card) {
-
-      const clone = card.cloneNode(true);
-
-      clone.setAttribute("aria-hidden", "true");
-
-      track.appendChild(clone);
+      track.appendChild(createCard(item));
 
     });
 
-    // Measure after rendering
+    // Middle set
+    valid.forEach(function(item) {
+
+      track.appendChild(createCard(item));
+
+    });
+
+    // Next set
+    valid.forEach(function(item) {
+
+      track.appendChild(createCard(item));
+
+    });
+
+    // =====================================
+    // POSITION IN MIDDLE
+    // =====================================
 
     requestAnimationFrame(function() {
 
-      measureCards();
+      measureCarousel();
 
-      // Start halfway through the duplicated track
+      viewport.scrollLeft = setWidth;
 
-      viewport.scrollLeft = 0;
-
-      updateControls();
+      updateStatus();
 
       startAutoScroll();
 
@@ -1816,8 +1856,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
   const script = document.createElement("script");
 
-  script.src =
-    scriptUrl + "?callback=lakesideTestimonialsCallback";
+  script.src = scriptUrl +
+    "?callback=lakesideTestimonialsCallback";
 
   script.async = true;
 
@@ -1840,27 +1880,32 @@ document.addEventListener("DOMContentLoaded", function() {
   document.body.appendChild(script);
 
   // =====================================
-  // SCROLL EVENTS
+  // HANDLE RESIZING
   // =====================================
 
-  viewport.addEventListener("scroll", handleLoop);
+  let resizeTimer;
 
   window.addEventListener("resize", function() {
 
-    if (!loaded) return;
+    clearTimeout(resizeTimer);
 
-    const previousWidth = cardWidth;
+    resizeTimer = setTimeout(function() {
 
-    measureCards();
+      if (!loaded) return;
 
-    if (previousWidth !== cardWidth) {
-      updateControls();
-    }
+      measureCarousel();
+
+      viewport.scrollLeft = setWidth;
+
+      updateStatus();
+
+    }, 200);
 
   });
 
 });
 </script>
+
 
   <!-- Gallery -->
 
