@@ -1510,7 +1510,7 @@ nav {
 
 
   <!-- Testimonials -->
-  
+
 <script>
 document.addEventListener("DOMContentLoaded", function() {
 
@@ -1530,9 +1530,14 @@ document.addEventListener("DOMContentLoaded", function() {
   let autoScrollTimer = null;
   let loaded = false;
   let timeout = null;
+  let originalCount = 0;
+  let cardWidth = 0;
+  let gap = 0;
+  let originalSetWidth = 0;
+  let manualScrolling = false;
 
   // =====================================
-  // DISPLAY LOADING / ERROR MESSAGES
+  // LOADING / ERROR MESSAGES
   // =====================================
 
   function showMessage(message) {
@@ -1560,91 +1565,113 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   // =====================================
-  // UPDATE CAROUSEL CONTROLS
+  // MEASURE CARDS
   // =====================================
 
-  function updateControls() {
+  function measureCards() {
 
     const cards = track.querySelectorAll(".testimonial-card");
 
     if (!cards.length) return;
 
-    prev.disabled = false;
-    next.disabled = false;
+    gap = parseFloat(getComputedStyle(track).gap) || 0;
 
-    const cardWidth = cards[0].offsetWidth;
-    const gap = parseFloat(getComputedStyle(track).gap) || 0;
+    cardWidth = cards[0].offsetWidth + gap;
 
-    const position = Math.round(
-      viewport.scrollLeft / (cardWidth + gap)
-    ) + 1;
-
-    status.textContent =
-      Math.min(position, cards.length) + " / " + cards.length;
+    originalSetWidth = cardWidth * originalCount;
 
   }
 
   // =====================================
-  // MOVE CAROUSEL
+  // UPDATE STATUS
+  // =====================================
+
+  function updateControls() {
+
+    if (!originalCount || !cardWidth) return;
+
+    let position = Math.floor(
+      (viewport.scrollLeft % originalSetWidth) / cardWidth
+    ) + 1;
+
+    position = ((position - 1) % originalCount) + 1;
+
+    status.textContent = position + " / " + originalCount;
+
+    prev.disabled = false;
+    next.disabled = false;
+
+  }
+
+  // =====================================
+  // CONTINUOUS SCROLLING
   // =====================================
 
   function moveCarousel(direction) {
 
-    const cards = Array.from(
-      track.querySelectorAll(".testimonial-card")
-    );
+    if (!cardWidth) return;
 
-    if (!cards.length) return;
+    stopAutoScroll();
 
-    const gap = parseFloat(getComputedStyle(track).gap) || 0;
+    manualScrolling = true;
 
-    const cardWidth = cards[0].offsetWidth + gap;
+    viewport.scrollBy({
+      left: direction * cardWidth,
+      behavior: "smooth"
+    });
 
-    const maxScroll =
-      viewport.scrollWidth - viewport.clientWidth;
+    setTimeout(function() {
 
-    if (direction === 1 && viewport.scrollLeft >= maxScroll - 5) {
+      manualScrolling = false;
 
-      viewport.scrollTo({
-        left: 0,
-        behavior: "smooth"
-      });
+      startAutoScroll();
 
-    } else if (direction === -1 && viewport.scrollLeft <= 5) {
-
-      viewport.scrollTo({
-        left: maxScroll,
-        behavior: "smooth"
-      });
-
-    } else {
-
-      viewport.scrollBy({
-        left: direction * cardWidth,
-        behavior: "smooth"
-      });
-
-    }
+    }, 700);
 
   }
 
   // =====================================
-  // AUTOMATIC LOOPING
+  // SEAMLESS LOOP RESET
+  // =====================================
+
+  function handleLoop() {
+
+    if (!originalSetWidth) return;
+
+    if (viewport.scrollLeft >= originalSetWidth) {
+
+      viewport.scrollLeft -= originalSetWidth;
+
+    }
+
+    if (viewport.scrollLeft < 0) {
+
+      viewport.scrollLeft += originalSetWidth;
+
+    }
+
+    updateControls();
+
+  }
+
+  // =====================================
+  // AUTOMATIC SCROLL
   // =====================================
 
   function startAutoScroll() {
 
     stopAutoScroll();
 
-    if (
-      track.querySelectorAll(".testimonial-card").length < 2
-    ) {
-      return;
-    }
+    if (originalCount < 2) return;
 
     autoScrollTimer = setInterval(function() {
 
-      moveCarousel(1);
+      if (manualScrolling) return;
+
+      viewport.scrollBy({
+        left: cardWidth,
+        behavior: "smooth"
+      });
 
     }, AUTO_SCROLL_SECONDS * 1000);
 
@@ -1663,26 +1690,18 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   // =====================================
-  // PREVIOUS / NEXT BUTTONS
+  // NAVIGATION BUTTONS
   // =====================================
 
   prev.addEventListener("click", function() {
 
-    stopAutoScroll();
-
     moveCarousel(-1);
-
-    startAutoScroll();
 
   });
 
   next.addEventListener("click", function() {
 
-    stopAutoScroll();
-
     moveCarousel(1);
-
-    startAutoScroll();
 
   });
 
@@ -1725,7 +1744,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     track.innerHTML = "";
 
-    // Create testimonial cards
+    // Create original testimonial cards
 
     valid.forEach(function(item) {
 
@@ -1753,9 +1772,39 @@ document.addEventListener("DOMContentLoaded", function() {
 
     });
 
-    updateControls();
+    originalCount = valid.length;
 
-    startAutoScroll();
+    // Duplicate cards to create continuous looping
+
+    const originals = Array.from(
+      track.querySelectorAll(".testimonial-card")
+    );
+
+    originals.forEach(function(card) {
+
+      const clone = card.cloneNode(true);
+
+      clone.setAttribute("aria-hidden", "true");
+
+      track.appendChild(clone);
+
+    });
+
+    // Measure after rendering
+
+    requestAnimationFrame(function() {
+
+      measureCards();
+
+      // Start halfway through the duplicated track
+
+      viewport.scrollLeft = 0;
+
+      updateControls();
+
+      startAutoScroll();
+
+    });
 
   }
 
@@ -1791,14 +1840,20 @@ document.addEventListener("DOMContentLoaded", function() {
   document.body.appendChild(script);
 
   // =====================================
-  // SCROLL / RESIZE EVENTS
+  // SCROLL EVENTS
   // =====================================
 
-  viewport.addEventListener("scroll", updateControls);
+  viewport.addEventListener("scroll", handleLoop);
 
   window.addEventListener("resize", function() {
 
-    if (loaded) {
+    if (!loaded) return;
+
+    const previousWidth = cardWidth;
+
+    measureCards();
+
+    if (previousWidth !== cardWidth) {
       updateControls();
     }
 
