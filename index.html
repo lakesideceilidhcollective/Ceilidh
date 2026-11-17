@@ -2028,10 +2028,14 @@ document.addEventListener("DOMContentLoaded", function() {
 </script>
 
 
+   <!--testimonials script-->  
+   <!--testimonials script-->  
+   <!--testimonials script-->  
 <script>
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
 
-  const scriptUrl = "https://script.google.com/macros/s/AKfycbyLPdcVoo_s4-x0MAU3tPE7hg3Wi8axxJmPXSg3AM0Xq77HjSJ_7SDyHpJ8yDWcZsiPlw/exec";
+  const scriptUrl =
+    "https://script.google.com/macros/s/AKfycbyLPdcVoo_s4-x0MAU3tPE7hg3Wi8axxJmPXSg3AM0Xq77HjSJ_7SDyHpJ8yDWcZsiPlw/exec";
 
   const track = document.getElementById("testimonialTrack");
   const viewport = document.querySelector(".testimonial-viewport");
@@ -2041,12 +2045,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
   if (!track || !viewport || !prev || !next || !status) return;
 
-// AUTO-SCROLL SETTINGS
-const AUTO_SCROLL_SECONDS = 13;
+  const AUTO_SCROLL_SECONDS = 13;
 
-let autoScrollTimer = null;
-let loaded = false;
-let timeout;
+  let autoScrollTimer = null;
+  let loaded = false;
+  let timeout = null;
 
   function showMessage(message) {
     if (loaded) return;
@@ -2085,42 +2088,7 @@ let timeout;
       status.textContent = position + " / " + cards.length;
     }
   }
-// AUTOMATIC TESTIMONIAL SCROLL
 
-function startAutoScroll() {
-
-  stopAutoScroll();
-
-  autoScrollTimer = setInterval(function() {
-
-    const maxScroll =
-      viewport.scrollWidth - viewport.clientWidth;
-
-    if (viewport.scrollLeft >= maxScroll - 5) {
-
-      viewport.scrollTo({
-        left: 0,
-        behavior: "smooth"
-      });
-
-    } else {
-
-      moveCarousel(1);
-
-    }
-
-  }, AUTO_SCROLL_SECONDS * 1000);
-
-}
-
-function stopAutoScroll() {
-
-  if (autoScrollTimer) {
-    clearInterval(autoScrollTimer);
-    autoScrollTimer = null;
-  }
-
-}
   function moveCarousel(direction) {
 
     const card = track.querySelector(".testimonial-card");
@@ -2134,17 +2102,54 @@ function stopAutoScroll() {
     });
   }
 
-prev.addEventListener("click", function() {
-  stopAutoScroll();
-  moveCarousel(-1);
-  startAutoScroll();
-});
+  function stopAutoScroll() {
+    if (autoScrollTimer) {
+      clearInterval(autoScrollTimer);
+      autoScrollTimer = null;
+    }
+  }
 
-next.addEventListener("click", function() {
-  stopAutoScroll();
-  moveCarousel(1);
-  startAutoScroll();
-});
+  function startAutoScroll() {
+
+    stopAutoScroll();
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+
+    autoScrollTimer = setInterval(function() {
+
+      const maxScroll = viewport.scrollWidth - viewport.clientWidth;
+
+      if (maxScroll <= 2) return;
+
+      if (viewport.scrollLeft >= maxScroll - 5) {
+
+        viewport.scrollTo({
+          left: 0,
+          behavior: "smooth"
+        });
+
+      } else {
+
+        moveCarousel(1);
+
+      }
+
+    }, AUTO_SCROLL_SECONDS * 1000);
+  }
+
+  prev.addEventListener("click", function() {
+    stopAutoScroll();
+    moveCarousel(-1);
+    startAutoScroll();
+  });
+
+  next.addEventListener("click", function() {
+    stopAutoScroll();
+    moveCarousel(1);
+    startAutoScroll();
+  });
 
   viewport.addEventListener("scroll", updateControls);
 
@@ -2152,17 +2157,14 @@ next.addEventListener("click", function() {
 
     if (loaded) return;
 
-    const testimonials = Array.isArray(data)
-      ? data
-      : data && Array.isArray(data.testimonials)
-        ? data.testimonials
-        : [];
+    const testimonials = data && Array.isArray(data.testimonials)
+      ? data.testimonials
+      : [];
 
     const valid = testimonials.filter(function(item) {
       return item &&
         typeof item.testimonial === "string" &&
-        item.testimonial.trim() !== "" &&
-        typeof item.from === "string";
+        item.testimonial.trim() !== "";
     });
 
     if (!valid.length) {
@@ -2182,7 +2184,51 @@ next.addEventListener("click", function() {
 
       const quote = document.createElement("p");
       quote.className = "testimonial-quote";
-      quote.textContent = "“" + item.
+      quote.textContent = "“" + item.testimonial + "”";
+
+      const from = document.createElement("p");
+      from.className = "testimonial-from";
+      from.textContent = item.from ? "— " + item.from : "";
+
+      card.appendChild(quote);
+      card.appendChild(from);
+
+      track.appendChild(card);
+
+    });
+
+    updateControls();
+    startAutoScroll();
+
+  }
+
+  window.lakesideTestimonialsCallback = loadTestimonials;
+
+  const script = document.createElement("script");
+
+  script.src = scriptUrl +
+    "?sheet=Testimonials&callback=lakesideTestimonialsCallback";
+
+  script.async = true;
+
+  script.onerror = function() {
+    showMessage("Unable to load testimonials just now. Please try again later.");
+  };
+
+  timeout = setTimeout(function() {
+    showMessage("Testimonials are taking longer than expected to load.");
+  }, 15000);
+
+  document.body.appendChild(script);
+
+});
+</script>
+
+
+
+ <!--quick quotes-->  
+ <!--quick quotes-->  
+ <!--quick quotes-->  
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -2193,11 +2239,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (!track) return;
 
-  const AUTO_SCROLL_SECONDS = 4;
-
-  let quotes = [];
-  let timer = null;
   let loaded = false;
+  let timeout = null;
 
   function createCard(item) {
 
@@ -2210,7 +2253,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const from = document.createElement("p");
     from.className = "quick-quote-from";
-    from.textContent = "— " + item.from;
+    from.textContent = item.from ? "— " + item.from : "";
 
     card.appendChild(quote);
     card.appendChild(from);
@@ -2222,19 +2265,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (loaded) return;
 
-    // Get data specifically from the Quick Quotes sheet
-    quotes = data && Array.isArray(data.quickQuotes)
+    const quotes = data && Array.isArray(data.quickQuotes)
       ? data.quickQuotes.filter(function(item) {
-
           return item &&
             typeof item.quote === "string" &&
-            item.quote.trim() !== "" &&
-            typeof item.from === "string";
-
+            item.quote.trim() !== "";
         })
       : [];
 
     if (!quotes.length) {
+      loaded = true;
+      clearTimeout(timeout);
 
       track.innerHTML =
         '<p class="quick-quotes-loading">Our lovely customer comments will be appearing here soon.</p>';
@@ -2243,9 +2284,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     loaded = true;
+    clearTimeout(timeout);
+
     track.innerHTML = "";
 
-    // Create three identical sets for an infinite loop
+    // Create three identical sets for the continuous CSS animation.
+
     for (let copy = 0; copy < 3; copy++) {
 
       quotes.forEach(function(item) {
@@ -2254,72 +2298,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-    // Start in the middle set
-    requestAnimationFrame(function() {
-
-      const firstCard =
-        track.querySelector(".quick-quote-card");
-
-      if (!firstCard) return;
-
-      const gap =
-        parseFloat(getComputedStyle(track).gap) || 0;
-
-      const setWidth =
-        (firstCard.offsetWidth + gap) * quotes.length;
-
-      track.scrollLeft = setWidth;
-
-      startAutoScroll();
-
-    });
-
   }
 
-  function startAutoScroll() {
-
-    if (timer) clearInterval(timer);
-
-    timer = setInterval(function() {
-
-      if (!loaded) return;
-
-      const firstCard =
-        track.querySelector(".quick-quote-card");
-
-      if (!firstCard) return;
-
-      const gap =
-        parseFloat(getComputedStyle(track).gap) || 0;
-
-      const distance =
-        firstCard.offsetWidth + gap;
-
-      track.scrollBy({
-        left: distance,
-        behavior: "smooth"
-      });
-
-      setTimeout(function() {
-
-        const setWidth =
-          distance * quotes.length;
-
-        if (track.scrollLeft < setWidth * 0.5) {
-          track.scrollLeft += setWidth;
-        }
-
-        if (track.scrollLeft > setWidth * 2.5) {
-          track.scrollLeft -= setWidth;
-        }
-
-      }, 550);
-
-    }, AUTO_SCROLL_SECONDS * 1000);
-
-  }
-
-  // Request Quick Quotes from the separate sheet
   window.lakesideQuickQuotesCallback = loadQuotes;
 
   const script = document.createElement("script");
@@ -2332,30 +2312,31 @@ document.addEventListener("DOMContentLoaded", function () {
   script.onerror = function() {
 
     if (!loaded) {
+      loaded = true;
 
       track.innerHTML =
         '<p class="quick-quotes-loading">Unable to load customer quotes just now.</p>';
-
     }
 
   };
 
-  document.body.appendChild(script);
-
-  // Loading timeout
-  setTimeout(function() {
+  timeout = setTimeout(function() {
 
     if (!loaded) {
+      loaded = true;
 
       track.innerHTML =
         '<p class="quick-quotes-loading">Customer quotes are taking longer than expected to load.</p>';
-
     }
 
   }, 15000);
 
+  document.body.appendChild(script);
+
 });
 </script>
+
+
 
 </body>
 </html>
