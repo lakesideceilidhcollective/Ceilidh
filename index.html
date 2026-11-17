@@ -956,6 +956,66 @@
         grid-template-columns: 1fr;
       }
     }
+    /* =====================================
+   GALLERY HEADER LAYERING
+===================================== */
+
+nav {
+  z-index: 1000;
+}
+
+#gallery {
+  position: relative;
+  z-index: 1;
+}
+
+.gallery-grid {
+  position: relative;
+  z-index: 1;
+}
+
+.gallery-item {
+  position: relative;
+  z-index: 1;
+}
+    /* =====================================
+   GALLERY RESPONSIVE GRID
+===================================== */
+
+.gallery-grid {
+  max-width: 1150px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+/* IMAGE FADE TRANSITION */
+
+.gallery-item {
+  opacity: 1;
+  transition: opacity 0.8s ease;
+}
+
+.gallery-grid.gallery-fading .gallery-item {
+  opacity: 0;
+}
+
+/* TABLET */
+
+@media (max-width: 900px) {
+  .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* MOBILE */
+
+@media (max-width: 450px) {
+  .gallery-grid {
+    grid-template-columns: 1fr;
+  }
+}
   </style>
 </head>
 
@@ -1879,17 +1939,30 @@
     });
   </script>
 <script>
-
 document.addEventListener("DOMContentLoaded", function() {
 
   const gallery =
     "https://script.google.com/macros/s/AKfycbwRyB0sewJw1MIrnU-ZNTZDE4W3kWgN-jMT8jGwstTskWuZ3TrdvKjQYAy4mJtWb-Y/exec";
 
+  // =====================================
+  // GALLERY SETTINGS
+  // =====================================
+
+  const ROTATION_SECONDS = 15;
+
+  const DESKTOP_LIMIT = 9;
+  const TABLET_LIMIT = 6;
+  const MOBILE_LIMIT = 4;
+
+  const FADE_DURATION = 800;
+
+  // =====================================
+  // ELEMENTS
+  // =====================================
+
   const grid = document.getElementById("galleryGrid");
   const status = document.getElementById("galleryStatus");
   const lightbox = document.getElementById("gallery-lightbox");
-
-  if (!grid || !status || !lightbox) return;
 
   const enlarged = lightbox.querySelector("img");
   const closeButton = lightbox.querySelector(".lightbox-close");
@@ -1897,29 +1970,182 @@ document.addEventListener("DOMContentLoaded", function() {
   const nextButton = lightbox.querySelector(".lightbox-next");
 
   let photos = [];
+  let visiblePhotos = [];
   let currentIndex = 0;
   let galleryLoaded = false;
+  let rotationTimer = null;
+  let currentStart = 0;
+  let rotating = false;
 
-  let timeout;
-
-  // GET IMAGE URL
+  // =====================================
+  // IMAGE URL
+  // =====================================
 
   function getImageUrl(photo) {
     return photo.url || photo.imageUrl || photo.src || "";
   }
 
-  // OPEN PHOTO
+  // =====================================
+  // RESPONSIVE PHOTO LIMIT
+  // =====================================
 
-  function openPhoto(index) {
+  function getPhotoLimit() {
 
-    if (!photos.length) return;
+    if (window.innerWidth <= 450) {
+      return MOBILE_LIMIT;
+    }
 
-    currentIndex = (index + photos.length) % photos.length;
+    if (window.innerWidth <= 900) {
+      return TABLET_LIMIT;
+    }
 
-    enlarged.src = getImageUrl(photos[currentIndex]);
+    return DESKTOP_LIMIT;
+
+  }
+
+  // =====================================
+  // BUILD GALLERY
+  // =====================================
+
+  function renderGallery() {
+
+    const limit = getPhotoLimit();
+
+    visiblePhotos = [];
+
+    for (let i = 0; i < limit; i++) {
+
+      const index = (currentStart + i) % photos.length;
+
+      if (photos[index]) {
+        visiblePhotos.push(photos[index]);
+      }
+
+    }
+
+    grid.innerHTML = "";
+
+    visiblePhotos.forEach(function(photo, index) {
+
+      const button = document.createElement("button");
+
+      button.className = "gallery-item";
+      button.type = "button";
+
+      button.setAttribute(
+        "aria-label",
+        "View gallery photograph " + (index + 1)
+      );
+
+      const img = document.createElement("img");
+
+      img.src = getImageUrl(photo);
+
+      img.alt = photo.name || "Lakeside Ceilidh Collective event";
+
+      img.loading = "lazy";
+      img.decoding = "async";
+
+      button.appendChild(img);
+
+      // PHOTOGRAPHER CREDIT
+
+      const photographer = (photo.name || "").trim();
+
+      if (
+        photographer &&
+        photographer.toLowerCase() !== "unknown"
+      ) {
+
+        const credit = document.createElement("span");
+
+        credit.className = "gallery-credit";
+        credit.textContent = photographer;
+
+        button.appendChild(credit);
+
+      }
+
+      img.onerror = function() {
+        button.remove();
+      };
+
+      button.addEventListener("click", function() {
+        openPhoto(photo);
+      });
+
+      grid.appendChild(button);
+
+    });
+
+  }
+
+  // =====================================
+  // AUTOMATIC PHOTO ROTATION
+  // =====================================
+
+  function rotateGallery() {
+
+    if (rotating || photos.length <= getPhotoLimit()) {
+      return;
+    }
+
+    rotating = true;
+
+    grid.classList.add("gallery-fading");
+
+    setTimeout(function() {
+
+      currentStart =
+        (currentStart + getPhotoLimit()) % photos.length;
+
+      renderGallery();
+
+      requestAnimationFrame(function() {
+
+        requestAnimationFrame(function() {
+
+          grid.classList.remove("gallery-fading");
+
+          rotating = false;
+
+        });
+
+      });
+
+    }, FADE_DURATION);
+
+  }
+
+  function startRotation() {
+
+    clearInterval(rotationTimer);
+
+    if (photos.length <= getPhotoLimit()) {
+      return;
+    }
+
+    rotationTimer = setInterval(
+      rotateGallery,
+      ROTATION_SECONDS * 1000
+    );
+
+  }
+
+  // =====================================
+  // LIGHTBOX
+  // =====================================
+
+  function openPhoto(photo) {
+
+    currentIndex = photos.indexOf(photo);
+
+    if (currentIndex < 0) return;
+
+    enlarged.src = getImageUrl(photo);
 
     enlarged.alt =
-      photos[currentIndex].name || "Gallery photograph";
+      photo.name || "Gallery photograph";
 
     lightbox.classList.add("active");
 
@@ -1929,19 +2155,26 @@ document.addEventListener("DOMContentLoaded", function() {
 
   }
 
-  // NEXT PHOTO
-
   function nextPhoto() {
-    openPhoto(currentIndex + 1);
-  }
 
-  // PREVIOUS PHOTO
+    if (!photos.length) return;
+
+    currentIndex = (currentIndex + 1) % photos.length;
+
+    openPhoto(photos[currentIndex]);
+
+  }
 
   function previousPhoto() {
-    openPhoto(currentIndex - 1);
-  }
 
-  // CLOSE PHOTO
+    if (!photos.length) return;
+
+    currentIndex =
+      (currentIndex - 1 + photos.length) % photos.length;
+
+    openPhoto(photos[currentIndex]);
+
+  }
 
   function closePhoto() {
 
@@ -1967,8 +2200,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
   });
 
-  // KEYBOARD CONTROLS
-
   document.addEventListener("keydown", function(e) {
 
     if (!lightbox.classList.contains("active")) return;
@@ -1981,7 +2212,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
   });
 
+  // =====================================
   // LOAD GALLERY
+  // =====================================
 
   function loadGallery(data) {
 
@@ -2017,66 +2250,21 @@ document.addEventListener("DOMContentLoaded", function() {
 
     galleryLoaded = true;
 
-    photos.forEach(function(photo, index) {
+    currentStart = 0;
 
-      const button = document.createElement("button");
-
-      button.className = "gallery-item";
-      button.type = "button";
-
-      button.setAttribute(
-        "aria-label",
-        "View gallery photograph " + (index + 1)
-      );
-
-      const img = document.createElement("img");
-
-      img.src = getImageUrl(photo);
-
-      img.alt =
-        photo.name || "Lakeside Ceilidh Collective event";
-
-      img.loading = index < 3 ? "eager" : "lazy";
-
-      img.decoding = "async";
-
-      button.appendChild(img);
-
-// PHOTOGRAPHER CREDIT
-
-const photographer = (photo.name || "").trim();
-
-if (
-  photographer &&
-  photographer.toLowerCase() !== "unknown"
-) {
-
-  const credit = document.createElement("span");
-
-  credit.className = "gallery-credit";
-  credit.textContent = photographer;
-
-  button.appendChild(credit);
-
-}
-
-      img.onerror = function() {
-        button.remove();
-      };
-
-      button.addEventListener("click", function() {
-        openPhoto(index);
-      });
-
-      grid.appendChild(button);
-
-    });
+    renderGallery();
 
     status.remove();
 
+    startRotation();
+
   }
 
+  // =====================================
   // GOOGLE APPS SCRIPT CONNECTION
+  // =====================================
+
+  let timeout;
 
   window.lakesideGalleryCallback = function(data) {
 
@@ -2115,9 +2303,32 @@ if (
 
   document.body.appendChild(script);
 
-});
+  // =====================================
+  // HANDLE SCREEN RESIZING
+  // =====================================
 
-</script>
+  let resizeTimer;
+
+  window.addEventListener("resize", function() {
+
+    clearTimeout(resizeTimer);
+
+    resizeTimer = setTimeout(function() {
+
+      if (!galleryLoaded) return;
+
+      currentStart = 0;
+
+      renderGallery();
+
+      startRotation();
+
+    }, 200);
+
+  });
+
+});
+    </script>
 
 </body>
 </html>
