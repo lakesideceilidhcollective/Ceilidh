@@ -1840,7 +1840,228 @@
 
     });
   </script>
+<script>
 
+document.addEventListener("DOMContentLoaded", function() {
+
+  const gallery =
+    "https://script.google.com/macros/s/AKfycbwRyB0sewJw1MIrnU-ZNTZDE4W3kWgN-jMT8jGwstTskWuZ3TrdvKjQYAy4mJtWb-Y/exec";
+
+  const grid = document.getElementById("galleryGrid");
+  const status = document.getElementById("galleryStatus");
+  const lightbox = document.getElementById("gallery-lightbox");
+
+  if (!grid || !status || !lightbox) return;
+
+  const enlarged = lightbox.querySelector("img");
+  const closeButton = lightbox.querySelector(".lightbox-close");
+  const prevButton = lightbox.querySelector(".lightbox-prev");
+  const nextButton = lightbox.querySelector(".lightbox-next");
+
+  let photos = [];
+  let currentIndex = 0;
+  let galleryLoaded = false;
+
+  let timeout;
+
+  // GET IMAGE URL
+
+  function getImageUrl(photo) {
+    return photo.url || photo.imageUrl || photo.src || "";
+  }
+
+  // OPEN PHOTO
+
+  function openPhoto(index) {
+
+    if (!photos.length) return;
+
+    currentIndex = (index + photos.length) % photos.length;
+
+    enlarged.src = getImageUrl(photos[currentIndex]);
+
+    enlarged.alt =
+      photos[currentIndex].name || "Gallery photograph";
+
+    lightbox.classList.add("active");
+
+    document.body.style.overflow = "hidden";
+
+    closeButton.focus();
+
+  }
+
+  // NEXT PHOTO
+
+  function nextPhoto() {
+    openPhoto(currentIndex + 1);
+  }
+
+  // PREVIOUS PHOTO
+
+  function previousPhoto() {
+    openPhoto(currentIndex - 1);
+  }
+
+  // CLOSE PHOTO
+
+  function closePhoto() {
+
+    lightbox.classList.remove("active");
+
+    enlarged.src = "";
+
+    document.body.style.overflow = "";
+
+  }
+
+  closeButton.addEventListener("click", closePhoto);
+
+  nextButton.addEventListener("click", nextPhoto);
+
+  prevButton.addEventListener("click", previousPhoto);
+
+  lightbox.addEventListener("click", function(e) {
+
+    if (e.target === lightbox) {
+      closePhoto();
+    }
+
+  });
+
+  // KEYBOARD CONTROLS
+
+  document.addEventListener("keydown", function(e) {
+
+    if (!lightbox.classList.contains("active")) return;
+
+    if (e.key === "Escape") closePhoto();
+
+    if (e.key === "ArrowRight") nextPhoto();
+
+    if (e.key === "ArrowLeft") previousPhoto();
+
+  });
+
+  // LOAD GALLERY
+
+  function loadGallery(data) {
+
+    if (galleryLoaded) return;
+
+    if (!data || !data.success || !Array.isArray(data.images)) {
+
+      status.textContent =
+        "Our gallery is temporarily unavailable. Please try again later.";
+
+      return;
+
+    }
+
+    photos = data.images.filter(function(photo) {
+
+      return photo &&
+        typeof getImageUrl(photo) === "string" &&
+        getImageUrl(photo).trim() !== "";
+
+    });
+
+    if (!photos.length) {
+
+      status.textContent =
+        "Our photos will be appearing here soon.";
+
+      galleryLoaded = true;
+
+      return;
+
+    }
+
+    galleryLoaded = true;
+
+    photos.forEach(function(photo, index) {
+
+      const button = document.createElement("button");
+
+      button.className = "gallery-item";
+      button.type = "button";
+
+      button.setAttribute(
+        "aria-label",
+        "View gallery photograph " + (index + 1)
+      );
+
+      const img = document.createElement("img");
+
+      img.src = getImageUrl(photo);
+
+      img.alt =
+        photo.name || "Lakeside Ceilidh Collective event";
+
+      img.loading = index < 3 ? "eager" : "lazy";
+
+      img.decoding = "async";
+
+      button.appendChild(img);
+
+      img.onerror = function() {
+        button.remove();
+      };
+
+      button.addEventListener("click", function() {
+        openPhoto(index);
+      });
+
+      grid.appendChild(button);
+
+    });
+
+    status.remove();
+
+  }
+
+  // GOOGLE APPS SCRIPT CONNECTION
+
+  window.lakesideGalleryCallback = function(data) {
+
+    clearTimeout(timeout);
+
+    loadGallery(data);
+
+  };
+
+  const script = document.createElement("script");
+
+  script.src =
+    gallery + "?callback=lakesideGalleryCallback";
+
+  script.async = true;
+
+  timeout = setTimeout(function() {
+
+    if (!galleryLoaded) {
+
+      status.textContent =
+        "Our gallery is taking longer than expected to load. Please refresh to try again.";
+
+    }
+
+  }, 12000);
+
+  script.onerror = function() {
+
+    clearTimeout(timeout);
+
+    status.textContent =
+      "Unable to load our gallery just now. Please try again later.";
+
+  };
+
+  document.body.appendChild(script);
+
+});
+
+</script>
 
 </body>
 </html>
