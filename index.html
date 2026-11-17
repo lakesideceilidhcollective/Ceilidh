@@ -483,7 +483,45 @@
       color: #173B5E;
       text-align: center;
     }
+/* CONTINUOUS QUICK QUOTES LOOP */
 
+.quick-quotes-viewport {
+  max-width: 1150px;
+  margin: auto;
+  overflow: hidden;
+}
+
+.quick-quotes-track {
+  display: flex;
+  width: max-content;
+  gap: 25px;
+  animation: quickQuotesLoop 40s linear infinite;
+  will-change: transform;
+}
+
+.quick-quote-card {
+  flex: 0 0 340px;
+}
+
+.quick-quotes-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes quickQuotesLoop {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 600px) {
+  .quick-quote-card {
+    flex: 0 0 280px;
+  }
+}
     /* Optional extras */
     .extras {
       background: var(--blue);
@@ -1086,7 +1124,7 @@ nav {
     <div class="video-grid">
       <div class="video-wrapper">
         <iframe
-          src="https://www.youtube-nocookie.com/embed/LZmtBrjSuTE""
+          src="https://www.youtube-nocookie.com/embed/LZmtBrjSuTE"
           title="Lakeside Ceilidh Collective – Video 1"
           loading="lazy"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -2385,6 +2423,159 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 </script>
 
+ 
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  const scriptUrl =
+    "https://script.google.com/macros/s/AKfycbyLPdcVoo_s4-x0MAU3tPE7hg3Wi8axxJmPXSg3AM0Xq77HjSJ_7SDyHpJ8yDWcZsiPlw/exec";
+
+  const track = document.getElementById("quickQuotesTrack");
+
+  if (!track) return;
+
+  const AUTO_SCROLL_SECONDS = 4;
+
+  let quotes = [];
+  let timer = null;
+  let loaded = false;
+
+  function createCard(item) {
+
+    const card = document.createElement("div");
+    card.className = "quick-quote-card";
+
+    const quote = document.createElement("p");
+    quote.className = "quick-quote-text";
+    quote.textContent = "“" + item.testimonial + "”";
+
+    const from = document.createElement("p");
+    from.className = "quick-quote-from";
+    from.textContent = "— " + item.from;
+
+    card.appendChild(quote);
+    card.appendChild(from);
+
+    return card;
+  }
+
+  function loadQuotes(data) {
+
+    if (loaded) return;
+
+    const testimonials = Array.isArray(data)
+      ? data
+      : data && Array.isArray(data.testimonials)
+        ? data.testimonials
+        : [];
+
+    quotes = testimonials.filter(function(item) {
+
+      return item &&
+        typeof item.testimonial === "string" &&
+        item.testimonial.trim() !== "" &&
+        typeof item.from === "string";
+
+    });
+
+    if (!quotes.length) {
+      track.innerHTML =
+        '<p class="quick-quotes-loading">Our lovely customer comments will be appearing here soon.</p>';
+      return;
+    }
+
+    loaded = true;
+    track.innerHTML = "";
+
+    // Create three identical sets for an infinite loop.
+    for (let copy = 0; copy < 3; copy++) {
+      quotes.forEach(function(item) {
+        track.appendChild(createCard(item));
+      });
+    }
+
+    // Start in the middle set.
+    requestAnimationFrame(function() {
+
+      const firstCard = track.querySelector(".quick-quote-card");
+      const gap = parseFloat(getComputedStyle(track).gap) || 0;
+      const setWidth = (firstCard.offsetWidth + gap) * quotes.length;
+
+      track.scrollLeft = setWidth;
+
+      startAutoScroll();
+
+    });
+
+  }
+
+  function startAutoScroll() {
+
+    if (timer) clearInterval(timer);
+
+    timer = setInterval(function() {
+
+      if (!loaded) return;
+
+      const firstCard = track.querySelector(".quick-quote-card");
+      if (!firstCard) return;
+
+      const gap = parseFloat(getComputedStyle(track).gap) || 0;
+      const distance = firstCard.offsetWidth + gap;
+
+      track.scrollBy({
+        left: distance,
+        behavior: "smooth"
+      });
+
+      setTimeout(function() {
+
+        const setWidth =
+          distance * quotes.length;
+
+        if (track.scrollLeft < setWidth * 0.5) {
+          track.scrollLeft += setWidth;
+        }
+
+        if (track.scrollLeft > setWidth * 2.5) {
+          track.scrollLeft -= setWidth;
+        }
+
+      }, 550);
+
+    }, AUTO_SCROLL_SECONDS * 1000);
+
+  }
+
+  // Receive the Google Apps Script response.
+  window.lakesideTestimonialsCallback = loadQuotes;
+
+  const script = document.createElement("script");
+
+  script.src = scriptUrl +
+    "?callback=lakesideTestimonialsCallback";
+
+  script.async = true;
+
+  script.onerror = function() {
+    track.innerHTML =
+      '<p class="quick-quotes-loading">Unable to load customer quotes just now.</p>';
+  };
+
+  document.body.appendChild(script);
+
+  // Loading timeout.
+  setTimeout(function() {
+
+    if (!loaded) {
+      track.innerHTML =
+        '<p class="quick-quotes-loading">Customer quotes are taking longer than expected to load.</p>';
+    }
+
+  }, 15000);
+
+});
+</script>
 
 </body>
 </html>
