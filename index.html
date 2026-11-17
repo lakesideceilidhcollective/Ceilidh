@@ -1634,6 +1634,7 @@
   </script>
 
 
+
   <!-- Quick customer quotes -->
   <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -1669,7 +1670,7 @@
 
       }
 
-      // Move quotes along
+      // Move quotes continuously in one direction
       function moveQuotes() {
 
         const cards = track.querySelectorAll(".quick-quote-card");
@@ -1685,7 +1686,7 @@
 
           viewport.scrollTo({
             left: 0,
-            behavior: "smooth"
+            behavior: "instant"
           });
 
         } else {
@@ -1787,6 +1788,18 @@
 
         });
 
+        // Duplicate quotes to create a continuous loop
+        const originalCards = Array.from(
+          track.querySelectorAll(".quick-quote-card")
+        );
+
+        originalCards.forEach(function(card) {
+
+          const clone = card.cloneNode(true);
+          track.appendChild(clone);
+
+        });
+
         startAutoScroll();
 
       }
@@ -1827,6 +1840,7 @@
 
     });
   </script>
+
 
 </body>
 </html>
