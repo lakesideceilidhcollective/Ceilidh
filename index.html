@@ -685,7 +685,27 @@
     .gallery-item:hover img {
       transform: scale(1.06);
     }
+.gallery-item {
+  position: relative;
+}
 
+/* PHOTOGRAPHER CREDIT */
+
+.gallery-credit {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 9px 12px;
+  background: rgba(8, 21, 34, 0.72);
+  color: white;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  text-align: left;
+  z-index: 2;
+  pointer-events: none;
+}
     .gallery-status {
       padding: 30px;
       color: var(--text);
@@ -2003,6 +2023,24 @@ document.addEventListener("DOMContentLoaded", function() {
       img.decoding = "async";
 
       button.appendChild(img);
+
+// PHOTOGRAPHER CREDIT
+
+const photographer = (photo.name || "").trim();
+
+if (
+  photographer &&
+  photographer.toLowerCase() !== "unknown"
+) {
+
+  const credit = document.createElement("span");
+
+  credit.className = "gallery-credit";
+  credit.textContent = photographer;
+
+  button.appendChild(credit);
+
+}
 
       img.onerror = function() {
         button.remove();
