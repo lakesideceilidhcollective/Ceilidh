@@ -2619,197 +2619,164 @@ next.addEventListener("click", function() {
 });
 </script>
 
+
 <script>
-
-document.addEventListener("DOMContentLoaded", function() {
-
-  // =====================================
-  // QUICK QUOTES SETTINGS
-  // =====================================
-
-  const QUICK_QUOTES_SCROLL_SECONDS = 10;
+document.addEventListener("DOMContentLoaded", function () {
 
   const scriptUrl =
     "https://script.google.com/macros/s/AKfycbyLPdcVoo_s4-x0MAU3tPE7hg3Wi8axxJmPXSg3AM0Xq77HjSJ_7SDyHpJ8yDWcZsiPlw/exec";
 
   const track = document.getElementById("quickQuotesTrack");
-  const viewport = document.querySelector(".quick-quotes-viewport");
 
-  if (!track || !viewport) return;
+  if (!track) return;
 
-  let autoScrollTimer = null;
+  const AUTO_SCROLL_SECONDS = 4;
+
+  let quotes = [];
+  let timer = null;
   let loaded = false;
 
-  // =====================================
-  // DISPLAY MESSAGES
-  // =====================================
+  function createCard(item) {
 
-  function showMessage(message) {
-    if (loaded) return;
+    const card = document.createElement("div");
+    card.className = "quick-quote-card";
 
-    track.innerHTML = "";
+    const quote = document.createElement("p");
+    quote.className = "quick-quote-text";
+    quote.textContent = "“" + item.testimonial + "”";
 
-    const p = document.createElement("p");
-    p.className = "quick-quotes-loading";
-    p.textContent = message;
+    const from = document.createElement("p");
+    from.className = "quick-quote-from";
+    from.textContent = "— " + item.from;
 
-    track.appendChild(p);
+    card.appendChild(quote);
+    card.appendChild(from);
+
+    return card;
   }
-
-  // =====================================
-  // AUTO SCROLL
-  // =====================================
-
-  function moveQuotes() {
-
-    const cards = track.querySelectorAll(".quick-quote-card");
-
-    if (cards.length < 2) return;
-
-    const gap = parseFloat(getComputedStyle(track).gap) || 0;
-
-    const cardWidth = cards[0].offsetWidth + gap;
-
-    const maxScroll = viewport.scrollWidth - viewport.clientWidth;
-
-    if (viewport.scrollLeft >= maxScroll - 5) {
-
-      viewport.scrollTo({
-        left: 0,
-        behavior: "smooth"
-      });
-
-    } else {
-
-      viewport.scrollBy({
-        left: cardWidth,
-        behavior: "smooth"
-      });
-
-    }
-  }
-
-  function startAutoScroll() {
-
-    if (autoScrollTimer) {
-      clearInterval(autoScrollTimer);
-    }
-
-    if (track.querySelectorAll(".quick-quote-card").length < 2) {
-      return;
-    }
-
-    autoScrollTimer = setInterval(
-      moveQuotes,
-      QUICK_QUOTES_SCROLL_SECONDS * 1000
-    );
-  }
-
-  // =====================================
-  // LOAD QUICK QUOTES
-  // =====================================
 
   function loadQuotes(data) {
 
     if (loaded) return;
 
-  if (!data || data.success !== true ||
-    !Array.isArray(data.quickQuotes)) {
+    const testimonials = Array.isArray(data)
+      ? data
+      : data && Array.isArray(data.testimonials)
+        ? data.testimonials
+        : [];
 
-  const errorDetails = data && data.error
-    ? data.error
-    : JSON.stringify(data);
-
-  showMessage("Google Apps Script says: " + errorDetails);
-  return;
-}
-
-    const quotes = data.quickQuotes.filter(function(item) {
+    quotes = testimonials.filter(function(item) {
 
       return item &&
-        typeof item.quote === "string" &&
-        item.quote.trim() !== "";
+        typeof item.testimonial === "string" &&
+        item.testimonial.trim() !== "" &&
+        typeof item.from === "string";
 
     });
 
     if (!quotes.length) {
-
-      showMessage("More kind words coming soon.");
+      track.innerHTML =
+        '<p class="quick-quotes-loading">Our lovely customer comments will be appearing here soon.</p>';
       return;
     }
 
     loaded = true;
     track.innerHTML = "";
 
-    quotes.forEach(function(item) {
+    // Create three identical sets for an infinite loop.
+    for (let copy = 0; copy < 3; copy++) {
+      quotes.forEach(function(item) {
+        track.appendChild(createCard(item));
+      });
+    }
 
-      const card = document.createElement("div");
-      card.className = "quick-quote-card";
+    // Start in the middle set.
+    requestAnimationFrame(function() {
 
-      const quote = document.createElement("p");
-      quote.className = "quick-quote-text";
+      const firstCard = track.querySelector(".quick-quote-card");
+      const gap = parseFloat(getComputedStyle(track).gap) || 0;
+      const setWidth = (firstCard.offsetWidth + gap) * quotes.length;
 
-      quote.textContent = "“" + item.quote + "”";
+      track.scrollLeft = setWidth;
 
-      card.appendChild(quote);
-
-      if (item.from && item.from.trim()) {
-
-        const from = document.createElement("p");
-
-        from.className = "quick-quote-from";
-        from.textContent = "— " + item.from;
-
-        card.appendChild(from);
-
-      }
-
-      track.appendChild(card);
+      startAutoScroll();
 
     });
 
-    startAutoScroll();
+  }
+
+  function startAutoScroll() {
+
+    if (timer) clearInterval(timer);
+
+    timer = setInterval(function() {
+
+      if (!loaded) return;
+
+      const firstCard = track.querySelector(".quick-quote-card");
+      if (!firstCard) return;
+
+      const gap = parseFloat(getComputedStyle(track).gap) || 0;
+      const distance = firstCard.offsetWidth + gap;
+
+      track.scrollBy({
+        left: distance,
+        behavior: "smooth"
+      });
+
+      setTimeout(function() {
+
+        const setWidth =
+          distance * quotes.length;
+
+        if (track.scrollLeft < setWidth * 0.5) {
+          track.scrollLeft += setWidth;
+        }
+
+        if (track.scrollLeft > setWidth * 2.5) {
+          track.scrollLeft -= setWidth;
+        }
+
+      }, 550);
+
+    }, AUTO_SCROLL_SECONDS * 1000);
 
   }
 
-  // =====================================
-  // CONNECT TO GOOGLE APPS SCRIPT
-  // =====================================
+  // Receive the Google Apps Script response.
+  // Separate callback prevents conflicts with the main testimonials.
 
   window.lakesideQuickQuotesCallback = loadQuotes;
 
   const script = document.createElement("script");
 
   script.src = scriptUrl +
-    "?sheet=Quick%20Quotes&callback=lakesideQuickQuotesCallback";
+    "?callback=lakesideQuickQuotesCallback";
 
   script.async = true;
 
-  const timeout = setTimeout(function() {
-
-    if (!loaded) {
-      showMessage("Our kind words are taking longer than expected to load.");
-    }
-
-  }, 12000);
-
-  script.onload = function() {
-    clearTimeout(timeout);
-  };
-
   script.onerror = function() {
-    clearTimeout(timeout);
-    showMessage("Unable to connect to our kind words service.");
+    if (!loaded) {
+      track.innerHTML =
+        '<p class="quick-quotes-loading">Unable to load customer quotes just now.</p>';
+    }
   };
 
   document.body.appendChild(script);
 
-  window.addEventListener("resize", function() {
-    startAutoScroll();
-  });
+  // Loading timeout.
+  setTimeout(function() {
+
+    if (!loaded) {
+      track.innerHTML =
+        '<p class="quick-quotes-loading">Customer quotes are taking longer than expected to load.</p>';
+    }
+
+  }, 15000);
 
 });
 </script>
+
 
 </body>
 </html>
