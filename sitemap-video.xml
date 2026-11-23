@@ -1,0 +1,56 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+
+  <url>
+    <loc>https://lakesideceilidh.co.uk/videos/wedding.html</loc>
+
+    <video:video>
+      <video:thumbnail_loc>
+        https://i.ytimg.com/vi/LZmtBrjSuTE/hqdefault.jpg
+      </video:thumbnail_loc>
+
+      <video:title>Lakeside Ceilidh Collective - Wedding</video:title>
+
+      <video:description>
+        Watch Lakeside Ceilidh Collective's wedding video, featuring our ceilidh music and wedding entertainment.
+      </video:description>
+
+      <video:player_loc allow_embed="yes">
+        https://www.youtube-nocookie.com/embed/LZmtBrjSuTE
+      </video:player_loc>
+
+      <video:publication_date>2026-11-17</video:publication_date>
+
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
+  </url>
+
+  <url>
+    <loc>https://lakesideceilidh.co.uk/videos/festival.html</loc>
+
+    <video:video>
+      <video:thumbnail_loc>
+        https://i.ytimg.com/vi/KgDSyAQoETo/hqdefault.jpg
+      </video:thumbnail_loc>
+
+      <video:title>Lakeside Ceilidh Collective - Festival</video:title>
+
+      <video:description>
+        Watch Lakeside Ceilidh Collective's festival video, featuring our live ceilidh music and entertainment.
+      </video:description>
+
+      <video:player_loc allow_embed="yes">
+        https://www.youtube-nocookie.com/embed/KgDSyAQoETo
+      </video:player_loc>
+
+      <video:publication_date>2026-11-16</video:publication_date>
+
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
+  </url>
+
+</urlset>
