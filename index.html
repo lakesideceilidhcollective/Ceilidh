@@ -443,45 +443,27 @@
 .quick-quotes-viewport {
   max-width: 1150px;
   margin: auto;
-  overflow: hidden;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.quick-quotes-viewport::-webkit-scrollbar {
+  display: none;
 }
 
 .quick-quotes-track {
   display: flex;
   align-items: stretch;
-  width: 100%;
-  justify-content: center;
+  gap: 25px;
 }
 
-.quick-quotes-track.is-scrolling {
-  width: max-content;
-  justify-content: flex-start;
-  animation: quickQuotesLoop var(--qq-duration, 40s) linear infinite;
-  will-change: transform;
-}
-
-/* Only pause on hover for devices that really hover (not phones) */
-@media (hover: hover) {
-  .quick-quotes-track.is-scrolling:hover {
-    animation-play-state: paused;
-  }
-}
-
-/* Respect "reduce motion": let people swipe instead */
-@media (prefers-reduced-motion: reduce) {
-  .quick-quotes-viewport {
-    overflow-x: auto;
-  }
-
-  .quick-quotes-track.is-scrolling {
-    animation: none;
-  }
-}
-
-.quick-quote-card {
-  flex: 0 0 340px;
+.quick-quotes-track .quick-quote-card {
+  flex: 0 0 calc((100% - 50px) / 3);
+  min-width: 0;
   min-height: 125px;
-  margin-right: 25px; /* margin instead of gap so both halves are identical */
   padding: 25px 22px;
   display: flex;
   flex-direction: column;
@@ -489,6 +471,7 @@
   border-radius: 4px;
   background: var(--white);
   color: #173B5E;
+  scroll-snap-align: start;
 }
 
 .quick-quote-text {
@@ -511,24 +494,20 @@
   text-align: center;
 }
 
-@keyframes quickQuotesLoop {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+@media (max-width: 900px) {
+  .quick-quotes-track .quick-quote-card {
+    flex: 0 0 calc((100% - 25px) / 2);
+  }
 }
 
 @media (max-width: 600px) {
-  .quick-quote-card {
-    flex: 0 0 280px;
+  .quick-quotes-track {
+    gap: 15px;
   }
-}
-    /* Quick quotes scrolling is now handled by JavaScript */
-.quick-quotes-track.is-scrolling {
-  animation: none;
-  will-change: auto;
-}
 
-.quick-quotes-track .quick-quote-card {
-  flex-shrink: 0;
+  .quick-quotes-track .quick-quote-card {
+    flex: 0 0 88%;
+  }
 }
     /* Optional extras */
     .extras {
@@ -2223,9 +2202,6 @@ document.addEventListener("DOMContentLoaded", function () {
  <!--quick quotes-->  
  <!--quick quotes-->  
  <!--quick quotes-->  
-<!--quick quotes-->
-<!--quick quotes-->
-<!--quick quotes-->
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -2233,23 +2209,20 @@ document.addEventListener("DOMContentLoaded", function () {
     "https://script.google.com/macros/s/AKfycbyLPdcVoo_s4-x0MAU3tPE7hg3Wi8axxJmPXSg3AM0Xq77HjSJ_7SDyHpJ8yDWcZsiPlw/exec";
 
   const track = document.getElementById("quickQuotesTrack");
+  const viewport = document.querySelector(".quick-quotes-viewport");
 
-  if (!track) return;
+  if (!track || !viewport) return;
 
-  const PIXELS_PER_SECOND = 45;
-  const MIN_CARDS_PER_GROUP = 6;
+  const AUTO_SCROLL_SECONDS = 5;
+  const PAUSE_AFTER_TOUCH_SECONDS = 10;
 
   let loaded = false;
   let timeout = null;
-  let offset = 0;
-  let lastTime = null;
-  let paused = false;
-  let loopStart = null;
+  let autoScrollTimer = null;
+  let pausedUntil = 0;
 
   function showMessage(message) {
 
-    track.classList.remove("is-scrolling");
-    track.style.transform = "";
     track.innerHTML = "";
 
     const p = document.createElement("p");
@@ -2260,14 +2233,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   }
 
-  function createCard(item, hidden) {
+  function createCard(item) {
 
     const card = document.createElement("div");
     card.className = "quick-quote-card";
-
-    if (hidden) {
-      card.setAttribute("aria-hidden", "true");
-    }
 
     const quote = document.createElement("p");
     quote.className = "quick-quote-text";
@@ -2283,32 +2252,46 @@ document.addEventListener("DOMContentLoaded", function () {
     return card;
   }
 
-  function step(time) {
+  function pauseAutoScroll() {
+    pausedUntil = Date.now() + PAUSE_AFTER_TOUCH_SECONDS * 1000;
+  }
 
-    if (lastTime === null) lastTime = time;
+  function startAutoScroll() {
 
-    const delta = (time - lastTime) / 1000;
-    lastTime = time;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
 
-    if (!paused && loopStart) {
+    clearInterval(autoScrollTimer);
 
-      const distance = loopStart.offsetLeft;
+    autoScrollTimer = setInterval(function() {
 
-      if (distance > 0) {
+      if (Date.now() < pausedUntil) return;
 
-        offset += PIXELS_PER_SECOND * delta;
+      const maxScroll = viewport.scrollWidth - viewport.clientWidth;
 
-        if (offset >= distance) {
-          offset -= distance;
-        }
+      if (maxScroll <= 2) return;
 
-        track.style.transform = "translate3d(" + (-offset) + "px, 0, 0)";
+      if (viewport.scrollLeft >= maxScroll - 5) {
+
+        viewport.scrollTo({
+          left: 0,
+          behavior: "smooth"
+        });
+
+      } else {
+
+        const card = track.querySelector(".quick-quote-card");
+        const gap = parseFloat(getComputedStyle(track).gap) || 0;
+
+        viewport.scrollBy({
+          left: card.offsetWidth + gap,
+          behavior: "smooth"
+        });
 
       }
 
-    }
-
-    requestAnimationFrame(step);
+    }, AUTO_SCROLL_SECONDS * 1000);
 
   }
 
@@ -2333,49 +2316,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
     loaded = true;
 
-    const group = [];
-
-    while (group.length < MIN_CARDS_PER_GROUP) {
-
-      quotes.forEach(function(item) {
-        group.push(item);
-      });
-
-    }
-
     track.innerHTML = "";
-    track.style.transform = "";
 
-    [false, true].forEach(function(hidden) {
-
-      group.forEach(function(item) {
-        track.appendChild(createCard(item, hidden));
-      });
-
+    quotes.forEach(function(item) {
+      track.appendChild(createCard(item));
     });
 
-    track.classList.add("is-scrolling");
+    viewport.addEventListener("touchstart", pauseAutoScroll, { passive: true });
+    viewport.addEventListener("mouseenter", pauseAutoScroll);
+    viewport.addEventListener("mousemove", pauseAutoScroll);
 
-    loopStart = track.children[group.length];
-
-    const reduceMotion =
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    if (reduceMotion) return;
-
-    if (window.matchMedia("(hover: hover)").matches) {
-
-      track.addEventListener("mouseenter", function() {
-        paused = true;
-      });
-
-      track.addEventListener("mouseleave", function() {
-        paused = false;
-      });
-
-    }
-
-    requestAnimationFrame(step);
+    startAutoScroll();
 
   }
 
