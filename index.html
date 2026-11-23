@@ -521,6 +521,15 @@
     flex: 0 0 280px;
   }
 }
+    /* Quick quotes scrolling is now handled by JavaScript */
+.quick-quotes-track.is-scrolling {
+  animation: none;
+  will-change: auto;
+}
+
+.quick-quotes-track .quick-quote-card {
+  flex-shrink: 0;
+}
     /* Optional extras */
     .extras {
       background: var(--blue);
@@ -2214,6 +2223,9 @@ document.addEventListener("DOMContentLoaded", function () {
  <!--quick quotes-->  
  <!--quick quotes-->  
  <!--quick quotes-->  
+<!--quick quotes-->
+<!--quick quotes-->
+<!--quick quotes-->
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -2221,31 +2233,41 @@ document.addEventListener("DOMContentLoaded", function () {
     "https://script.google.com/macros/s/AKfycbyLPdcVoo_s4-x0MAU3tPE7hg3Wi8axxJmPXSg3AM0Xq77HjSJ_7SDyHpJ8yDWcZsiPlw/exec";
 
   const track = document.getElementById("quickQuotesTrack");
+
   if (!track) return;
 
-  const SECONDS_PER_CARD = 6;     // lower = faster scrolling
-  const MIN_CARDS_PER_GROUP = 6;  // makes sure the loop always fills the screen
+  const PIXELS_PER_SECOND = 45;
+  const MIN_CARDS_PER_GROUP = 6;
 
   let loaded = false;
   let timeout = null;
+  let offset = 0;
+  let lastTime = null;
+  let paused = false;
+  let loopStart = null;
 
-  function showMessage(text) {
-    if (loaded) return;
+  function showMessage(message) {
 
     track.classList.remove("is-scrolling");
-    track.style.removeProperty("--qq-duration");
+    track.style.transform = "";
     track.innerHTML = "";
 
     const p = document.createElement("p");
     p.className = "quick-quotes-loading";
-    p.textContent = text;
+    p.textContent = message;
+
     track.appendChild(p);
+
   }
 
   function createCard(item, hidden) {
+
     const card = document.createElement("div");
     card.className = "quick-quote-card";
-    if (hidden) card.setAttribute("aria-hidden", "true");
+
+    if (hidden) {
+      card.setAttribute("aria-hidden", "true");
+    }
 
     const quote = document.createElement("p");
     quote.className = "quick-quote-text";
@@ -2261,44 +2283,100 @@ document.addEventListener("DOMContentLoaded", function () {
     return card;
   }
 
+  function step(time) {
+
+    if (lastTime === null) lastTime = time;
+
+    const delta = (time - lastTime) / 1000;
+    lastTime = time;
+
+    if (!paused && loopStart) {
+
+      const distance = loopStart.offsetLeft;
+
+      if (distance > 0) {
+
+        offset += PIXELS_PER_SECOND * delta;
+
+        if (offset >= distance) {
+          offset -= distance;
+        }
+
+        track.style.transform = "translate3d(" + (-offset) + "px, 0, 0)";
+
+      }
+
+    }
+
+    requestAnimationFrame(step);
+
+  }
+
   function loadQuotes(data) {
+
     if (loaded) return;
 
     const quotes = data && Array.isArray(data.quickQuotes)
-      ? data.quickQuotes.filter(function (item) {
+      ? data.quickQuotes.filter(function(item) {
           return item &&
             typeof item.quote === "string" &&
             item.quote.trim() !== "";
         })
       : [];
 
+    clearTimeout(timeout);
+
     if (!quotes.length) {
       showMessage("Our lovely customer comments will be appearing here soon.");
-      loaded = true;
-      clearTimeout(timeout);
       return;
     }
 
     loaded = true;
-    clearTimeout(timeout);
 
-    // Build one group long enough to fill the screen
     const group = [];
+
     while (group.length < MIN_CARDS_PER_GROUP) {
-      quotes.forEach(function (q) { group.push(q); });
+
+      quotes.forEach(function(item) {
+        group.push(item);
+      });
+
     }
 
     track.innerHTML = "";
+    track.style.transform = "";
 
-    // Two identical groups, so scrolling by exactly -50% loops seamlessly
-    [false, true].forEach(function (hidden) {
-      group.forEach(function (item) {
+    [false, true].forEach(function(hidden) {
+
+      group.forEach(function(item) {
         track.appendChild(createCard(item, hidden));
       });
+
     });
 
-    track.style.setProperty("--qq-duration", (group.length * SECONDS_PER_CARD) + "s");
     track.classList.add("is-scrolling");
+
+    loopStart = track.children[group.length];
+
+    const reduceMotion =
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (reduceMotion) return;
+
+    if (window.matchMedia("(hover: hover)").matches) {
+
+      track.addEventListener("mouseenter", function() {
+        paused = true;
+      });
+
+      track.addEventListener("mouseleave", function() {
+        paused = false;
+      });
+
+    }
+
+    requestAnimationFrame(step);
+
   }
 
   window.lakesideQuickQuotesCallback = loadQuotes;
@@ -2310,13 +2388,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
   script.async = true;
 
-  script.onerror = function () {
-    showMessage("Unable to load customer quotes just now.");
+  script.onerror = function() {
+
+    clearTimeout(timeout);
+
+    if (!loaded) {
+      showMessage("Unable to load customer quotes just now.");
+    }
+
   };
 
-  // The message shows after 15s, but late data can still replace it
-  timeout = setTimeout(function () {
-    showMessage("Customer quotes are taking longer than expected to load.");
+  timeout = setTimeout(function() {
+
+    if (!loaded) {
+      showMessage("Customer quotes are taking longer than expected to load.");
+    }
+
   }, 15000);
 
   document.body.appendChild(script);
