@@ -5,12 +5,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
- <title>Wedding Ceilidh Band UK | Lakeside Ceilidh Collective</title>
+<title>Wedding Ceilidh Band UK | Lakeside Ceilidh Collective</title>
 
-  <meta name="description" content="Wedding ceilidh band for the whole UK. Lakeside Ceilidh Collective brings live folk music, a friendly caller and a full dance floor to weddings and events.">
+  <meta name="description" content="Wedding ceilidh band for the whole UK. Live folk music, a friendly caller and a full dance floor for your wedding ceilidh or ceili.">
   <meta name="robots" content="index, follow, max-image-preview:large">
   <meta name="theme-color" content="#245B85">
   <link rel="canonical" href="https://lakesideceilidh.co.uk/">
+  <link rel="alternate" hreflang="en-gb" href="https://lakesideceilidh.co.uk/">
+  <link rel="alternate" hreflang="x-default" href="https://lakesideceilidh.co.uk/">
+
+  <!-- Speed -->
+  <link rel="preconnect" href="https://lh3.googleusercontent.com">
+  <link rel="preconnect" href="https://script.google.com">
+  <link rel="preload" as="image" href="https://lh3.googleusercontent.com/d/1kQiq7yFZ7N5s_wxB3FwrcBEaH3xZYhqF" fetchpriority="high">
 
   <!-- Social media -->
   <meta property="og:type" content="website">
@@ -20,30 +27,47 @@
   <meta property="og:url" content="https://lakesideceilidh.co.uk/">
   <meta property="og:site_name" content="Lakeside Ceilidh Collective">
   <meta property="og:image" content="https://lh3.googleusercontent.com/d/1kQiq7yFZ7N5s_wxB3FwrcBEaH3xZYhqF">
+  <meta property="og:image:alt" content="Wedding ceilidh band Lakeside Ceilidh Collective performing for dancing guests">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Wedding Ceilidh Band UK | Lakeside Ceilidh Collective">
   <meta name="twitter:description" content="Live ceilidh music and wedding entertainment across the UK.">
   <meta name="twitter:image" content="https://lh3.googleusercontent.com/d/1kQiq7yFZ7N5s_wxB3FwrcBEaH3xZYhqF">
+  <meta name="twitter:image:alt" content="Wedding ceilidh band Lakeside Ceilidh Collective performing for dancing guests">
 
   <!-- Business information -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "MusicGroup",
-    "name": "Lakeside Ceilidh Collective",
-    "alternateName": "Lakeside Ceilidh Band",
-    "url": "https://lakesideceilidh.co.uk/",
-    "image": "https://lh3.googleusercontent.com/d/1kQiq7yFZ7N5s_wxB3FwrcBEaH3xZYhqF",
-    "description": "Wedding ceilidh band offering live folk music, a ceilidh caller and traditional ceili dancing for weddings and events across the UK.",
-    "genre": ["Ceilidh", "Folk"],
-    "email": "LakesideCeilidh@gmail.com",
-    "areaServed": {
-      "@type": "Country",
-      "name": "United Kingdom"
-    },
-    "sameAs": [
-      "https://www.instagram.com/lakesideceilidhband/"
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://lakesideceilidh.co.uk/#website",
+        "name": "Lakeside Ceilidh Collective",
+        "alternateName": ["Lakeside Ceilidh Band", "Lakeside Ceilidh"],
+        "url": "https://lakesideceilidh.co.uk/",
+        "inLanguage": "en-GB"
+      },
+      {
+        "@type": "MusicGroup",
+        "@id": "https://lakesideceilidh.co.uk/#band",
+        "name": "Lakeside Ceilidh Collective",
+        "alternateName": "Lakeside Ceilidh Band",
+        "url": "https://lakesideceilidh.co.uk/",
+        "image": "https://lh3.googleusercontent.com/d/1kQiq7yFZ7N5s_wxB3FwrcBEaH3xZYhqF",
+        "description": "Wedding ceilidh band offering live folk music, a ceilidh caller and traditional ceili dancing for weddings and events across the UK.",
+        "genre": ["Ceilidh", "Folk"],
+        "keywords": "wedding ceilidh, wedding ceili, ceilidh band, wedding ceilidh band, ceili band, folk band, UK wedding band",
+        "knowsAbout": ["Wedding ceilidh", "Ceilidh dancing", "Ceilidh calling", "Live folk music"],
+        "email": "LakesideCeilidh@gmail.com",
+        "areaServed": {
+          "@type": "Country",
+          "name": "United Kingdom"
+        },
+        "sameAs": [
+          "https://www.instagram.com/lakesideceilidhband/"
+        ]
+      }
     ]
   }
   </script>
@@ -1048,7 +1072,7 @@ nav {
 <body>
 
   <!-- Navigation -->
-  <nav>
+  <nav aria-label="Main">
     <a href="#" class="logo">
       Lakeside
       <span>Ceilidh Collective</span>
@@ -1645,7 +1669,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     img.src = getImageUrl(photo);
 
-    img.alt = photo.name || "Lakeside Ceilidh Collective event";
+    img.alt = "Lakeside Ceilidh Collective performing and guests dancing at a wedding";
 
     img.loading = "lazy";
     img.decoding = "async";
@@ -1744,9 +1768,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         oldImage.src = getImageUrl(replacement);
 
-        oldImage.alt = replacement.name ||
-          "Lakeside Ceilidh Collective event";
-
+        oldImage.alt = "Wedding ceilidh band and guests dancing at a Lakeside Ceilidh Collective event";
         // Update photographer credit
 
         const oldCredit = selectedItem.querySelector(
