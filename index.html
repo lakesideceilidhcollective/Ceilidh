@@ -418,72 +418,27 @@
       text-align: center;
     }
 
-    /* Quick quotes */
-    .quick-quotes {
-      padding: 45px 8%;
-      overflow: hidden;
-      background: #EAF3FA;
-      text-align: center;
-    }
+/* Quick quotes */
+.quick-quotes {
+  padding: 45px 8%;
+  overflow: hidden;
+  background: #EAF3FA;
+  text-align: center;
+}
 
-    .quick-quotes-heading {
-      margin-bottom: 25px;
-    }
+.quick-quotes-heading {
+  margin-bottom: 25px;
+}
 
-    .quick-quotes-heading h2 {
-      color: #173B5E;
-      font-size: clamp(25px, 3vw, 34px);
-    }
+.quick-quotes-heading h2 {
+  color: #173B5E;
+  font-size: clamp(25px, 3vw, 34px);
+}
 
-    .quick-quotes-heading .eyebrow {
-      margin-bottom: 10px;
-      color: #3979A8;
-    }
-
-    .quick-quotes-viewport {
-      max-width: 1150px;
-      margin: auto;
-      overflow: hidden;
-    }
-
-    .quick-quotes-track {
-      display: flex;
-      align-items: stretch;
-      gap: 25px;
-    }
-
-    .quick-quote-card {
-      flex: 0 0 calc((100% - 50px) / 3);
-      min-height: 125px;
-      padding: 25px 22px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      border-radius: 4px;
-      background: var(--white);
-      color: #173B5E;
-    }
-
-    .quick-quote-text {
-      color: #173B5E;
-      font-family: 'Playfair Display', serif;
-      font-size: 19px;
-      line-height: 1.5;
-    }
-
-    .quick-quote-from {
-      margin-top: 10px;
-      color: #3979A8;
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    .quick-quotes-loading {
-      width: 100%;
-      color: #173B5E;
-      text-align: center;
-    }
-/* CONTINUOUS QUICK QUOTES LOOP */
+.quick-quotes-heading .eyebrow {
+  margin-bottom: 10px;
+  color: #3979A8;
+}
 
 .quick-quotes-viewport {
   max-width: 1150px;
@@ -493,28 +448,72 @@
 
 .quick-quotes-track {
   display: flex;
+  align-items: stretch;
+  width: 100%;
+  justify-content: center;
+}
+
+.quick-quotes-track.is-scrolling {
   width: max-content;
-  gap: 25px;
-  animation: quickQuotesLoop 40s linear infinite;
+  justify-content: flex-start;
+  animation: quickQuotesLoop var(--qq-duration, 40s) linear infinite;
   will-change: transform;
+}
+
+/* Only pause on hover for devices that really hover (not phones) */
+@media (hover: hover) {
+  .quick-quotes-track.is-scrolling:hover {
+    animation-play-state: paused;
+  }
+}
+
+/* Respect "reduce motion": let people swipe instead */
+@media (prefers-reduced-motion: reduce) {
+  .quick-quotes-viewport {
+    overflow-x: auto;
+  }
+
+  .quick-quotes-track.is-scrolling {
+    animation: none;
+  }
 }
 
 .quick-quote-card {
   flex: 0 0 340px;
+  min-height: 125px;
+  margin-right: 25px; /* margin instead of gap so both halves are identical */
+  padding: 25px 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 4px;
+  background: var(--white);
+  color: #173B5E;
 }
 
-.quick-quotes-track:hover {
-  animation-play-state: paused;
+.quick-quote-text {
+  color: #173B5E;
+  font-family: 'Playfair Display', serif;
+  font-size: 19px;
+  line-height: 1.5;
+}
+
+.quick-quote-from {
+  margin-top: 10px;
+  color: #3979A8;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.quick-quotes-loading {
+  width: 100%;
+  color: #173B5E;
+  text-align: center;
 }
 
 @keyframes quickQuotesLoop {
-  from {
-    transform: translateX(0);
-  }
-
-  to {
-    transform: translateX(-50%);
-  }
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
 }
 
 @media (max-width: 600px) {
@@ -868,16 +867,6 @@
     }
 
     /* Responsive layout */
-    @media (max-width: 900px) {
-      .testimonial-card {
-        flex: 0 0 calc((100% - 20px) / 2);
-      }
-
-      .quick-quote-card {
-        flex: 0 0 calc((100% - 25px) / 2);
-      }
-    }
-
     @media (max-width: 800px) {
       nav {
         padding: 15px 5%;
@@ -1545,10 +1534,6 @@ nav {
 
     });
   </script>
-
-
-  <!-- Testimonials -->
-
   <!-- Gallery -->
 
 <script>
@@ -2236,16 +2221,31 @@ document.addEventListener("DOMContentLoaded", function () {
     "https://script.google.com/macros/s/AKfycbyLPdcVoo_s4-x0MAU3tPE7hg3Wi8axxJmPXSg3AM0Xq77HjSJ_7SDyHpJ8yDWcZsiPlw/exec";
 
   const track = document.getElementById("quickQuotesTrack");
-
   if (!track) return;
+
+  const SECONDS_PER_CARD = 6;     // lower = faster scrolling
+  const MIN_CARDS_PER_GROUP = 6;  // makes sure the loop always fills the screen
 
   let loaded = false;
   let timeout = null;
 
-  function createCard(item) {
+  function showMessage(text) {
+    if (loaded) return;
 
+    track.classList.remove("is-scrolling");
+    track.style.removeProperty("--qq-duration");
+    track.innerHTML = "";
+
+    const p = document.createElement("p");
+    p.className = "quick-quotes-loading";
+    p.textContent = text;
+    track.appendChild(p);
+  }
+
+  function createCard(item, hidden) {
     const card = document.createElement("div");
     card.className = "quick-quote-card";
+    if (hidden) card.setAttribute("aria-hidden", "true");
 
     const quote = document.createElement("p");
     quote.className = "quick-quote-text";
@@ -2262,11 +2262,10 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function loadQuotes(data) {
-
     if (loaded) return;
 
     const quotes = data && Array.isArray(data.quickQuotes)
-      ? data.quickQuotes.filter(function(item) {
+      ? data.quickQuotes.filter(function (item) {
           return item &&
             typeof item.quote === "string" &&
             item.quote.trim() !== "";
@@ -2274,30 +2273,32 @@ document.addEventListener("DOMContentLoaded", function () {
       : [];
 
     if (!quotes.length) {
+      showMessage("Our lovely customer comments will be appearing here soon.");
       loaded = true;
       clearTimeout(timeout);
-
-      track.innerHTML =
-        '<p class="quick-quotes-loading">Our lovely customer comments will be appearing here soon.</p>';
-
       return;
     }
 
     loaded = true;
     clearTimeout(timeout);
 
-    track.innerHTML = "";
-
-    // Create three identical sets for the continuous CSS animation.
-
-    for (let copy = 0; copy < 3; copy++) {
-
-      quotes.forEach(function(item) {
-        track.appendChild(createCard(item));
-      });
-
+    // Build one group long enough to fill the screen
+    const group = [];
+    while (group.length < MIN_CARDS_PER_GROUP) {
+      quotes.forEach(function (q) { group.push(q); });
     }
 
+    track.innerHTML = "";
+
+    // Two identical groups, so scrolling by exactly -50% loops seamlessly
+    [false, true].forEach(function (hidden) {
+      group.forEach(function (item) {
+        track.appendChild(createCard(item, hidden));
+      });
+    });
+
+    track.style.setProperty("--qq-duration", (group.length * SECONDS_PER_CARD) + "s");
+    track.classList.add("is-scrolling");
   }
 
   window.lakesideQuickQuotesCallback = loadQuotes;
@@ -2309,34 +2310,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
   script.async = true;
 
-  script.onerror = function() {
-
-    if (!loaded) {
-      loaded = true;
-
-      track.innerHTML =
-        '<p class="quick-quotes-loading">Unable to load customer quotes just now.</p>';
-    }
-
+  script.onerror = function () {
+    showMessage("Unable to load customer quotes just now.");
   };
 
-  timeout = setTimeout(function() {
-
-    if (!loaded) {
-      loaded = true;
-
-      track.innerHTML =
-        '<p class="quick-quotes-loading">Customer quotes are taking longer than expected to load.</p>';
-    }
-
+  // The message shows after 15s, but late data can still replace it
+  timeout = setTimeout(function () {
+    showMessage("Customer quotes are taking longer than expected to load.");
   }, 15000);
 
   document.body.appendChild(script);
 
 });
 </script>
-
-
-
 </body>
 </html>
