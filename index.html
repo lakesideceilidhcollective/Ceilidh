@@ -1,2398 +1,442 @@
+<!DOCTYPE html><html lang="en"><head>
+    <base href="https://kenilworthfolkfestival.co.uk.thetrailerstage.co.uk/"><meta charset="utf-8">
 
-<!DOCTYPE html>
-<html lang="en-gb">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kenilworth Folk Festival</title>
+<meta name="description" content="Kenilworth Folk Festival, 4th–7th June 2027. Live folk music, Morris dancing, ceilidhs, workshops and more.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;family=Playfair+Display:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
 
-<title>Wedding Ceilidh Band UK | Lakeside Ceilidh Collective</title>
+<style>
+:root {
+    --burgundy: #741b2c;
+    --dark-red: #4b101e;
+    --gold: #e6aa32;
+    --cream: #f8f0dc;
+    --dark: #25151a;
+    --header-height: 76px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: calc(var(--header-height) + 16px); }
+body {
+    background: var(--cream);
+    color: var(--dark);
+    font-family: 'DM Sans', sans-serif;
+    padding-top: var(--header-height);
+}
+body.modal-open { overflow: hidden; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; }
 
-  <meta name="description" content="Wedding ceilidh band for the whole UK. Live folk music, a friendly caller and a full dance floor for your wedding ceilidh or ceili.">
-  <meta name="robots" content="index, follow, max-image-preview:large">
-  <meta name="theme-color" content="#245B85">
-  <link rel="canonical" href="https://lakesideceilidh.co.uk/">
-  <link rel="alternate" hreflang="en-gb" href="https://lakesideceilidh.co.uk/">
-  <link rel="alternate" hreflang="x-default" href="https://lakesideceilidh.co.uk/">
+/* HEADER */
+header {
+    background: var(--dark-red);
+    color: var(--cream);
+    padding: 12px 6%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: var(--header-height);
+    z-index: 1000;
+    border-bottom: 1px solid rgba(230,170,50,0.3);
+}
+.header-logo img { display: block; width: 210px; height: auto; }
+nav { display: flex; gap: 30px; align-items: center; }
+nav a {
+    font-size: 13px; font-weight: 600; color: var(--cream);
+    user-select: none; -webkit-tap-highlight-color: transparent; transition: color .2s;
+}
+nav a:hover { color: var(--gold); }
+.nav-ticket { border: 1px solid var(--gold); color: var(--gold) !important; padding: 11px 19px; }
+.nav-ticket:hover { background: var(--gold); color: var(--dark-red) !important; }
 
-  <!-- Speed -->
-  <link rel="preconnect" href="https://lh3.googleusercontent.com">
-  <link rel="preconnect" href="https://script.google.com">
-  <link rel="preload" as="image" href="https://lh3.googleusercontent.com/d/1kQiq7yFZ7N5s_wxB3FwrcBEaH3xZYhqF" fetchpriority="high">
+/* HERO */
+.hero {
+    min-height: 690px;
+    background-color: var(--burgundy);
+    background-image: url("assets/festival-texture.jpg");
+    background-repeat: repeat;
+    background-size: 230px 230px;
+    color: var(--cream);
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    text-align: center; padding: 70px 20px; position: relative; overflow: hidden;
+    border-bottom: 2px solid rgba(230,170,50,0.5);
+}
+.hero::before {
+    content: ""; position: absolute; inset: 15px;
+    border: 1px solid rgba(248,240,220,0.2); pointer-events: none;
+}
+.hero-content { position: relative; z-index: 1; width: 100%; max-width: 950px; }
+.festival-logo { display: block; width: min(90%, 760px); height: auto; margin: 0 auto 35px; }
+.hero-dates {
+    font-family: 'Playfair Display', serif; font-size: clamp(42px, 7vw, 76px);
+    color: var(--cream); margin-top: 5px; text-transform: uppercase;
+}
+.hero-dates span { color: var(--gold); }
+.hero-description { max-width: 650px; margin: 20px auto 30px; font-size: 15px; line-height: 1.8; color: var(--cream); }
+.button {
+    display: inline-block; background: var(--gold); color: var(--dark-red);
+    padding: 15px 30px; font-weight: 700; font-size: 13px; letter-spacing: 1px;
+    text-transform: uppercase; border: none; cursor: pointer; transition: .2s;
+}
+.button:hover { background: var(--cream); transform: translateY(-2px); }
 
-  <!-- Social media -->
-  <meta property="og:type" content="website">
-  <meta property="og:locale" content="en_GB">
-  <meta property="og:title" content="Wedding Ceilidh Band UK | Lakeside Ceilidh Collective">
-  <meta property="og:description" content="Live folk music, ceilidh dancing and unforgettable wedding entertainment throughout the UK.">
-  <meta property="og:url" content="https://lakesideceilidh.co.uk/">
-  <meta property="og:site_name" content="Lakeside Ceilidh Collective">
-  <meta property="og:image" content="https://lh3.googleusercontent.com/d/1kQiq7yFZ7N5s_wxB3FwrcBEaH3xZYhqF">
-  <meta property="og:image:alt" content="Wedding ceilidh band Lakeside Ceilidh Collective performing for dancing guests">
+/* GENERAL SECTIONS */
+.intro { padding: 90px 20px; text-align: center; max-width: 850px; margin: auto; }
+.section-label {
+    color: var(--burgundy); text-transform: uppercase; font-size: 11px;
+    font-weight: 700; letter-spacing: 4px; margin-bottom: 18px;
+}
+.intro h2, .section-heading {
+    font-family: 'Playfair Display', serif; font-size: clamp(34px, 5vw, 49px);
+    color: var(--burgundy); margin-bottom: 22px;
+}
+.intro p { font-size: 16px; line-height: 1.9; color: #59484a; }
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Wedding Ceilidh Band UK | Lakeside Ceilidh Collective">
-  <meta name="twitter:description" content="Live ceilidh music and wedding entertainment across the UK.">
-  <meta name="twitter:image" content="https://lh3.googleusercontent.com/d/1kQiq7yFZ7N5s_wxB3FwrcBEaH3xZYhqF">
-  <meta name="twitter:image:alt" content="Wedding ceilidh band Lakeside Ceilidh Collective performing for dancing guests">
+/* ARTISTS */
+.lineup { background: var(--dark-red); color: var(--cream); padding: 90px 6%; text-align: center; }
+.lineup .section-label { color: var(--gold); }
+.lineup .section-heading { color: var(--cream); }
+.artists {
+    max-width: 1150px; margin: 45px auto 0;
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px;
+}
+.artist {
+    position: relative; display: block; width: 100%; min-height: 260px;
+    overflow: hidden; border: 1px solid rgba(230,170,50,.45);
+    background: #32101a; color: var(--cream); padding: 0; cursor: pointer;
+    text-align: center; isolation: isolate;
+}
+.artist img {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; z-index: -2; transition: transform .35s ease;
+}
+.artist::before {
+    content: ""; position: absolute; inset: 0; z-index: -1;
+    background: linear-gradient(180deg, rgba(20,0,6,.08) 15%, rgba(20,0,6,.72) 100%);
+}
+.artist:hover img { transform: scale(1.05); }
+.artist-name {
+    position: absolute; left: 12px; right: 12px; bottom: 16px;
+    display: block; padding: 12px 10px;
+    background: rgba(55, 8, 22, .88); border: 1px solid rgba(230,170,50,.55);
+    color: var(--cream); font-family: 'Playfair Display', serif; font-size: 23px;
+}
+.artist-category {
+    display: block; font: 10px 'DM Sans', sans-serif; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--gold); margin-top: 5px;
+}
+.artist-placeholder {
+    position: absolute; inset: 0; display: grid; place-items: center;
+    color: rgba(248,240,220,.45); font: 16px 'Playfair Display', serif; z-index: -2;
+}
+.more-follow { margin-top: 35px; color: var(--gold); font-family: 'Playfair Display', serif; font-size: 22px; }
+.artist-error { margin: 25px auto 0; color: #ffd9a0; font-size: 14px; }
 
-  <!-- Business information -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebSite",
-        "@id": "https://lakesideceilidh.co.uk/#website",
-        "name": "Lakeside Ceilidh Collective",
-        "alternateName": ["Lakeside Ceilidh Band", "Lakeside Ceilidh"],
-        "url": "https://lakesideceilidh.co.uk/",
-        "inLanguage": "en-GB"
-      },
-      {
-        "@type": "MusicGroup",
-        "@id": "https://lakesideceilidh.co.uk/#band",
-        "name": "Lakeside Ceilidh Collective",
-        "alternateName": "Lakeside Ceilidh Band",
-        "url": "https://lakesideceilidh.co.uk/",
-        "image": "https://lh3.googleusercontent.com/d/1kQiq7yFZ7N5s_wxB3FwrcBEaH3xZYhqF",
-        "description": "Midlands-based wedding ceilidh band performing live folk music, ceilidh dancing and traditional entertainment at weddings, festivals and events throughout the UK.",        
-        "genre": ["Ceilidh", "Folk", "ceili"],
-        "keywords": "wedding ceilidh, wedding ceili, ceilidh band, wedding ceilidh band, ceili band, folk band, UK wedding band",
-        "knowsAbout": ["Wedding ceilidh", "Ceilidh dancing", "Ceilidh calling", "Live folk music"],
-        "email": "LakesideCeilidh@gmail.com",
-        "areaServed": {
-          "@type": "Country",
-          "name": "United Kingdom"
-        },
-        "sameAs": [
-          "https://www.instagram.com/lakesideceilidhband/"
-        ]
-      }
-    ]
-  }
-  </script>
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+/* ACTIVITIES */
+.activities { padding: 90px 6%; text-align: center; background: var(--cream); }
+.activity-grid {
+    max-width: 1050px; margin: 45px auto 0; display: grid;
+    grid-template-columns: repeat(3, 1fr); gap: 20px;
+}
+.activity { background: #efe3c8; padding: 35px 20px; border-bottom: 3px solid var(--gold); }
+.activity h3 { font-family: 'Playfair Display', serif; color: var(--burgundy); font-size: 22px; margin-bottom: 10px; }
+.activity p { font-size: 13px; line-height: 1.7; color: #59484a; }
 
-  <style>
-    :root {
-      --blue: #245B85;
-      --dark: #172F45;
-      --dusty: #789BB8;
-      --pale: #F2F6FA;
-      --light-grey: #DCE6EF;
-      --white: #FFFFFF;
-      --text: #3F4D5B;
-    }
+/* TICKETS AND FOOTER */
+.save-date { background: var(--burgundy); color: var(--cream); text-align: center; padding: 85px 20px; }
+.save-date h2 { font-family: 'Playfair Display', serif; font-size: clamp(40px, 7vw, 72px); margin-bottom: 15px; text-transform: uppercase; }
+.save-date p { font-size: 15px; line-height: 1.8; margin-bottom: 25px; }
+.save-date .button { margin-top: 8px; }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-      scroll-padding-top: 90px;
-    }
-
-    body {
-      font-family: 'DM Sans', sans-serif;
-      color: var(--text);
-      background: var(--pale);
-      line-height: 1.7;
-    }
-
-    h1, h2, h3 {
-      font-family: 'Playfair Display', serif;
-      font-weight: 600;
-      line-height: 1.2;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    /* Navigation */
-    nav {
-      min-height: 82px;
-      padding: 0 8%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: var(--white);
-      position: sticky;
-      top: 0;
-      z-index: 0;
-      box-shadow: 0 2px 15px #172f45;
-    }
-
-    .logo {
-      font-family: 'Playfair Display', serif;
-      color: var(--blue);
-      font-size: 27px;
-      font-weight: 700;
-      line-height: 1.2;
-    }
-
-    .logo span {
-      display: block;
-      font: 11px 'DM Sans', sans-serif;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      text-align: center;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 30px;
-      font-size: 13px;
-      font-weight: 600;
-    }
-
-    .nav-links a:hover {
-      color: var(--dusty);
-    }
-
-    /* Buttons */
-    .btn {
-      display: inline-block;
-      padding: 14px 28px;
-      border: none;
-      border-radius: 3px;
-      background: var(--blue);
-      color: var(--white);
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: .3s;
-    }
-
-    .btn:hover {
-      background: var(--dark);
-      transform: translateY(-2px);
-    }
-
-    /* Hero */
-    .hero {
-      min-height: 680px;
-      padding: 0px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      color: var(--white);
-      background:
-        linear-gradient(#172f4575, #172f4585),
-        url("https://lh3.googleusercontent.com/d/1kQiq7yFZ7N5s_wxB3FwrcBEaH3xZYhqF") center / cover no-repeat;
-    }
-
-    .hero-content {
-      max-width: 850px;
-    }
-
-    .eyebrow {
-      margin-bottom: 24px;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-    }
-
-    .hero h1 {
-      margin-bottom: 25px;
-      font-size: clamp(43px, 7vw, 78px);
-    }
-
-    .hero p {
-      max-width: 600px;
-      margin: 0 auto 35px;
-      color: #f1f5f9;
-      font-size: 17px;
-    }
-
-    .hero .btn {
-      background: var(--pale);
-      color: var(--blue);
-    }
-
-       /* General sections */
-    section {
-      padding: 75px 8%;
-    }
-
-    .section-heading {
-      max-width: 680px;
-      margin: 0 auto 55px;
-      text-align: center;
-    }
-
-    .section-heading h2 {
-      margin-bottom: 18px;
-      color: var(--blue);
-      font-size: clamp(32px, 4vw, 46px);
-    }
-
-    .section-heading p {
-      color: #6d7b88;
-    }
-
-    /* About and videos */
-    .video-grid {
-      max-width: 1150px;
-      margin: 0 auto 45px;
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 30px;
-    }
-
-    .video-wrapper {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      overflow: hidden;
-      border-radius: 4px;
-      background: var(--dark);
-    }
-
-    .video-wrapper iframe {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      border: 0;
-    }
-
-    .about-text {
-      max-width: 850px;
-      margin: auto;
-      text-align: center;
-    }
-
-    .about-text p {
-      margin-bottom: 20px;
-    }
-
-    .italic {
-      font-style: italic;
-    }
-
-    /* Services */
-    .services {
-      background: var(--white);
-    }
-
-    .cards {
-      max-width: 1150px;
-      margin: auto;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 25px;
-    }
-
-    .card {
-      padding: 45px 30px;
-      border-bottom: 3px solid var(--dusty);
-      background: var(--pale);
-      text-align: center;
-      transition: .3s;
-    }
-
-    .card:hover {
-      transform: translateY(-5px);
-    }
-
-    .card h3 {
-      margin-bottom: 18px;
-      color: var(--blue);
-      font-size: 25px;
-    }
-
-    /* Experience */
-    .experience {
-      background: var(--blue);
-      color: var(--white);
-      text-align: center;
-    }
-
-    .experience h2 {
-      max-width: 800px;
-      margin: 0 auto 25px;
-      font-size: clamp(35px, 5vw, 52px);
-    }
-
-    .experience p {
-      max-width: 700px;
-      margin: auto;
-      color: #e3edf5;
-    }
-
-    .experience .btn {
-      margin-top: 30px;
-      background: var(--pale);
-      color: var(--blue);
-    }
-
-    /* Testimonials */
-    .testimonials {
-      padding: 75px 8%;
-      background: var(--blue);
-      color: var(--white);
-    }
-
-    .testimonials-heading {
-      margin-bottom: 30px;
-      text-align: center;
-    }
-
-    .testimonials-heading h2 {
-      margin-bottom: 15px;
-      color: var(--white);
-      font-size: clamp(30px, 4vw, 40px);
-    }
-
-    .testimonials-heading p {
-      color: #e3edf5;
-    }
-
-    .testimonial-viewport {
-      width: 100%;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      scroll-behavior: smooth;
-      scrollbar-width: none;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .testimonial-viewport::-webkit-scrollbar {
-      display: none;
-    }
-
-    .testimonial-track {
-      display: flex;
-      align-items: stretch;
-      gap: 20px;
-    }
-
-    .testimonial-card {
-      flex: 0 0 calc((100% - 40px) / 3);
-      min-width: 0;
-      min-height: 190px;
-      padding: 30px 25px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      border-radius: 4px;
-      background: var(--pale);
-      color: var(--dark);
-      text-align: left;
-      scroll-snap-align: start;
-    }
-
-    .testimonial-quote {
-      margin-bottom: 25px;
-      font-family: 'Playfair Display', serif;
-      font-size: 18px;
-      line-height: 1.6;
-    }
-
-    .testimonial-from {
-      color: var(--blue);
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    .testimonial-controls {
-      margin-bottom: 22px;
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-    }
-
-    .testimonial-controls button {
-      width: 42px;
-      height: 42px;
-      border: 1px solid var(--white);
-      border-radius: 50%;
-      background: transparent;
-      color: var(--white);
-      font-size: 22px;
-      cursor: pointer;
-      transition: .3s;
-    }
-
-    .testimonial-controls button:hover {
-      background: var(--white);
-      color: var(--blue);
-    }
-
-    .testimonial-controls button:disabled {
-      opacity: .35;
-      cursor: default;
-    }
-
-    .testimonial-status {
-      margin-top: 18px;
-      color: #e3edf5;
-      text-align: center;
-      font-size: 12px;
-    }
-
-    .testimonial-loading {
-      width: 100%;
-      padding: 25px;
-      color: var(--white);
-      text-align: center;
-    }
-
-/* Quick quotes */
-.quick-quotes {
-  padding: 45px 8%;
-  overflow: hidden;
-  background: #EAF3FA;
-  text-align: center;
+.save-date .mailing-form {
+    width: min(100%, 460px);
+    margin: 28px auto 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    text-align: left;
+}
+.save-date .mailing-form label {
+    color: var(--cream);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .4px;
+}
+.save-date .mailing-form input[type="email"] {
+    width: 100%;
+    padding: 15px 16px;
+    background: var(--cream);
+    color: var(--dark);
+    border: 2px solid var(--gold);
+    border-radius: 0;
+    font: 15px 'DM Sans', sans-serif;
+    outline: none;
+}
+.save-date .mailing-form input[type="email"]:focus,
+.save-date .mailing-form input[type="text"]:focus {
+    box-shadow: 0 0 0 3px rgba(230,170,50,.28);
+}
+.save-date .mailing-interests {
+    display: grid;
+    gap: 10px;
+    padding: 15px;
+    border: 1px solid rgba(230,170,50,.65);
+    background: rgba(75,16,30,.45);
+}
+.save-date .mailing-interests legend {
+    color: var(--gold);
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    padding: 0 6px;
+}
+.save-date .mailing-interests label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    color: var(--cream);
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: 1.5;
+    cursor: pointer;
+}
+.save-date .mailing-interests input[type="checkbox"] {
+    accent-color: var(--gold);
+    width: 17px;
+    height: 17px;
+    flex: 0 0 auto;
+    margin: 2px 0 0;
+}
+.save-date .mailing-form input[type="text"] {
+    width: 100%;
+    padding: 13px 15px;
+    background: var(--cream);
+    color: var(--dark);
+    border: 2px solid var(--gold);
+    border-radius: 0;
+    font: 14px 'DM Sans', sans-serif;
+}
+.save-date .mailing-form button {
+    align-self: center;
+    margin-top: 6px;
 }
 
-.quick-quotes-heading {
-  margin-bottom: 25px;
+footer { background: var(--dark-red); color: var(--cream); text-align: center; padding: 35px 20px; }
+footer .footer-title { font-family: 'Playfair Display', serif; font-size: 24px; margin-bottom: 10px; }
+footer p { font-size: 12px; line-height: 1.8; color: rgba(248,240,220,.8); }
+footer a { color: var(--gold); }
+.footer-social { display: inline-block; margin-top: 12px; color: var(--gold); border-bottom: 1px solid var(--gold); padding-bottom: 3px; }
+.footer-bottom { border-top: 1px solid rgba(248,240,220,.2); margin-top: 25px; padding-top: 20px; font-size: 11px; }
+
+/* ARTIST POP-UP */
+.artist-modal {
+    display: none; position: fixed; inset: 0; z-index: 2000;
+    background: rgba(15,0,5,.9); justify-content: center; align-items: center; padding: 25px;
 }
-
-.quick-quotes-heading h2 {
-  color: #173B5E;
-  font-size: clamp(25px, 3vw, 34px);
+.artist-modal.active { display: flex; }
+.modal-box {
+    position: relative; width: 100%; max-width: 850px; max-height: 90vh; overflow-y: auto;
+    background: var(--burgundy); color: var(--cream); border: 2px solid var(--gold);
+    padding: 55px 65px; text-align: center; box-shadow: 0 15px 60px rgba(0,0,0,.5);
 }
-
-.quick-quotes-heading .eyebrow {
-  margin-bottom: 10px;
-  color: #3979A8;
+.modal-close {
+    position: absolute; top: 12px; right: 18px; background: none; border: none;
+    color: var(--cream); font-size: 34px; cursor: pointer; line-height: 1; z-index: 3;
 }
-
-.quick-quotes-viewport {
-  max-width: 1150px;
-  margin: auto;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
+.modal-close:hover { color: var(--gold); }
+.modal-content { max-width: 620px; margin: auto; }
+.modal-photo {
+    width: 100%; max-width: 480px; max-height: 300px; min-height: 180px;
+    margin: 0 auto 25px; background: rgba(40,0,10,.5);
+    border: 1px solid rgba(230,170,50,.5); display: flex; align-items: center;
+    justify-content: center; color: var(--gold); font-family: 'Playfair Display', serif; font-size: 20px;
 }
-
-.quick-quotes-viewport::-webkit-scrollbar {
-  display: none;
+.modal-photo img { width: 100%; max-height: 300px; object-fit: cover; display: block; }
+.modal-content h2 { font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 46px); margin-bottom: 18px; color: var(--gold); }
+.modal-bio { font-size: 15px; line-height: 1.8; margin-bottom: 25px; white-space: pre-line; }
+.modal-socials { display: flex; justify-content: center; gap: 22px; flex-wrap: wrap; margin-bottom: 25px; }
+.modal-socials a { color: var(--gold); font-size: 13px; border-bottom: 1px solid var(--gold); padding-bottom: 3px; }
+.modal-socials a:hover { color: var(--cream); }
+.modal-video-wrap { display: none; margin: 15px auto 5px; }
+.modal-video-wrap.visible { display: block; }
+.modal-video-wrap h3 { color: var(--gold); font: 20px 'Playfair Display', serif; margin-bottom: 12px; }
+.modal-video {
+    position: relative; width: 100%; aspect-ratio: 16 / 9; background: #18070c;
+    border: 1px solid rgba(230,170,50,.5);
 }
-
-.quick-quotes-track {
-  display: flex;
-  align-items: stretch;
-  gap: 25px;
+.modal-video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.modal-quote {
+    display: none;
+    margin: 28px auto 0;
+    padding: 22px 24px;
+    max-width: 580px;
+    border-top: 1px solid rgba(230,170,50,.65);
+    border-bottom: 1px solid rgba(230,170,50,.65);
+    color: var(--cream);
+    font-family: 'Playfair Display', serif;
+    font-size: 19px;
+    line-height: 1.7;
+    font-style: italic;
+    white-space: pre-line;
 }
+.modal-quote.visible { display: block; }
 
-.quick-quotes-track .quick-quote-card {
-  flex: 0 0 calc((100% - 50px) / 3);
-  min-width: 0;
-  min-height: 125px;
-  padding: 25px 22px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  border-radius: 4px;
-  background: var(--white);
-  color: #173B5E;
-  scroll-snap-align: start;
+.modal-navigation {
+    position: absolute; top: 50%; left: 0; right: 0; display: flex;
+    justify-content: space-between; padding: 0 15px; transform: translateY(-50%);
+    pointer-events: none; z-index: 2;
 }
-
-.quick-quote-text {
-  color: #173B5E;
-  font-family: 'Playfair Display', serif;
-  font-size: 19px;
-  line-height: 1.5;
+.modal-arrow {
+    width: 42px; height: 55px; border: 1px solid var(--gold);
+    background: rgba(50,0,10,.85); color: var(--gold); font-size: 30px;
+    cursor: pointer; pointer-events: auto; transition: .2s;
 }
-
-.quick-quote-from {
-  margin-top: 10px;
-  color: #3979A8;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.quick-quotes-loading {
-  width: 100%;
-  color: #173B5E;
-  text-align: center;
-}
-
-@media (max-width: 900px) {
-  .quick-quotes-track .quick-quote-card {
-    flex: 0 0 calc((100% - 25px) / 2);
-  }
-}
-
-@media (max-width: 600px) {
-  .quick-quotes-track {
-    gap: 15px;
-  }
-
-  .quick-quotes-track .quick-quote-card {
-    flex: 0 0 88%;
-  }
-}
-    /* Optional extras */
-    .extras {
-      background: var(--blue);
-      color: var(--white);
-    }
-
-    .extras .section-heading h2,
-    .extras .section-heading p,
-    .extras .section-heading .eyebrow {
-      color: var(--white);
-    }
-
-    .extras-grid {
-      max-width: 1050px;
-      margin: auto;
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 25px;
-    }
-
-    .extra-card {
-      padding: 40px 35px;
-      border: 1px solid var(--light-grey);
-      border-radius: 3px;
-      background: var(--white);
-      text-align: center;
-      transition: .3s;
-    }
-
-    .extra-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 30px #172f4512;
-    }
-
-    .extra-card h3 {
-      margin-bottom: 15px;
-      color: var(--blue);
-      font-size: 26px;
-    }
-
-    .extra-card p {
-      margin-bottom: 15px;
-      color: #6d7b88;
-    }
-
-    .extra-label {
-      display: inline-block;
-      margin-top: 10px;
-      padding: 7px 15px;
-      background: #e3edf5;
-      color: var(--blue);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
-
-    .extras-bottom {
-      max-width: 750px;
-      margin: 50px auto 0;
-      padding: 35px;
-      background: var(--dark);
-      color: var(--white);
-      text-align: center;
-    }
-
-    .extras-bottom h3 {
-      margin-bottom: 12px;
-      font-size: 27px;
-    }
-
-    .extras-bottom p {
-      color: #e3edf5;
-    }
-
-    /* Contact */
-    .contact {
-      background: var(--white);
-    }
-
-    .contact-grid {
-      max-width: 1050px;
-      margin: auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      align-items: start;
-      gap: 65px;
-    }
-
-    .contact h2 {
-      margin-bottom: 20px;
-      color: var(--blue);
-      font-size: 43px;
-    }
-
-    .contact-info p {
-      margin-bottom: 12px;
-    }
-
-    .contact-info a {
-      color: var(--blue);
-      overflow-wrap: anywhere;
-    }
-
-    .contact-info a:hover {
-      text-decoration: underline;
-    }
-
-    .contact form {
-      display: grid;
-      gap: 16px;
-    }
-
-    input,
-    textarea,
-    select {
-      width: 100%;
-      padding: 15px;
-      border: 1px solid var(--light-grey);
-      border-radius: 2px;
-      background: var(--pale);
-      color: var(--text);
-      font: inherit;
-    }
-
-    textarea {
-      min-height: 140px;
-      resize: vertical;
-    }
-
-    input:focus,
-    textarea:focus,
-    select:focus {
-      outline: 2px solid var(--dusty);
-      border-color: var(--blue);
-    }
-
-    .contact form button {
-      border: none;
-      cursor: pointer;
-    }
-
-    .form-note {
-      color: #6d7b88;
-      font-size: 12px;
-    }
-
-    .success-message {
-      padding: 30px;
-      border-left: 4px solid var(--blue);
-      background: var(--pale);
-      color: var(--blue);
-    }
-
-    .success-message h3 {
-      margin-bottom: 12px;
-      font-size: 27px;
-    }
-
-    .success-message p {
-      margin-bottom: 10px;
-      color: var(--text);
-    }
-
-    .success-message .btn {
-      margin-top: 20px;
-    }
-
-    /* Gallery */
-    #gallery {
-      background: var(--pale);
-    }
-
-    .gallery-grid {
-      max-width: 1150px;
-      margin: auto;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-    }
-
-    .gallery-item {
-      padding: 0;
-      border: none;
-      aspect-ratio: 4 / 3;
-      overflow: hidden;
-      background: var(--white);
-      cursor: pointer;
-    }
-
-    .gallery-item img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform .4s;
-    }
-
-    .gallery-item:hover img {
-      transform: scale(1.06);
-    }
-.gallery-item {
-  position: relative;
-}
-
-/* PHOTOGRAPHER CREDIT */
-
-.gallery-credit {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  padding: 9px 12px;
-  background: rgba(8, 21, 34, 0.72);
-  color: white;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 12px;
-  font-weight: 500;
-  text-align: left;
-  z-index: 2;
-  pointer-events: none;
-
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-/* SHOW ON HOVER */
-
-.gallery-item:hover .gallery-credit {
-  opacity: 1;
-}
-
-/* KEYBOARD ACCESSIBILITY */
-
-.gallery-item:focus-visible .gallery-credit {
-  opacity: 1;
-}
-
-/* TOUCH DEVICES */
-
-@media (hover: none) {
-  .gallery-credit {
-    opacity: 0;
-  }
-}
-/* INDIVIDUAL IMAGE FADE */
-
-.gallery-item {
-  transition: opacity 0.8s ease;
-}
-    /* Gallery lightbox */
-    #gallery-lightbox {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      align-items: center;
-      justify-content: center;
-      padding: 60px;
-      background: #081522ee;
-    }
-
-    #gallery-lightbox.active {
-      display: flex;
-    }
-
-    #gallery-lightbox img {
-      max-width: 85%;
-      max-height: 85vh;
-      object-fit: contain;
-    }
-
-    #gallery-lightbox button {
-      position: absolute;
-      z-index: 2;
-      border: none;
-      background: transparent;
-      color: var(--white);
-      cursor: pointer;
-    }
-
-    .lightbox-close {
-      top: 20px;
-      right: 25px;
-      font-size: 40px;
-    }
-
-    .lightbox-prev,
-    .lightbox-next {
-      top: 50%;
-      padding: 15px;
-      font-size: 38px;
-      transform: translateY(-50%);
-    }
-
-    .lightbox-prev {
-      left: 20px;
-    }
-
-    .lightbox-next {
-      right: 20px;
-    }
-
-    #gallery-lightbox button:hover {
-      color: var(--dusty);
-    }
-
-    /* Instagram */
-    .instagram-link {
-      margin: 15px 0;
-      display: inline-flex;
-      flex-direction: column;
-      gap: 4px;
-      color: var(--white);
-      font-size: 14px;
-    }
-
-    .instagram-link strong {
-      color: #c8d7e4;
-      font-size: 13px;
-    }
-
-    .instagram-link:hover {
-      color: var(--dusty);
-    }
-
-    /* Footer */
-    footer {
-      padding: 45px 20px;
-      background: var(--dark);
-      color: var(--white);
-      text-align: center;
-    }
-
-    footer .logo {
-      margin-bottom: 15px;
-      color: var(--white);
-    }
-
-    footer p {
-      margin-top: 10px;
-      color: #c8d7e4;
-      font-size: 13px;
-    }
-
-    /* Responsive layout */
-    @media (max-width: 800px) {
-      nav {
-        padding: 15px 5%;
-        height: auto;
-        gap: 15px;
-      }
-
-      .nav-links {
-        gap: 12px;
-        font-size: 11px;
-      }
-
-      .nav-links a:not(.btn) {
-        display: none;
-      }
-
-      .video-grid,
-      .contact-grid {
-        grid-template-columns: 1fr;
-        gap: 35px;
-      }
-
-      .cards,
-      .extras-grid {
-        grid-template-columns: 1fr;
-      }
-
-      section {
-        padding: 75px 6%;
-      }
-
-      .contact h2 {
-        font-size: 35px;
-      }
-
-      .extras-bottom {
-        padding: 30px 20px;
-      }
-
-      .hero {
-        min-height: 550px;
-      }
-
-      .gallery-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      #gallery-lightbox {
-        padding: 45px 10px;
-      }
-
-      #gallery-lightbox img {
-        max-width: 90%;
-        max-height: 75vh;
-      }
-
-      .lightbox-prev {
-        left: 2px;
-      }
-
-      .lightbox-next {
-        right: 2px;
-      }
-
-      .lightbox-prev,
-      .lightbox-next {
-        font-size: 27px;
-      }
-    }
-
-    @media (max-width: 600px) {
-      .testimonials {
-        padding: 40px 6%;
-      }
-
-      .testimonial-card {
-        flex: 0 0 100%;
-        min-height: 170px;
-      }
-
-      .testimonial-quote {
-        font-size: 17px;
-      }
-
-      .quick-quotes {
-        padding: 40px 6%;
-      }
-
-      .quick-quote-card {
-        flex: 0 0 100%;
-      }
-
-      .quick-quote-text {
-        font-size: 18px;
-      }
-    }
-
-    @media (max-width: 450px) {
-      .logo {
-        font-size: 19px;
-      }
-
-      .logo span {
-        font-size: 9px;
-        letter-spacing: 3px;
-      }
-
-      .nav-links .btn {
-        padding: 11px 15px;
-        font-size: 11px;
-      }
-
-      .hero h1 {
-        font-size: 43px;
-      }
-
-      .gallery-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-    /* =====================================
-   GALLERY HEADER LAYERING
-===================================== */
-
-nav {
-  z-index: 1000;
-}
-
-#gallery {
-  position: relative;
-  z-index: 1;
-}
-
-.gallery-grid {
-  position: relative;
-  z-index: 1;
-}
-
-.gallery-item {
-  position: relative;
-  z-index: 1;
-}
-    /* =====================================
-   GALLERY RESPONSIVE GRID
-===================================== */
-
-.gallery-grid {
-  max-width: 1150px;
-  margin: auto;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
-}
-
-/* IMAGE FADE TRANSITION */
-
-.gallery-item {
-  opacity: 1;
-  transition: opacity 0.8s ease;
-}
-
-.gallery-grid.gallery-fading .gallery-item {
-  opacity: 0;
-}
-
-/* TABLET */
-
-@media (max-width: 900px) {
-  .gallery-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
+.modal-arrow:hover { background: var(--gold); color: var(--dark-red); }
 
 /* MOBILE */
-
-@media (max-width: 450px) {
-  .gallery-grid {
-    grid-template-columns: 1fr;
-  }
+@media (max-width: 700px) {
+    :root { --header-height: 112px; }
+    header { flex-direction: column; gap: 10px; padding: 10px 12px; justify-content: center; }
+    .header-logo img { width: 170px; }
+    nav { gap: 14px; justify-content: center; flex-wrap: wrap; }
+    nav a { font-size: 11px; }
+    .nav-ticket { padding: 7px 11px; }
+    .hero { min-height: 570px; padding: 60px 15px; }
+    .festival-logo { width: 95%; margin-bottom: 30px; }
+    .hero-dates { font-size: 43px; }
+    .artists { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .artist { min-height: 210px; }
+    .artist-name { font-size: 18px; left: 7px; right: 7px; bottom: 9px; padding: 9px 5px; }
+    .activity-grid { grid-template-columns: 1fr; }
+    .intro, .lineup, .activities { padding-top: 65px; padding-bottom: 65px; }
+    .modal-box { padding: 55px 38px 35px; }
+    .modal-photo { min-height: 150px; }
+    .modal-arrow { width: 30px; height: 42px; font-size: 24px; }
+    .modal-navigation { padding: 0 4px; }
 }
-  </style>
+@media (max-width: 400px) {
+    nav { gap: 10px; }
+    nav a { font-size: 10px; }
+    .hero-dates { font-size: 36px; }
+    .artist { min-height: 175px; }
+}
+</style>
 </head>
 
-<body>
+<body dir="ltr" spellcheck="false" style="direction: ltr; min-height: 901px;">
+<header>
+    <a href="#" class="header-logo"><img src="assets/festival-logo.png" alt="Kenilworth Folk Festival"></a>
+    <nav>
+        <a href="#about">About</a>
+        <a href="#lineup">Artists</a>
+        <a href="#activities">What's On</a>
+        <a href="#tickets" class="nav-ticket">Tickets</a>
+    </nav>
+</header>
 
-  <!-- Navigation -->
-  <nav aria-label="Main">
-    <a href="#" class="logo">
-      Lakeside
-      <span>Ceilidh Collective</span>
-    </a>
-
-    <div class="nav-links">
-      <a href="#about">About</a>
-      <a href="#weddings">What We Do</a>
-      <a href="#extras">Optional Extras</a>
-      <a href="#gallery">Gallery</a>
-      <a href="#contact" class="btn">Request a Quote</a>
-    </div>
-  </nav>
-
-  <!-- Hero -->
-  <header class="hero">
+<main>
+<section class="hero">
     <div class="hero-content">
-      <div class="eyebrow">Music · Dancing · Celebration</div>
-
-      <h1>Make Memories.<br>Fill the Dance Floor.</h1>
-
-      <p>
-        Bringing people together through unforgettable
-        ceilidh music, laughter and dancing.
-        Let's make your celebration something special.
-      </p>
-
-      <a href="#contact" class="btn">Let's Plan Your Celebration</a>
+        <img src="assets/festival-logo.png" alt="Kenilworth Folk Festival" class="festival-logo">
+        <div class="hero-dates">June <span>4th–7th</span> 2027</div>
+        <p class="hero-description">Four days of folk music, dancing, workshops, ceilidhs and celebrations across Kenilworth.</p>
+        <a href="#tickets" class="button">Save the Date</a>
     </div>
-  </header>
+</section>
 
-  <!-- Quick customer quotes -->
-  <section class="quick-quotes">
-    <div class="quick-quotes-heading">
-      <div class="eyebrow">A little love from our customers</div>
-      <h2>Don't Just Take Our Word For It</h2>
+<section class="intro" id="about">
+    <div class="section-label">4th–7th June 2027</div>
+    <h2>Folk Music. Dancing. Community.</h2>
+    <p>Kenilworth Folk Festival returns in June 2027 for four days celebrating folk music, traditional dance and everything that makes a great festival. With live performances, ceilidhs, workshops and music sessions across Kenilworth, there's plenty to look forward to.</p>
+</section>
+
+<section class="lineup" id="lineup">
+    <div class="section-label">The 2027 Festival</div>
+    <h2 class="section-heading">Artists &amp; Performers</h2>
+    <div class="artists" id="artistsGrid">
+        <p class="artist-error">Loading artists…</p>
     </div>
+    <p class="more-follow">More to follow...</p>
+    <p class="artist-error" id="artistError" hidden=""><br></p>
+</section>
 
-    <div class="quick-quotes-viewport">
-      <div id="quickQuotesTrack" class="quick-quotes-track">
-        <p class="quick-quotes-loading">Loading kind words...</p>
-      </div>
+<section class="activities" id="activities">
+    <div class="section-label">More than just music</div>
+    <h2 class="section-heading">What's On</h2>
+    <div class="activity-grid">
+        <div class="activity"><h3>Morris Dancing</h3><p>Featuring Plum Jerkum and more.</p></div>
+        <div class="activity"><h3>Ceilidhs</h3><p>Featuring Banter! and Oakstone Trio.</p></div>
+        <div class="activity"><h3>Workshops</h3><p>Get involved, learn something new and enjoy the music.</p></div>
+        <div class="activity"><h3>Tuneworks</h3><p>Celebrating traditional tunes and folk music.</p></div>
+        <div class="activity"><h3>Kubb Tournament</h3><p>Join in with this traditional outdoor game.</p></div>
+        <div class="activity"><h3>Music Sessions</h3><p>Music sessions taking place across Kenilworth.</p></div>
     </div>
-  </section>
+</section>
 
-  <!-- About -->
-  <section id="about">
-    <div class="section-heading">
-      <div class="eyebrow">A little about us</div>
-      <h2>Tradition with a Modern Twist</h2>
-      <p>
-        Bringing people together through live folk music,
-        ceilidh dancing and unforgettable celebrations.
-      </p>
-    </div>
+<section class="save-date" id="tickets">
+    <h2>Save the Date!</h2>
+    <p>4th–7th June 2027<br>Tickets available from February 2027.<br>Join our mailing list to be first to hear about tickets.</p>
+    <form class="mailing-form" action="https://formsubmit.co/kenilworthfolkfestival@mail.uk" method="POST">
+        <input type="hidden" name="_subject" value="New Kenilworth Folk Festival mailing list signup">
+        <input type="hidden" name="_template" value="table">
+        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+        <label for="mailingEmail">Email address</label>
+        <input type="email" id="mailingEmail" name="email" placeholder="Your email address" autocomplete="email" required>
 
-    <div class="video-grid">
-      <div class="video-wrapper">
-        <iframe
-          src="https://www.youtube-nocookie.com/embed/LZmtBrjSuTE"
-          title="Lakeside Ceilidh Collective – Video 1"
-          loading="lazy"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen>
-        </iframe>
-      </div>
-      <div class="video-wrapper">
-        <iframe
-          src="https://www.youtube-nocookie.com/embed/KgDSyAQoETo"
-          title="Lakeside Ceilidh Collective – Video 2"
-          loading="lazy"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen>
-        </iframe>
-      </div>
-    </div>
+        <fieldset class="mailing-interests">
+            <legend>What are you interested in?</legend>
+            <label><input type="checkbox" name="interests[]" value="Tickets"> <span>Being interested in tickets</span></label>
+            <label><input type="checkbox" name="interests[]" value="Volunteering / stewarding"> <span>Interested in volunteering / stewarding</span></label>
+            <label><input type="checkbox" name="interests[]" value="Contributing to the festival (trade / performers)"> <span>Contributing to the festival (trade / performers)</span></label>
+            <label><input type="checkbox" name="interests[]" value="Other"> <span>Other (please specify)</span></label>
+        </fieldset>
+        <label for="mailingOther">If you selected “Other”, please tell us more (optional)</label>
+        <input type="text" id="mailingOther" name="other_interest" placeholder="Please specify">
 
-    <div class="about-text">
-      <p>
-        At Lakeside Ceilidh Collective, we believe the best
-        celebrations are the ones where everyone gets involved.
-      </p>
+        <button type="submit" class="button">Join the Mailing List</button>
+    </form>
+</section>
+</main>
 
-      <p>
-        Combining the spirit of traditional ceilidh music
-        with a fresh, contemporary wedding atmosphere,
-        we bring energy, connection and plenty of reasons
-        to get onto the dance floor.
-      </p>
-
-      <p class="italic">
-        Good music. Great people. Unforgettable memories.
-      </p>
-    </div>
-  </section>
-
-  <!-- Lakeside experience -->
-  <section class="experience">
-    <div class="eyebrow">The Lakeside Experience</div>
-
-    <h2>Not Just a Band. A Celebration Everyone Can Be Part Of.</h2>
-
-    <p>
-      Whether your guests are seasoned dancers or have never
-      tried a ceilidh before, our caller will bring everyone
-      together to make your event truly special.
-    </p>
-
-    <a href="#contact" class="btn">Enquire About Your Date</a>
-  </section>
-
-  <!-- What we do -->
-  <section class="services" id="weddings">
-    <div class="section-heading">
-      <div class="eyebrow">What we do</div>
-      <h2>Let's Get Everyone Dancing</h2>
-      <p>
-        From intimate celebrations to big wedding parties,
-        make your event a celebration everyone can enjoy.
-      </p>
-    </div>
-
-    <div class="cards">
-      <div class="card">
-        <h3>Weddings</h3>
-        <p>
-          Give your wedding reception a lively, personal touch
-          with music and dancing that brings everyone together.
-        </p>
-      </div>
-
-      <div class="card">
-        <h3>Live Music</h3>
-        <p>
-          Enjoy the infectious energy of live folk music
-          and the excitement of traditional ceilidh dancing.
-        </p>
-      </div>
-
-      <div class="card">
-        <h3>Special Events</h3>
-        <p>
-          Birthdays, parties and special occasions.
-          Whatever you're celebrating, let's make it memorable.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Testimonials -->
-  <section class="testimonials">
-    <div class="testimonials-heading">
-      <div class="eyebrow">Kind Words</div>
-      <h2>What Our Customers Say</h2>
-      <p>We're lucky to be part of so many special celebrations.</p>
-    </div>
-
-    <div class="testimonial-controls">
-      <button type="button" id="testimonialPrev" aria-label="Previous testimonials">
-        &#8592;
-      </button>
-
-      <button type="button" id="testimonialNext" aria-label="Next testimonials">
-        &#8594;
-      </button>
-    </div>
-
-    <div class="testimonial-viewport">
-      <div id="testimonialTrack" class="testimonial-track">
-        <p class="testimonial-loading">Loading testimonials...</p>
-      </div>
-    </div>
-
-    <div id="testimonialStatus" class="testimonial-status" aria-live="polite"></div>
-  </section>
-
-  <!-- Gallery -->
-  <section id="gallery">
-    <div class="section-heading">
-      <div class="eyebrow">A glimpse of the celebrations</div>
-      <h2>Our Gallery</h2>
-      <p>Music, dancing and memories from our events.</p>
-    </div>
-
-    <div id="galleryStatus" class="gallery-status">
-      Loading our photos...
-    </div>
-
-    <div id="galleryGrid" class="gallery-grid"></div>
-  </section>
-
-  <!-- Gallery lightbox -->
-  <div
-    id="gallery-lightbox"
-    role="dialog"
-    aria-modal="true"
-    aria-label="Enlarged gallery photo">
-
-    <button type="button" class="lightbox-close" aria-label="Close image">
-      &times;
-    </button>
-
-    <button type="button" class="lightbox-prev" aria-label="Previous photo">
-      &#10094;
-    </button>
-
-    <img src="" alt="Lakeside Ceilidh Collective photograph">
-
-    <button type="button" class="lightbox-next" aria-label="Next photo">
-      &#10095;
-    </button>
-  </div>
-
-  <!-- Optional extras -->
-  <section class="extras" id="extras">
-    <div class="section-heading">
-      <div class="eyebrow">Take Your Evening Further</div>
-      <h2>Optional Extras</h2>
-      <p>
-        Want to keep the party going after the ceilidh?
-        We offer additional entertainment and lighting options
-        to make your evening even more special.
-      </p>
-    </div>
-
-    <div class="extras-grid">
-      <div class="extra-card">
-        <h3>Disco Till Late</h3>
-        <p>
-          Keep the dance floor alive long after the ceilidh
-          with a disco playlist of your favourite party tunes.
-        </p>
-        <span class="extra-label">PA &amp; Lighting Included</span>
-      </div>
-
-      <div class="extra-card">
-        <h3>DJ Till Late</h3>
-        <p>
-          Enjoy a manned DJ to keep the celebrations going,
-          with music and requests to suit your tastes and keep everyone dancing.
-        </p>
-        <span class="extra-label">PA &amp; Lighting Included</span>
-      </div>
-
-      <div class="extra-card">
-        <h3>Enhanced Lighting</h3>
-        <p>
-          Take your evening atmosphere up a level with
-          an enhanced lighting setup, adding extra impact
-          and atmosphere to your dance floor.
-        </p>
-      </div>
-
-      <div class="extra-card">
-        <h3>Something Else in Mind?</h3>
-        <p>
-          Have a particular idea for your celebration?
-          Get in touch and we'll be happy to discuss
-          additional options.
-        </p>
-      </div>
-    </div>
-
-    <div class="extras-bottom">
-      <h3>Make It Your Own</h3>
-      <p>All optional extras are available on request.</p>
-      <p>
-        Contact us for details and a personalised quote
-        tailored to your event.
-      </p>
-    </div>
-  </section>
-
-  <!-- Contact -->
-  <section class="contact" id="contact">
-    <div class="contact-grid">
-
-      <div class="contact-info">
-        <div class="eyebrow">Get in touch</div>
-        <h2>Let's Make Your Day Unforgettable.</h2>
-
-        <p>
-          Tell us a little about your celebration and
-          we'll get back to you with a personalised quote.
-        </p>
-
-        <p>
-          We travel throughout the UK, bringing ceilidh music
-          and dancing to weddings, parties and special occasions.
-        </p>
-
-        <p>
-          Every event is different, so get in touch for a quote
-          tailored to your plans. If you'd like to add a disco,
-          DJ or extra lighting, just let us know and we can
-          chat through the options.
-        </p>
-
-        <p>
-          <strong>Get in touch:</strong><br>
-          <a href="mailto:LakesideCeilidh@gmail.com">
-            LakesideCeilidh@gmail.com
-          </a>
-        </p>
-      </div>
-
-      <div>
-        <form
-          id="contactForm"
-          action="https://formsubmit.co/LakesideCeilidh@gmail.com"
-          method="POST">
-
-          <input
-            type="hidden"
-            name="_subject"
-            value="New Lakeside Ceilidh Collective Website Enquiry">
-
-          <input type="hidden" name="_template" value="table">
-          <input type="hidden" name="_captcha" value="true">
-
-          <input
-            type="hidden"
-            name="_next"
-            value="https://lakesideceilidh.co.uk/?submitted=true#contact">
-
-          <!-- Spam protection -->
-          <input
-            type="text"
-            name="_honey"
-            style="display:none"
-            tabindex="-1"
-            autocomplete="off">
-
-          <!-- Customer details -->
-          <input
-            type="text"
-            name="Name"
-            placeholder="Your name"
-            required>
-
-          <input
-            type="email"
-            name="Email"
-            placeholder="Email address"
-            required>
-
-          <input
-            type="tel"
-            name="Phone"
-            placeholder="Phone number">
-
-          <!-- Event details -->
-          <select name="Event type" required>
-            <option value="">What are you celebrating?</option>
-            <option>Wedding</option>
-            <option>Birthday</option>
-            <option>Private Party</option>
-            <option>Other Event</option>
-          </select>
-
-          <input type="date" name="Event date">
-
-          <input
-            type="text"
-            name="Location"
-            placeholder="Event location">
-
-          <!-- Optional extras -->
-          <select name="Optional extras">
-            <option value="">Interested in any extras?</option>
-            <option>Disco Till Late</option>
-            <option>DJ Till Late</option>
-            <option>Enhanced Lighting</option>
-            <option>Multiple Extras</option>
-            <option>Not Sure Yet</option>
-          </select>
-
-          <textarea
-            name="Message"
-            placeholder="Tell us about your plans, guests and anything else you'd like us to know..."></textarea>
-
-          <button class="btn" type="submit" id="submitButton">
-            Request My Quote
-          </button>
-
-          <p
-            id="sendingMessage"
-            style="display:none; color:#173B5E; font-weight:600;">
-            Sending your enquiry, please wait...
-          </p>
-
-          <p class="form-note">
-            Your enquiry will be sent directly to Lakeside Ceilidh Collective.
-          </p>
-        </form>
-
-        <!-- Form success message -->
-        <div
-          class="success-message"
-          id="successMessage"
-          style="display:none;"
-          role="status">
-
-          <h3>Thank You for Your Enquiry!</h3>
-
-          <p>Your enquiry has been submitted successfully.</p>
-
-          <p>
-            Thank you for considering Lakeside Ceilidh Collective.
-            We'll be in touch as soon as possible.
-          </p>
-
-          <a href="#about" class="btn">Back to Website</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-
-<!-- Footer -->
 <footer>
-  <div class="logo">Lakeside Ceilidh Collective</div>
-  <a
-    href="https://www.instagram.com/lakesideceilidhband/"
-    target="_blank"
-    rel="noopener noreferrer"
-    class="instagram-link">
-
-    <span>📸 Follow us on Instagram</span>
-    <strong>@lakesideceilidhband</strong>
-  </a>
-
-  <p>Folk music. Modern celebrations. Memories for life.</p>
-  <p>
-    Based in the Midlands · Performing at weddings,
-    festivals and events throughout the UK.
-  </p>
-
-  <p>© 2026 Lakeside Ceilidh Band. All rights reserved.</p>
+    <div class="footer-title">Kenilworth Folk Festival</div>
+    <p>4th–7th June 2027</p>
+    <p><a href="mailto:kenilworthfolkfestival@mail.uk">kenilworthfolkfestival@mail.uk</a></p>
+    <a class="footer-social" href="https://www.facebook.com/p/Kenilworth-Folk-Festival-61594588766591/" target="_blank" rel="noopener noreferrer">Facebook</a>
+    <div class="footer-bottom">© Kenilworth Folk Festival</div>
 </footer>
 
-  <!-- Contact form success handling -->
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-
-      const params = new URLSearchParams(window.location.search);
-
-      const form = document.getElementById("contactForm");
-      const successMessage = document.getElementById("successMessage");
-      const submitButton = document.getElementById("submitButton");
-      const sendingMessage = document.getElementById("sendingMessage");
-
-      // Show success message after submission
-      if (params.get("submitted") === "true") {
-
-        form.style.display = "none";
-        successMessage.style.display = "block";
-
-        window.history.replaceState(
-          {},
-          document.title,
-          window.location.pathname + "#contact"
-        );
-
-        document.getElementById("contact").scrollIntoView({
-          behavior: "smooth"
-        });
-      }
-
-      // Show loading state when submitting
-      form.addEventListener("submit", function() {
-
-        if (!form.checkValidity()) return;
-
-        submitButton.disabled = true;
-        submitButton.textContent = "Sending Enquiry...";
-
-        sendingMessage.style.display = "block";
-
-      });
-
-    });
-  </script>
-  <!-- Gallery -->
-
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-
-  const gallery =
-    "https://script.google.com/macros/s/AKfycbwRyB0sewJw1MIrnU-ZNTZDE4W3kWgN-jMT8jGwstTskWuZ3TrdvKjQYAy4mJtWb-Y/exec";
-
-  // =====================================
-  // GALLERY SETTINGS
-  // =====================================
-
-  const INITIAL_DELAY_SECONDS = 20;
-  const ROTATION_SECONDS = 6;
-  const FADE_DURATION = 800;
-
-  const DESKTOP_LIMIT = 9;
-  const TABLET_LIMIT = 6;
-  const MOBILE_LIMIT = 4;
-
-  // =====================================
-  // ELEMENTS
-  // =====================================
-
-  const grid = document.getElementById("galleryGrid");
-  const status = document.getElementById("galleryStatus");
-  const lightbox = document.getElementById("gallery-lightbox");
-
-  if (!grid || !status || !lightbox) return;
-
-  const enlarged = lightbox.querySelector("img");
-  const closeButton = lightbox.querySelector(".lightbox-close");
-  const prevButton = lightbox.querySelector(".lightbox-prev");
-  const nextButton = lightbox.querySelector(".lightbox-next");
-
-  let photos = [];
-  let currentIndex = 0;
-  let galleryLoaded = false;
-
-  let rotationTimer = null;
-  let initialRotationTimer = null;
-  let rotating = false;
-  let resizeTimer = null;
-
-  // =====================================
-  // IMAGE URL
-  // =====================================
-
-  function getImageUrl(photo) {
-    return photo.url || photo.imageUrl || photo.src || "";
-  }
-
-  // =====================================
-  // RESPONSIVE PHOTO LIMIT
-  // =====================================
-
-  function getPhotoLimit() {
-
-    if (window.innerWidth <= 450) {
-      return MOBILE_LIMIT;
-    }
-
-    if (window.innerWidth <= 900) {
-      return TABLET_LIMIT;
-    }
-
-    return DESKTOP_LIMIT;
-
-  }
-
-  // =====================================
-  // PHOTOGRAPHER CREDIT
-  // =====================================
-
-  function addCredit(button, photo) {
-
-    const photographer = (photo.name || "").trim();
-
-    if (
-      !photographer ||
-      photographer.toLowerCase() === "unknown"
-    ) {
-      return;
-    }
-
-    const credit = document.createElement("span");
-
-    credit.className = "gallery-credit";
-    credit.textContent = photographer;
-
-    button.appendChild(credit);
-
-  }
-
-  // =====================================
-  // CREATE GALLERY ITEM
-  // =====================================
-
-  function createGalleryItem(photo, index) {
-
-    const button = document.createElement("button");
-
-    button.className = "gallery-item";
-    button.type = "button";
-
-    button.setAttribute(
-      "aria-label",
-      "View gallery photograph " + (index + 1)
-    );
-
-    button._photo = photo;
-
-    const img = document.createElement("img");
-
-    img.src = getImageUrl(photo);
-
-    img.alt = "Lakeside Ceilidh Collective performing and guests dancing at a wedding";
-
-    img.loading = "lazy";
-    img.decoding = "async";
-
-    button.appendChild(img);
-
-    addCredit(button, photo);
-
-    img.onerror = function() {
-      button.remove();
-    };
-
-    button.addEventListener("click", function() {
-      openPhoto(button._photo);
-    });
-
-    return button;
-
-  }
-
-  // =====================================
-  // RENDER GALLERY
-  // =====================================
-
-  function renderGallery() {
-
-    const limit = getPhotoLimit();
-
-    const visible = photos.slice(0, limit);
-
-    grid.innerHTML = "";
-
-    visible.forEach(function(photo, index) {
-
-      grid.appendChild(
-        createGalleryItem(photo, index)
-      );
-
-    });
-
-  }
-
-  // =====================================
-  // RANDOM INDIVIDUAL PHOTO ROTATION
-  // =====================================
-
-  function rotateGallery() {
-
-    if (rotating) return;
-
-    const items = Array.from(
-      grid.querySelectorAll(".gallery-item")
-    );
-
-    if (!items.length) return;
-
-    const visiblePhotos = items.map(function(item) {
-      return item._photo;
-    });
-
-    const availablePhotos = photos.filter(function(photo) {
-      return !visiblePhotos.includes(photo);
-    });
-
-    if (!availablePhotos.length) return;
-
-    rotating = true;
-
-    // Select one random visible image
-
-    const randomIndex = Math.floor(
-      Math.random() * items.length
-    );
-
-    const selectedItem = items[randomIndex];
-
-    // Select a random replacement
-
-    const replacementIndex = Math.floor(
-      Math.random() * availablePhotos.length
-    );
-
-    const replacement = availablePhotos[replacementIndex];
-
-    // Preload replacement before fading
-
-    const preloadedImage = new Image();
-
-    preloadedImage.onload = function() {
-
-      selectedItem.style.opacity = "0";
-
-      setTimeout(function() {
-
-        const oldImage = selectedItem.querySelector("img");
-
-        oldImage.src = getImageUrl(replacement);
-
-        oldImage.alt = "Wedding ceilidh band and guests dancing at a Lakeside Ceilidh Collective event";
-        // Update photographer credit
-
-        const oldCredit = selectedItem.querySelector(
-          ".gallery-credit"
-        );
-
-        if (oldCredit) {
-          oldCredit.remove();
-        }
-
-        addCredit(selectedItem, replacement);
-
-        // Update photo reference
-
-        selectedItem._photo = replacement;
-
-        selectedItem.setAttribute(
-          "aria-label",
-          "View gallery photograph"
-        );
-
-        selectedItem.style.opacity = "1";
-
-        rotating = false;
-
-      }, FADE_DURATION);
-
-    };
-
-    preloadedImage.onerror = function() {
-      rotating = false;
-    };
-
-    preloadedImage.src = getImageUrl(replacement);
-
-  }
-
-  // =====================================
-  // START ROTATION
-  // =====================================
-
-  function startRotation() {
-
-    clearTimeout(initialRotationTimer);
-    clearInterval(rotationTimer);
-
-    if (photos.length <= getPhotoLimit()) {
-      return;
-    }
-
-    // Wait 20 seconds before the first change
-
-    initialRotationTimer = setTimeout(function() {
-
-      rotateGallery();
-
-      // Change one random image every 6 seconds
-
-      rotationTimer = setInterval(function() {
-
-        rotateGallery();
-
-      }, ROTATION_SECONDS * 1000);
-
-    }, INITIAL_DELAY_SECONDS * 1000);
-
-  }
-
-  // =====================================
-  // LIGHTBOX
-  // =====================================
-
-  function openPhoto(photo) {
-
-    currentIndex = photos.indexOf(photo);
-
-    if (currentIndex < 0) return;
-
-    enlarged.src = getImageUrl(photo);
-
-    enlarged.alt =
-      photo.name || "Gallery photograph";
-
-    lightbox.classList.add("active");
-
-    document.body.style.overflow = "hidden";
-
-    closeButton.focus();
-
-  }
-
-  function nextPhoto() {
-
-    if (!photos.length) return;
-
-    currentIndex = (currentIndex + 1) % photos.length;
-
-    openPhoto(photos[currentIndex]);
-
-  }
-
-  function previousPhoto() {
-
-    if (!photos.length) return;
-
-    currentIndex =
-      (currentIndex - 1 + photos.length) % photos.length;
-
-    openPhoto(photos[currentIndex]);
-
-  }
-
-  function closePhoto() {
-
-    lightbox.classList.remove("active");
-
-    enlarged.src = "";
-
-    document.body.style.overflow = "";
-
-  }
-
-  closeButton.addEventListener("click", closePhoto);
-
-  nextButton.addEventListener("click", nextPhoto);
-
-  prevButton.addEventListener("click", previousPhoto);
-
-  lightbox.addEventListener("click", function(e) {
-
-    if (e.target === lightbox) {
-      closePhoto();
-    }
-
-  });
-
-  document.addEventListener("keydown", function(e) {
-
-    if (!lightbox.classList.contains("active")) return;
-
-    if (e.key === "Escape") closePhoto();
-
-    if (e.key === "ArrowRight") nextPhoto();
-
-    if (e.key === "ArrowLeft") previousPhoto();
-
-  });
-
-  // =====================================
-  // LOAD GALLERY
-  // =====================================
-
-  function loadGallery(data) {
-
-    if (galleryLoaded) return;
-
-    if (!data || !data.success || !Array.isArray(data.images)) {
-
-      status.textContent =
-        "Our gallery is temporarily unavailable. Please try again later.";
-
-      return;
-
-    }
-
-    photos = data.images.filter(function(photo) {
-
-      return photo &&
-        typeof getImageUrl(photo) === "string" &&
-        getImageUrl(photo).trim() !== "";
-
-    });
-
-    if (!photos.length) {
-
-      status.textContent =
-        "Our photos will be appearing here soon.";
-
-      galleryLoaded = true;
-
-      return;
-
-    }
-
-    galleryLoaded = true;
-
-    renderGallery();
-
-    status.remove();
-
-    startRotation();
-
-  }
-
-  // =====================================
-  // GOOGLE APPS SCRIPT CONNECTION
-  // =====================================
-
-  let timeout;
-
-  window.lakesideGalleryCallback = function(data) {
-
-    clearTimeout(timeout);
-
-    loadGallery(data);
-
-  };
-
-  const script = document.createElement("script");
-
-  script.src =
-    gallery + "?callback=lakesideGalleryCallback";
-
-  script.async = true;
-
-  script.onerror = function() {
-
-    clearTimeout(timeout);
-
-    status.textContent =
-      "Unable to load our gallery just now. Please try again later.";
-
-  };
-
-  timeout = setTimeout(function() {
-
-    if (!galleryLoaded) {
-
-      status.textContent =
-        "Our gallery is taking longer than expected to load. Please refresh to try again.";
-
-    }
-
-  }, 12000);
-
-  document.body.appendChild(script);
-
-  // =====================================
-  // HANDLE SCREEN RESIZING
-  // =====================================
-
-  window.addEventListener("resize", function() {
-
-    clearTimeout(resizeTimer);
-
-    resizeTimer = setTimeout(function() {
-
-      if (!galleryLoaded) return;
-
-      renderGallery();
-
-      startRotation();
-
-    }, 200);
-
-  });
-
-});
-</script>
-
-
-   <!--testimonials script-->  
-   <!--testimonials script-->  
-   <!--testimonials script-->  
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-
-  const scriptUrl =
-    "https://script.google.com/macros/s/AKfycbyLPdcVoo_s4-x0MAU3tPE7hg3Wi8axxJmPXSg3AM0Xq77HjSJ_7SDyHpJ8yDWcZsiPlw/exec";
-
-  const track = document.getElementById("testimonialTrack");
-  const viewport = document.querySelector(".testimonial-viewport");
-  const prev = document.getElementById("testimonialPrev");
-  const next = document.getElementById("testimonialNext");
-  const status = document.getElementById("testimonialStatus");
-
-  if (!track || !viewport || !prev || !next || !status) return;
-
-  const AUTO_SCROLL_SECONDS = 13;
-
-  let autoScrollTimer = null;
-  let loaded = false;
-  let timeout = null;
-
-  function showMessage(message) {
-    if (loaded) return;
-
-    loaded = true;
-    clearTimeout(timeout);
-
-    track.innerHTML = "";
-
-    const p = document.createElement("p");
-    p.className = "testimonial-loading";
-    p.textContent = message;
-
-    track.appendChild(p);
-    status.textContent = "";
-  }
-
-  function updateControls() {
-
-    const maxScroll = viewport.scrollWidth - viewport.clientWidth;
-
-    prev.disabled = viewport.scrollLeft <= 2;
-    next.disabled = viewport.scrollLeft >= maxScroll - 2;
-
-    const cards = track.querySelectorAll(".testimonial-card");
-
-    if (cards.length) {
-
-      const width = cards[0].offsetWidth;
-      const gap = parseFloat(getComputedStyle(track).gap) || 0;
-
-      const position = Math.round(
-        viewport.scrollLeft / (width + gap)
-      ) + 1;
-
-      status.textContent = position + " / " + cards.length;
-    }
-  }
-
-  function moveCarousel(direction) {
-
-    const card = track.querySelector(".testimonial-card");
-    if (!card) return;
-
-    const gap = parseFloat(getComputedStyle(track).gap) || 0;
-
-    viewport.scrollBy({
-      left: direction * (card.offsetWidth + gap),
-      behavior: "smooth"
-    });
-  }
-
-  function stopAutoScroll() {
-    if (autoScrollTimer) {
-      clearInterval(autoScrollTimer);
-      autoScrollTimer = null;
-    }
-  }
-
-  function startAutoScroll() {
-
-    stopAutoScroll();
-
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      return;
-    }
-
-    autoScrollTimer = setInterval(function() {
-
-      const maxScroll = viewport.scrollWidth - viewport.clientWidth;
-
-      if (maxScroll <= 2) return;
-
-      if (viewport.scrollLeft >= maxScroll - 5) {
-
-        viewport.scrollTo({
-          left: 0,
-          behavior: "smooth"
-        });
-
-      } else {
-
-        moveCarousel(1);
-
-      }
-
-    }, AUTO_SCROLL_SECONDS * 1000);
-  }
-
-  prev.addEventListener("click", function() {
-    stopAutoScroll();
-    moveCarousel(-1);
-    startAutoScroll();
-  });
-
-  next.addEventListener("click", function() {
-    stopAutoScroll();
-    moveCarousel(1);
-    startAutoScroll();
-  });
-
-  viewport.addEventListener("scroll", updateControls);
-
-  function loadTestimonials(data) {
-
-    if (loaded) return;
-
-    const testimonials = data && Array.isArray(data.testimonials)
-      ? data.testimonials
-      : [];
-
-    const valid = testimonials.filter(function(item) {
-      return item &&
-        typeof item.testimonial === "string" &&
-        item.testimonial.trim() !== "";
-    });
-
-    if (!valid.length) {
-      showMessage("Our testimonials will be appearing here soon.");
-      return;
-    }
-
-    loaded = true;
-    clearTimeout(timeout);
-
-    track.innerHTML = "";
-
-    valid.forEach(function(item) {
-
-      const card = document.createElement("div");
-      card.className = "testimonial-card";
-
-      const quote = document.createElement("p");
-      quote.className = "testimonial-quote";
-      quote.textContent = "“" + item.testimonial + "”";
-
-      const from = document.createElement("p");
-      from.className = "testimonial-from";
-      from.textContent = item.from ? "— " + item.from : "";
-
-      card.appendChild(quote);
-      card.appendChild(from);
-
-      track.appendChild(card);
-
-    });
-
-    updateControls();
-    startAutoScroll();
-
-  }
-
-  window.lakesideTestimonialsCallback = loadTestimonials;
-
-  const script = document.createElement("script");
-
-  script.src = scriptUrl +
-    "?sheet=Testimonials&callback=lakesideTestimonialsCallback";
-
-  script.async = true;
-
-  script.onerror = function() {
-    showMessage("Unable to load testimonials just now. Please try again later.");
-  };
-
-  timeout = setTimeout(function() {
-    showMessage("Testimonials are taking longer than expected to load.");
-  }, 15000);
-
-  document.body.appendChild(script);
-
-});
-</script>
-
-
-
- <!--quick quotes-->  
- <!--quick quotes-->  
- <!--quick quotes-->  
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-
-  const scriptUrl =
-    "https://script.google.com/macros/s/AKfycbyLPdcVoo_s4-x0MAU3tPE7hg3Wi8axxJmPXSg3AM0Xq77HjSJ_7SDyHpJ8yDWcZsiPlw/exec";
-
-  const track = document.getElementById("quickQuotesTrack");
-  const viewport = document.querySelector(".quick-quotes-viewport");
-
-  if (!track || !viewport) return;
-
-  const AUTO_SCROLL_SECONDS = 5;
-  const PAUSE_AFTER_TOUCH_SECONDS = 10;
-
-  let loaded = false;
-  let timeout = null;
-  let autoScrollTimer = null;
-  let pausedUntil = 0;
-
-  function showMessage(message) {
-
-    track.innerHTML = "";
-
-    const p = document.createElement("p");
-    p.className = "quick-quotes-loading";
-    p.textContent = message;
-
-    track.appendChild(p);
-
-  }
-
-  function createCard(item) {
-
-    const card = document.createElement("div");
-    card.className = "quick-quote-card";
-
-    const quote = document.createElement("p");
-    quote.className = "quick-quote-text";
-    quote.textContent = "“" + item.quote + "”";
-
-    const from = document.createElement("p");
-    from.className = "quick-quote-from";
-    from.textContent = item.from ? "— " + item.from : "";
-
-    card.appendChild(quote);
-    card.appendChild(from);
-
-    return card;
-  }
-
-  function pauseAutoScroll() {
-    pausedUntil = Date.now() + PAUSE_AFTER_TOUCH_SECONDS * 1000;
-  }
-
-  function startAutoScroll() {
-
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      return;
-    }
-
-    clearInterval(autoScrollTimer);
-
-    autoScrollTimer = setInterval(function() {
-
-      if (Date.now() < pausedUntil) return;
-
-      const maxScroll = viewport.scrollWidth - viewport.clientWidth;
-
-      if (maxScroll <= 2) return;
-
-      if (viewport.scrollLeft >= maxScroll - 5) {
-
-        viewport.scrollTo({
-          left: 0,
-          behavior: "smooth"
-        });
-
-      } else {
-
-        const card = track.querySelector(".quick-quote-card");
-        const gap = parseFloat(getComputedStyle(track).gap) || 0;
-
-        viewport.scrollBy({
-          left: card.offsetWidth + gap,
-          behavior: "smooth"
-        });
-
-      }
-
-    }, AUTO_SCROLL_SECONDS * 1000);
-
-  }
-
-  function loadQuotes(data) {
-
-    if (loaded) return;
-
-    const quotes = data && Array.isArray(data.quickQuotes)
-      ? data.quickQuotes.filter(function(item) {
-          return item &&
-            typeof item.quote === "string" &&
-            item.quote.trim() !== "";
-        })
-      : [];
-
-    clearTimeout(timeout);
-
-    if (!quotes.length) {
-      showMessage("Our lovely customer comments will be appearing here soon.");
-      return;
-    }
-
-    loaded = true;
-
-    track.innerHTML = "";
-
-    quotes.forEach(function(item) {
-      track.appendChild(createCard(item));
-    });
-
-    viewport.addEventListener("touchstart", pauseAutoScroll, { passive: true });
-    viewport.addEventListener("mouseenter", pauseAutoScroll);
-    viewport.addEventListener("mousemove", pauseAutoScroll);
-
-    startAutoScroll();
-
-  }
-
-  window.lakesideQuickQuotesCallback = loadQuotes;
-
-  const script = document.createElement("script");
-
-  script.src = scriptUrl +
-    "?sheet=Quick%20Quotes&callback=lakesideQuickQuotesCallback";
-
-  script.async = true;
-
-  script.onerror = function() {
-
-    clearTimeout(timeout);
-
-    if (!loaded) {
-      showMessage("Unable to load customer quotes just now.");
-    }
-
-  };
-
-  timeout = setTimeout(function() {
-
-    if (!loaded) {
-      showMessage("Customer quotes are taking longer than expected to load.");
-    }
-
-  }, 15000);
-
-  document.body.appendChild(script);
-
-});
-</script>
-</body>
-</html>
+<div class="artist-modal" id="artistModal" onclick="outsideModal(event)" aria-hidden="true">
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalName">
+        <button class="modal-close" onclick="closeArtist()" aria-label="Close">×</button>
+        <div class="modal-navigation">
+            <button class="modal-arrow" onclick="changeArtist(-1)" aria-label="Previous artist">‹</button>
+            <button class="modal-arrow" onclick="changeArtist(1)" aria-label="Next artist">›</button>
+        </div>
+        <div class="modal-content">
+            <div class="modal-photo" id="modalPhoto">Photo coming soon</div>
+            <h2 id="modalName"><br></h2>
+            <p class="modal-bio" id="modalBio"><br></p>
+            <div class="modal-socials" id="modalSocials"><br></div>
+            <div class="modal-video-wrap" id="modalVideoWrap">
+                <h3>Watch</h3>
+                <div class="modal-video" id="modalVideo"><br></div>
+            </div>
+            <blockquote class="modal-quote" id="modalQuote"><br></blockquote>
+        </div>
+    </div>
+</div>
+
+
+<style data-cpanel-injected="cpanel-editor-padding">
+body { padding-bottom: 80px !important; }
+</style>
+
+
+</body></html>
